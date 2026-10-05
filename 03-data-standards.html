@@ -1,1 +1,102 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Data standards | EFI BITCom</title><link rel="stylesheet" href="efi-craft-prototype.css"></head><body><div class="site-bar"><div class="container site-bar"><a class="brand" href="01-bitcom-at-efi.html">EFI <small>Bioinformatics &amp; IT Committee</small></a><nav class="site-nav"><a href="02-bitcom-committee.html">Committee</a><a href="04-training-events.html">Training</a><a href="08-resources-archive.html">Resources</a></nav></div></div><header class="hero"><div class="container"><p class="breadcrumb"><a href="01-bitcom-at-efi.html">BITCom</a><span>›</span> Data standards</p><h1>Data standards</h1><p class="lede">Common, well-governed data make laboratory, registry and research collaboration more reliable.</p></div></header><main><section class="section"><div class="container"><p class="eyebrow">Role</p><h2>From representation to responsible exchange</h2><div class="grid"><article class="card"><h3>HLA genotyping data</h3><p>BITCom supports implementation-oriented discussion of structured HLA genotyping information and its transfer between systems.</p></article><article class="card"><h3>Antibody data</h3><p>Work on HLA Antibody Markup Language (HAML) has been discussed through international data-standard initiatives, including DaSH.</p></article><article class="card"><h3>Interoperability</h3><p>The committee promotes data integrity, transparency, FAIR principles and practical interoperability, always in dialogue with EFI standards work.</p></article></div></div></section><section class="section section--gray"><div class="container split"><div><p class="eyebrow">Publication rule</p><h2>Clear status is part of a useful standard</h2><p>This page should link only to documents that are approved for public use. Every item needs an owner, version, publication date, review date and a clear label: EFI policy, external standard, educational resource or work in progress.</p><p>BITCom does not make a draft discussion normative by placing it on a public page.</p></div><aside class="notice"><strong>Source trail</strong><br>EFI reporting records BITCom’s collaboration with the Standards Committee and international partners on data communication and storage. The resource archive links to the relevant EFI publications.</aside></div></section></main><footer class="site-footer"><div class="container"><p>EFI BITCom · Data standards</p></div></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Data standards | EFI BITCom</title>
+  <link rel="stylesheet" href="efi-craft-prototype.css">
+</head>
+<body>
+  <div class="site-bar"><div class="container site-bar">
+    <a class="brand" href="01-bitcom-at-efi.html">EFI <small>Bioinformatics &amp; IT Committee</small></a>
+    <nav class="site-nav" aria-label="BITCom navigation"><a href="02-bitcom-committee.html">Committee</a><a href="04-training-events.html">Training</a><a href="08-resources-archive.html">Resources</a></nav>
+  </div></div>
+
+  <header class="hero"><div class="container">
+    <p class="breadcrumb"><a href="01-bitcom-at-efi.html">BITCom</a><span>›</span> Data standards</p>
+    <h1>Data standards</h1>
+    <p class="lede">Reliable H&amp;I data exchange starts with a result that is unambiguous, traceable to its nomenclature and meaningful beyond the laboratory that created it.</p>
+  </div></header>
+
+  <main>
+    <section class="section"><div class="container split">
+      <div>
+        <p class="eyebrow">The purpose</p>
+        <h2>Make the clinical meaning travel with the data</h2>
+        <p>HLA and KIR results are unusually information-dense: a report may contain allele ambiguity, phase, copy-number or locus uncertainty, assay-specific evidence and an interpretation that directly affects donor selection or transplant care. A standard must therefore preserve what is known <em>and</em> what remains unresolved.</p>
+        <p>BITCom helps translate this need into workable data models, exchange specifications, validation practice and education. The objective is not one universal file format: it is a connected, versioned ecosystem in which laboratories, registries, manufacturers, researchers and clinical systems can interpret data consistently.</p>
+      </div>
+      <aside class="notice"><strong>Three questions for every exchange</strong><br>What does the result mean? Which nomenclature and reference release were used? Can the receiving system retain the result without silently changing its meaning?</aside>
+    </div></section>
+
+    <section class="section section--gray"><div class="container">
+      <p class="eyebrow">The standards landscape</p>
+      <h2>Complementary standards for different kinds of information</h2>
+      <div class="grid">
+        <article class="card">
+          <span class="meta">Genotype grammar</span>
+          <h3>GL String and GLSC</h3>
+          <p>The Genotype List (GL) String is a compact, machine-parseable grammar for HLA and KIR genotypes. Its operators explicitly represent allele lists, phased alleles, genotype ambiguity and multilocus unphased data. The Genotype List String Code (GLSC) adds the gene-family namespace and the relevant nomenclature version or creation date, so a result can be interpreted in its historical context.</p>
+          <a class="link" href="https://glstring.org/syntax-1.0.html" target="_blank" rel="noopener">Read the GL String specification</a>
+        </article>
+        <article class="card">
+          <span class="meta">Structured genotyping exchange</span>
+          <h3>HML</h3>
+          <p>Histoimmunogenetics Markup Language (HML) is an XML-based exchange format for HLA and KIR genotyping. It can carry typing-method information, allele assignments, consensus sequence and reference-database provenance; GL Strings can be included for a concise representation of the genotype. HML is especially useful where the result must travel together with laboratory and assay context.</p>
+          <a class="link" href="https://github.com/nmdp-bioinformatics/hml" target="_blank" rel="noopener">Open the HML specification repository</a>
+        </article>
+        <article class="card">
+          <span class="meta">Phenotype and antibody interpretation</span>
+          <h3>PL String, PLSC and HAML</h3>
+          <p>Phenotype List (PL) String and its coded form PLSC extend the same disciplined approach to protein- and antigen-level data: assay reagents, test results and clinical antibody interpretations. PL String is designed to express heterodimers and antigen ambiguity. It is intended for use in structured messages, including the developing HLA Antibody Markup Language (HAML), rather than as a replacement for genotype standards.</p>
+          <a class="link" href="https://doi.org/10.1111/tan.70693" target="_blank" rel="noopener">Read the PL String publication</a>
+        </article>
+      </div>
+    </div></section>
+
+    <section class="section"><div class="container">
+      <p class="eyebrow">From a result to an interoperable record</p>
+      <h2>What an implementation should preserve</h2>
+      <div class="grid">
+        <article class="card"><h3>Meaning and ambiguity</h3><p>Encode ambiguity and phase explicitly; do not reduce an uncertain genotype or antibody interpretation to a preferred-looking value merely because a downstream system cannot represent the uncertainty.</p></article>
+        <article class="card"><h3>Provenance and version</h3><p>Record the namespace, nomenclature/reference-database release or the applicable creation date, the method and the interpretation context. A value without its version is not reproducible.</p></article>
+        <article class="card"><h3>Validation and conformance</h3><p>Use published schemas, grammar validators and test data at system boundaries. Validate when data are created, imported, exported and transformed—and retain the original report alongside derived values.</p></article>
+      </div>
+    </div></section>
+
+    <section class="section section--blue"><div class="container split">
+      <div>
+        <p class="eyebrow">EFI collaboration</p>
+        <h2>BITCom and the EFI Standards Committee</h2>
+        <p>EFI’s Standards Committee owns the European laboratory standards and the process by which these are maintained. BITCom brings the technical and implementation perspective: how structured H&amp;I data are represented, communicated, stored, validated and used in real laboratory and clinical workflows.</p>
+        <p>The committees should work as a defined partnership. BITCom can identify interoperability needs, evaluate technical options, convene expert input and draft implementable guidance. The Standards Committee determines whether and how requirements enter EFI Standards and coordinates the formal review and approval route.</p>
+        <p>EFI has reported this collaboration explicitly: BITCom supports data standards and their inclusion in EFI standards guidance, while engaging with the Standards Committee on the appropriate use and communication of immunogenetics data.</p>
+      </div>
+      <aside class="notice"><strong>Governance principle</strong><br>Technical material on this page is educational or externally maintained unless it is explicitly labelled as an approved EFI standard. Publication here does not make a draft, a software implementation or an external specification an EFI requirement.</aside>
+    </div></section>
+
+    <section class="section section--gray"><div class="container">
+      <p class="eyebrow">Priority topics</p>
+      <h2>A practical agenda for BITCom</h2>
+      <ul class="list">
+        <li><strong>Guidance for lossless HLA and KIR result exchange.</strong> Map laboratory needs to GL String/GLSC and HML capabilities, including versioning, ambiguity and phase.</li>
+        <li><strong>Antibody data harmonisation.</strong> Support the continuing development and real-world testing of HAML and PL String/PLSC use cases, with clear boundaries between raw assay information, analytical result and clinical interpretation.</li>
+        <li><strong>Interoperability with healthcare systems.</strong> Follow relevant HL7 FHIR developments so H&amp;I data can be exchanged safely alongside the rest of the clinical record.</li>
+        <li><strong>Conformance, education and adoption.</strong> Develop examples, validation approaches and teaching materials with laboratories, software suppliers and the EFI community; do not publish local conventions as universal requirements.</li>
+      </ul>
+    </div></section>
+
+    <section class="section"><div class="container split">
+      <div>
+        <p class="eyebrow">Reference route</p>
+        <h2>Start with primary specifications</h2>
+        <p>Use the original specification or maintained project site when implementing a standard. EFI resources should explain clinical and laboratory relevance, link to those sources and state their approval status and review date.</p>
+        <p><a class="button" href="08-resources-archive.html">Open resources and archive</a></p>
+      </div>
+      <aside class="notice"><strong>Review cadence</strong><br>Review this page at least annually and after each material release, EFI standard update or substantive change in the relevant exchange specifications. Confirm every outward-facing recommendation with the EFI Standards Committee before publication.</aside>
+    </div></section>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p>EFI BITCom · Data standards</p></div></footer>
+</body>
+</html>
