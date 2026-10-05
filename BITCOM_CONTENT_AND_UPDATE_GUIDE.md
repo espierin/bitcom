@@ -3,7 +3,7 @@
 ## Page map
 
 1. **BITCom at EFI** — stable overview of purpose and the three workstreams.
-2. **About BITCom** — remit and current membership. Confirm roles, countries, affiliations, biographies, portraits and optional ORCID records with each member before publication.
+2. **About BITCom** — remit and current membership. The current prototype includes a verified ORCID link for each member and institution-based affiliation text; confirm roles, affiliations, biographies and portraits with each member before production publication.
 3. **Data standards** — published data-standard activity only. Link to source documents rather than reproducing draft guidance.
 4. **Training & events** — active and completed BITCom learning activities. Every listing needs a date, audience, delivery format, owner and registration/resource link.
 5. **Digital infrastructure** — member-facing description of website, educational platform and conference workflow support. Keep security, contracts and technical architecture out of this public page.
@@ -13,7 +13,7 @@
 
 ## Update cadence
 
-- **At every BITCom meeting:** refresh current activities; check whether a member/role change must be reflected.
+- **At every BITCom meeting:** refresh current activities; check whether a member/role change must be reflected. Only publish items approved for public release.
 - **Before each EFI conference:** update sessions, registration and resources.
 - **Within two weeks after each EFI conference:** add completed-session materials or the definitive EFI link.
 - **Quarterly:** test all external links and mark or remove expired opportunities.
@@ -21,7 +21,7 @@
 
 ## Publication checks
 
-Use the EFI committee page as the primary record for membership. Use EFI newsletters, event pages and EFI teaching-session pages as the primary evidence for activities. The BITCom Mission Document and Committee Manual v1.0 (effective 18 March 2026) is the primary internal source for remit, structure, terms, recruitment and meeting procedures. Label future activities as planned; do not describe them as delivered until confirmed. Obtain individual approval for portraits, biographies, affiliations, personal contact details and ORCID links.
+Use the EFI committee page as the primary record for membership and Chair designation. Use EFI newsletters, event pages and EFI teaching-session pages as the primary evidence for activities. The BITCom Mission Document and Committee Manual v1.0 (effective 18 March 2026) is the primary internal source for remit, structure, terms, recruitment and meeting procedures. Label future activities as planned; do not describe them as delivered until confirmed. Obtain individual approval for portraits, biographies, affiliations, personal contact details and ORCID links.
 
 ## Sources used in this prototype
 
