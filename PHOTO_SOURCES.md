@@ -1,15 +1,12 @@
 # BITCom portrait sources
 
-The committee page deliberately favours authentic photographs over AI-generated portraits.
+The eight `*-studio-v2.png` portraits are AI-assisted studio treatments based on the committee group photographs supplied by the user. The supplied photographs establish the identity and the clothing of each member; conference lanyards and badges have been removed for a consistent web presentation.
 
-- **Eric Spierings:** UMC Utrecht research profile.
-- **James Robinson:** Anthony Nolan research profile.
-- **Mathijs Groeneweg:** Frontiers Loop profile image, retained locally for this prototype.
-- **Moshe Israeli:** existing institutional profile image retained locally for this prototype.
+For **Eric Spierings**, an existing UMC Utrecht profile portrait was additionally used as the primary identity reference, because it provides a clearer and more reliable likeness than the group images alone.
 
-No sufficiently suitable institutional portrait was identified for **José de Abreu Nunes**, **Jürgen Sauter**, **Michaela Agapiou** or **Nicolas Vince**. Their visible portraits are non-destructive CSS crops of the committee group photograph supplied by the user, with identities confirmed as follows:
+Identities in the source group images were confirmed as follows:
 
-- Top row, left to right: José, Eric, James, Jürgen, Nico, Mathijs
+- Top row, left to right: José, Eric, James, Jürgen, Nicolas, Mathijs
 - Lower row: Michaela, Moshe
 
-Before a production EFI publication, each pictured member should confirm the final selection and EFI should confirm its reuse rights.
+Before production publication, each member should approve their own final portrait. EFI should also retain the original supplied photographs and record the approval date and any replacement photograph provided by a member.
