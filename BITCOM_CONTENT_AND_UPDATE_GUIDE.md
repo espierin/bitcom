@@ -34,7 +34,13 @@ For data standards, retain a written approval trail. BITCom may curate technical
 - EFI Newsletter 105 (January 2025), BITCom report on data standards, DaSH and Standards Committee collaboration: https://efi-web.org/fileadmin/Efi_web/user_upload/Efi_Newsletter_nr_105.pdf
 - GL String / GLSC specification: https://glstring.org/syntax-1.0.html
 - HML technical repository: https://github.com/nmdp-bioinformatics/hml
-- PL String / PLSC publication: https://doi.org/10.1111/tan.70693
+- PL String / PLSC publication: https://pmc.ncbi.nlm.nih.gov/articles/PMC13060008/
+- IPD-IMGT/HLA: https://www.ebi.ac.uk/ipd/imgt/hla/
+- IPD-KIR: https://www.ebi.ac.uk/ipd/kir/
+- HLA nomenclature: https://hla.alleles.org/nomenclature/index.html
+- MIRING reporting guidance: https://pmc.ncbi.nlm.nih.gov/articles/PMC4674382/
+- HL7 FHIR H&amp;I reporting guidance: https://www.hl7.org/fhir/uv/genomics-reporting/STU2/histocompatibility.html
+- IHIWS bioinformatics / DaSH: https://ihiw19.org/components-projects/bioinformatics/
 - EFI committee application form: https://efi-web.org/uploads/files/EFI-Committees-Committee-Member-Application-Form-v8_pdf.pdf
 - EFI Bioinformatics & IT Committee Mission Document and Committee Manual v1.0 (internal EFI source)
 
