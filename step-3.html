@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Follow the EFI International Summer School 2026 hands-on workshop in HLA sequence analysis.">
+<title>Step 3 | EFI BITCom workshop</title>
+<link rel="stylesheet" href="assets/summer-school-2026/workshop.css">
+<link rel="stylesheet" href="assets/summer-school-2026/efi-links.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to workshop</a>
+<header>
+<div class="top"><a href="https://efi-web.org/">European Federation for Immunogenetics</a><span>Bioinformatics &amp; IT Committee</span></div>
+<div class="banner">
+<div><p class="eyebrow">International Summer School 2026 · Crete</p><h1>Hands-on HLA Sequence Analysis</h1><p>From genomic DNA to structure</p></div>
+<img src="assets/summer-school-2026/efi-logo-white.svg" alt="EFI" width="90" height="87">
+</div>
+</header>
+<main id="main"><nav aria-label="Workshop navigation"><a href="index.html">Overview</a><a href="step-1.html">Step 1</a><a href="step-2.html">Step 2</a><a href="step-3.html" aria-current="page">Step 3</a><a href="step-4.html">Step 4</a><a href="downloads.html">Downloads</a><a href="group-guidance.html">Group guidance</a><a href="01-bitcom-at-efi.html">About BITCom</a></nav><section class="manual-step" id="manual-3"><span id="part2"></span><h2>Step 3 - Is immune recognition plausible? (surface exposure + ARD + structural view)</h2><details class="page-contents" open><summary>On this page</summary><ol><li><a href="#step-3.0">3.0 Create your variant list (you will reuse it everywhere)</a></li><li><a href="#step-3.1">3.1 Is this variation leading to a premature end of the protein?</a></li><li><a href="#step-3.1.1">3.1.1 Stop codon introduced by the variant</a></li><li><a href="#step-3.1.2">3.1.2 Frameshift (insertion/deletion not divisible by 3)</a></li><li><a href="#step-3.1.3">3.1.3 Alternative splicing / splice site disruption (genomic sequences)</a></li><li><a href="#step-3.2">3.2 Does this change the Antigen Recognition Domain (ARD; and therefore G/P grouping logic)?</a></li><li><a href="#step-3.2.1">3.2.1 Does this lead to another G-group characterization?</a></li><li><a href="#step-3.2.2">3.2.2 Does this lead to another P-group characterization?</a></li><li><a href="#step-3.2.3">3.2.3 Does this alter the peptide repertoire (binding groove)?</a></li><li><a href="#step-3.3">3.3 Is this variation surface-accessible (antibody/NK/T cell relevance)?</a></li><li><a href="#step-3.3.1">3.3.1 Run the surface accessibility analysis (NetSurfP-2.0)</a></li><li><a href="#step-3.3.2">3.3.2 Identify exposure characteristics of the new amino acids</a></li><li><a href="#step-3.3.3">3.3.3 Could this lead to antibody recognition by Bw4/Bw6?</a></li><li><a href="#step-3.3.4">3.3.4 Could this lead to antibody recognition in general?</a></li><li><a href="#step-3.3.5">3.3.5 Could this lead to altered NK recognition?</a></li><li><a href="#step-3.3.6">3.3.6 Could this lead to altered direct T cell recognition?</a></li></ol></details><h4>Links (open in browser)</h4><p>SFAT (Sequence Feature Annotation Tool): <a href="https://www.ebi.ac.uk/ipd/imgt/hla/annotation/">https://www.ebi.ac.uk/ipd/imgt/hla/annotation/</a></p>
+<p>IPD-IMGT/HLA Alignment tool: <a href="https://www.ebi.ac.uk/ipd/imgt/hla/alignment/">https://www.ebi.ac.uk/ipd/imgt/hla/alignment/</a></p>
+<p>IPD-IMGT/HLA Allele Query tool: <a href="https://www.ebi.ac.uk/ipd/imgt/hla/alleles/">https://www.ebi.ac.uk/ipd/imgt/hla/alleles/</a></p>
+<p>NetSurfP-2.0 (surface accessibility): <a href="https://services.healthtech.dtu.dk/services/NetSurfP-2.0/">https://services.healthtech.dtu.dk/services/NetSurfP-2.0/</a></p>
+<p>NCBI ORFfinder: <a href="https://www.ncbi.nlm.nih.gov/orffinder/">https://www.ncbi.nlm.nih.gov/orffinder/</a></p>
+<p>HLA Eplet Registry (optional): <a href="https://www.epregistry.com.br/">https://www.epregistry.com.br/</a></p>
+<p>SpliceAI Lookup (optional): <a href="https://spliceailookup.broadinstitute.org/">https://spliceailookup.broadinstitute.org/</a></p>
+<p>RCSB PDB: <a href="https://www.rcsb.org/">https://www.rcsb.org/</a></p>
+<p>PyMOL FindSurfaceResidues helper (optional): <a href="https://pymolwiki.org/FindSurfaceResidues">https://pymolwiki.org/FindSurfaceResidues</a></p>
+<h4>What you will produce</h4><p>step3_variant_list.txt</p>
+<p>step3_truncation_check.txt</p>
+<p>step3_ard_check.txt</p>
+<p>step3_surface_check.txt</p>
+<p>Optional: step3_pymol_notes.txt</p>
+<h4>Inputs you need from previous steps</h4><p>synthetic_input_sequence.txt (DNA)</p>
+<p>synthetic_CDS.txt (CDS)</p>
+<p>synthetic_protein.txt (protein)</p>
+<p>Closest known allele from Step 2 (from IPD-IMGT/HLA BLAST)</p>
+<h3 id="step-3.0">3.0 Create your variant list (you will reuse it everywhere)</h3><p>Goal: list each amino-acid difference between your synthetic protein and the closest known allele protein in a clean, consistent format.</p>
+<h4>What you do</h4><p>Open synthetic_protein.txt.</p>
+<p>Compare it to the closest known allele protein (from BLAST/alignment).</p>
+<p>Write down each amino-acid difference in a clean, consistent way.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: your synthetic protein sequence (and the closest allele protein sequence or alignment snippet).</p>
+<p>WRITE (format): one change per line, e.g., 80 I-&gt;T; 116 D-&gt;Y; 156 insertion: +G; 233 deletion: ΔK</p>
+<p>SAVE: as step3_variant_list.txt</p>
+</div><h4>Quick rule</h4><p>If you have only DNA differences: do not guess. First translate (SFAT/ORFfinder/ExPASy), then list AA changes.</p>
+<h3 id="step-3.1">3.1 Is this variation leading to a premature end of the protein?</h3><h3 id="step-3.1.1">3.1.1 Stop codon introduced by the variant</h3><p>Goal: check if the variant introduces an early stop (truncation).</p>
+<h4>What you do</h4><p>Open synthetic_protein.txt.</p>
+<p>Look for an early stop sign (some tools show '*' as stop) or an unexpectedly short protein.</p>
+<p>Cross-check with NCBI ORFfinder (fast sanity check).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: synthetic_CDS.txt (preferred) or synthetic_input_sequence.txt (if CDS not available).</p>
+<p>PASTE: into ORFfinder and run.</p>
+<p>LOOK FOR: the longest ORF; whether it stops much earlier than expected; whether multiple ORFs appear because of early stops.</p>
+<p>SAVE: write a 3–5 line conclusion in step3_truncation_check.txt: 'Stop codon present: yes/no' + evidence (protein has */ORF ends at ...).</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>If ORFfinder is unavailable, translate the CDS with ExPASy in the annotated frame. Compact output uses a dash for a stop. Compare the annotated reading frame as well as the longest ORF.</p></details><h3 id="step-3.1.2">3.1.2 Frameshift (insertion/deletion not divisible by 3)</h3><p>Goal: check whether an indel causes a frameshift and therefore likely truncation.</p>
+<h4>What you do</h4><p>From your coding alignment, identify insertions/deletions in the coding sequence.</p>
+<p>Check the length: 3, 6, 9... bases -&gt; in-frame; 1, 2, 4, 5... bases -&gt; frameshift.</p>
+<p>Confirm with ORFfinder: a frameshift often creates a short, abnormal ORF.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the exact indel from your alignment (length and position).</p>
+<p>WRITE: in step3_truncation_check.txt add: 'Frameshift: yes/no', 'Indel length: ... bp', 'Expected consequence: early stop likely / not likely'.</p>
+</div><h3 id="step-3.1.3">3.1.3 Alternative splicing / splice site disruption (genomic sequences)</h3><p>This only applies if your synthetic sequence includes introns (genomic input).</p>
+<h4>What you do (simple, manual but effective)</h4><p>Run SFAT on the genomic sequence and record exon boundaries.</p>
+<p>Check whether your variant sits at an exon boundary:</p>
+<p>- Donor site (start of intron): usually GT right after the exon</p>
+<p>- Acceptor site (end of intron): usually AG right before the next exon</p>
+<p>If your variant changes those canonical bases, splicing disruption is plausible.</p>
+<h4>Optional (stronger): SpliceAI Lookup</h4><p>If you can express your change as a variant on a reference genome coordinate, use SpliceAI Lookup and record the delta score.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>WRITE: in step3_truncation_check.txt add: 'Splice-site hit: yes/no', 'Which boundary: exon X donor/acceptor', 'Reason: canonical GT/AG changed / nearby splice motif changed'.</p>
+<p>OPTIONAL: add 'SpliceAI delta score' if used.</p>
+</div><h3 id="step-3.2">3.2 Does this change the Antigen Recognition Domain (ARD; and therefore G/P grouping logic)?</h3><h4>ARD definition used here</h4><p>Class I: peptide-binding domain is encoded by exons 2 and 3.</p>
+<p>Class II: peptide-binding domain is encoded by exon 2.</p>
+<h3 id="step-3.2.1">3.2.1 Does this lead to another G-group characterization?</h3><p>Goal: determine whether the ARD nucleotide sequence differs from the closest allele (relative G-group statement).</p>
+<h4>What you do</h4><p>Using SFAT output, isolate the ARD nucleotide sequence:</p>
+<p>- Class I: exon 2 + exon 3</p>
+<p>- Class II: exon 2</p>
+<p>Compare that ARD nucleotide sequence to the closest allele’s ARD nucleotide sequence (IPD alignment tool can show exon-level alignments).</p>
+<p>If any nucleotide differs in the ARD region, it is not the same G-group as the closest allele (relative statement).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: ARD exon nucleotide sequence(s) from SFAT + closest allele ARD exon sequence(s).</p>
+<p>COMPARE: identical yes/no.</p>
+<p>SAVE: in step3_ard_check.txt write: 'ARD nucleotide change: yes/no' and 'Same G-group as closest allele? yes/no (relative)'.</p>
+</div><h3 id="step-3.2.2">3.2.2 Does this lead to another P-group characterization?</h3><p>Goal: determine whether the ARD protein sequence differs from the closest allele (relative P-group statement).</p>
+<h4>What you do</h4><p>Translate the ARD region (or use your protein alignment) and check whether any AA in the ARD differs.</p>
+<p>Any ARD amino-acid difference vs closest allele implies a different P-group (relative statement).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: your ARD AA changes from step3_variant_list.txt.</p>
+<p>DECIDE: are any within ARD? (Class I: exons 2+3; Class II: exon 2).</p>
+<p>SAVE: in step3_ard_check.txt write: 'ARD protein change: yes/no' and 'Same P-group as closest allele? yes/no (relative)'.</p>
+</div><h3 id="step-3.2.3">3.2.3 Does this alter the peptide repertoire (binding groove)?</h3><p>You do not prove this here — you flag plausibility.</p>
+<h4>What you do (workshop rule)</h4><p>If the change is in ARD, it may affect peptide repertoire.</p>
+<p>Strengthen your conclusion using structure (Step 3.3 + optional PyMOL): if the mutated residue points into the binding groove or sits close to the peptide, plausibility increases.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>WRITE: in step3_ard_check.txt: 'Peptide repertoire impact plausible: low / medium / high'.</p>
+<p>WRITE: reason: 'ARD change yes/no; residue points to groove yes/no'.</p>
+</div><h3 id="step-3.3">3.3 Is this variation surface-accessible (antibody/NK/T cell relevance)?</h3><p>You will depict exposure with two options:</p>
+<p>Prediction from sequence (NetSurfP-2.0).</p>
+<p>Structure view using a PDB reference in PyMOL (optional).</p>
+<h3 id="step-3.3.1">3.3.1 Run the surface accessibility analysis (NetSurfP-2.0)</h3><p>Goal: obtain per-residue exposure (RSA) predictions for your synthetic protein.</p>
+<h4>What you do</h4><p>Open NetSurfP-2.0.</p>
+<p>Paste synthetic_protein.txt.</p>
+<p>Run the job.</p>
+<p>Download/export the per-residue output.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: protein sequence from synthetic_protein.txt</p>
+<p>PASTE: into NetSurfP and run.</p>
+<p>SAVE: export/download results and copy the key lines (your variant positions) into step3_surface_check.txt.</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>The original exercise uses NetSurfP-2.0. NetSurfP-3.0 is an additional route for the same accessibility exercise. Saved Case 01 predictions were generated with version 3.0. Record the version you use.</p></details><h3 id="step-3.3.2">3.3.2 Identify exposure characteristics of the new amino acids</h3><p>Goal: map each AA change to exposure (exposed/buried) using NetSurfP output.</p>
+<h4>What you do</h4><p>For each line in step3_variant_list.txt, look up the same position in the NetSurfP output.</p>
+<p>Record whether it looks exposed or buried (use RSA as your guide).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>SAVE: in step3_surface_check.txt create one block per variant:</p>
+<p>- Position + AA change</p>
+<p>- RSA (from NetSurfP)</p>
+<p>- Call: exposed / partly exposed / buried</p>
+<p>- 1-line interpretation: 'Accessible change yes/no'</p>
+</div><h3 id="step-3.3.3">3.3.3 Could this lead to antibody recognition by Bw4/Bw6?</h3><p>Goal: check whether the variant affects the class I 77–83 motif (Bw4/Bw6 region).</p>
+<h4>What you do</h4><p>Check if any variant position falls within residues 77–83 (class I only).</p>
+<p>If yes: write down the 77–83 motif for your synthetic allele and compare it to the closest allele’s motif.</p>
+<p>If the motif changes, Bw4/Bw6 reactivity can change.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>SAVE: in step3_surface_check.txt write: '77–83 affected: yes/no', 'Motif changed: yes/no', 'Bw4/Bw6 relevance: plausible / unlikely'.</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>Check mature HLA residue numbering before comparing positions 77–83. A full precursor sequence can include a signal peptide.</p></details><h3 id="step-3.3.4">3.3.4 Could this lead to antibody recognition in general?</h3><p>Goal: do a useful screen without overclaiming specific antibody specificities.</p>
+<h4>What you do (workshop-level decision rule)</h4><p>If a residue is surface-accessible (NetSurfP) and different from the closest allele, it can be part of an antibody epitope.</p>
+<p>Optional stronger check: see if the position overlaps a known eplet in the HLA Eplet Registry.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: variant positions that are 'exposed' from NetSurfP mapping.</p>
+<p>OPTIONAL CHECK: look up those positions in the HLA Eplet Registry.</p>
+<p>SAVE: in step3_surface_check.txt add: 'Antibody-relevant variants (exposed): [list]', 'Eplet overlap: yes/no/unknown', 'Overall antibody recognition plausibility: low/medium/high'.</p>
+</div><h3 id="step-3.3.5">3.3.5 Could this lead to altered NK recognition?</h3><p>Goal: flag plausibility of NK receptor effects.</p>
+<h4>What you do</h4><p>If your variant affects residues 77–83 (class I), NK impact via the Bw4 axis becomes more plausible.</p>
+<p>If not, you can still note 'unknown/possible', but do not overclaim.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>SAVE: in step3_surface_check.txt write: 'KIR/Bw4 axis affected: yes/no' and 'NK recognition change plausible: low/medium/high' + 1-line reason.</p>
+</div><h3 id="step-3.3.6">3.3.6 Could this lead to altered direct T cell recognition?</h3><p>Goal: flag plausibility based on ARD involvement and exposure (TCR-facing surface).</p>
+<h4>What you do</h4><p>If your change is in ARD and exposed, direct T cell recognition impact is plausible.</p>
+<p>Strengthen with PyMOL: if residue is on the TCR-facing side, plausibility increases.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>SAVE: in step3_surface_check.txt write: 'Direct T cell recognition change plausible: low/medium/high' and 'Reason: ARD change yes/no; exposed yes/no'.</p>
+</div><h4>Step 3 final deliverable (max 5 bullets)</h4><p>Premature end? yes/no + reason (stop/frameshift/splice).</p>
+<p>ARD affected? yes/no.</p>
+<p>G/P group change relative to closest allele? yes/no (relative statement).</p>
+<p>Accessible polymorphism? yes/no (NetSurfP +/- PyMOL).</p>
+<p>Antibody/NK/T cell plausibility: low/medium/high + 1-line reason (mention Bw4/Bw6 if relevant).</p>
+</section><nav class="page-turn" aria-label="Previous and next step"><a href="step-2.html">← Step 2</a><a href="step-4.html">Step 4 →</a></nav></main>
+<footer>European Federation for Immunogenetics · <a href="01-bitcom-at-efi.html">Bioinformatics &amp; IT Committee</a></footer>
+</body>
+</html>

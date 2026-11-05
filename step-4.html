@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Follow the EFI International Summer School 2026 hands-on workshop in HLA sequence analysis.">
+<title>Step 4 | EFI BITCom workshop</title>
+<link rel="stylesheet" href="assets/summer-school-2026/workshop.css">
+<link rel="stylesheet" href="assets/summer-school-2026/efi-links.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to workshop</a>
+<header>
+<div class="top"><a href="https://efi-web.org/">European Federation for Immunogenetics</a><span>Bioinformatics &amp; IT Committee</span></div>
+<div class="banner">
+<div><p class="eyebrow">International Summer School 2026 · Crete</p><h1>Hands-on HLA Sequence Analysis</h1><p>From genomic DNA to structure</p></div>
+<img src="assets/summer-school-2026/efi-logo-white.svg" alt="EFI" width="90" height="87">
+</div>
+</header>
+<main id="main"><nav aria-label="Workshop navigation"><a href="index.html">Overview</a><a href="step-1.html">Step 1</a><a href="step-2.html">Step 2</a><a href="step-3.html">Step 3</a><a href="step-4.html" aria-current="page">Step 4</a><a href="downloads.html">Downloads</a><a href="group-guidance.html">Group guidance</a><a href="01-bitcom-at-efi.html">About BITCom</a></nav><section class="manual-step" id="manual-4"><h2>Step 4 - Map your changed amino acids onto an HLA structure (web-based, using RCSB Mol*)</h2><details class="page-contents" open><summary>On this page</summary><ol><li><a href="#step-4.1">4.1 Find a proper HLA-A*02:01 PDB model (RCSB)</a></li><li><a href="#step-4.2">4.2 Open the structure in Mol* and clean the view</a></li><li><a href="#step-4.3">4.3 Prepare the residue positions you need to map</a></li><li><a href="#step-4.4">4.4 Select the changed residues in Mol*</a></li><li><a href="#step-4.4.1">4.4.1 Turn on Selection Mode and set Picking Level to Residue</a></li><li><a href="#step-4.4.2">4.4.2 Select residues from the Sequence panel</a></li><li><a href="#step-4.4.3">4.4.3 Select residues by clicking in the 3D canvas</a></li><li><a href="#step-4.5">4.5 Color your selected residues so they stay visible</a></li><li><a href="#step-4.6">4.6 Show the HLA heavy chain as a surface (exposed vs buried)</a></li><li><a href="#step-4.7">4.7 Optional: make a separate component for the variant residues (clean pictures)</a></li><li><a href="#step-4.8">4.8 Export a screenshot</a></li></ol></details><p>Example: HLA-A*02:01</p>
+<h4>What you will produce</h4><p>step4_pdb_model.txt (which PDB you used + why)</p>
+<p>step4_structure_mapping.txt (per variant: exposed/buried + notes)</p>
+<p>Optional: a folder step4_screenshots/ (PNG screenshots exported from Mol*)</p>
+<h4>Inputs you need from earlier steps</h4><p>step3_variant_list.txt (your amino-acid changes, positions)</p>
+<p>The closest known allele from Step 2</p>
+<p>For this example, you will use an HLA-A*02:01 PDB entry</p>
+<h4>Links (open in browser)</h4><p>RCSB PDB (search and 3D viewer):<a href="https://www.rcsb.org/">https://www.rcsb.org/</a> Mol* getting started (RCSB documentation):<a href="https://www.rcsb.org/docs/3d-viewers/mol*/getting-started">https://www.rcsb.org/docs/3d-viewers/mol*/getting-started</a></p>
+<h3 id="step-4.1">4.1 Find a proper HLA-A*02:01 PDB model (RCSB)</h3><h4>Goal</h4><p>Pick a structure that is usable for surface mapping. You want at least:</p>
+<p>HLA heavy chain (HLA-A*02:01)</p>
+<p>beta2-microglobulin</p>
+<p>a bound peptide (preferred, because it orients the groove)</p>
+<h4>What to do</h4><p>1. Open RCSB PDB (browser).</p>
+<p>2. Search for: HLA-A*02:01</p>
+<p>3. Open a candidate structure page and verify it is HLA-A*02:01.</p>
+<p>4. Check that the structure contains beta2-microglobulin and a bound peptide.</p>
+<p>5. Prefer X-ray or cryo-EM structures (defined coordinates).</p>
+<p>6. Pick one PDB entry as your reference model.</p>
+<h4>Examples of PDB entries that work for HLA-A*02:01 (examples only)</h4><p>7M8S (HLA-A*02:01 with peptide; useful for groove orientation)</p>
+<p>5F9J (HLA-A*02:01 with peptide)</p>
+<p>If you need an antibody/Fab present (optional), choose a pMHC structure that includes a Fab chain</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: PDB ID, title (1 line), and which components are present (heavy chain / beta2m / peptide / extras).</p>
+<p>SAVE: Create step4_pdb_model.txt with: Chosen PDB, Reason, Notes (extras present yes/no; method/resolution optional).</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>The manual uses HLA-A*02:01 as its structure example. If your analysed allele differs, align sequences and record the mapping to this example structure.</p></details><h3 id="step-4.2">4.2 Open the structure in Mol* and clean the view</h3><h4>Goal</h4><p>Get a clear picture: HLA heavy chain surface plus your residues highlighted.</p>
+<h4>What to do</h4><p>1. On the RCSB PDB page, open the 3D View (Mol*).</p>
+<p>2. Locate the Sequence panel and the Components/Controls panel.</p>
+<p>3. Keep visible: HLA heavy chain, beta2-microglobulin, and peptide.</p>
+<p>4. Hide: any extra chains (Fab/TCR/other) if present.</p>
+<h4>Important</h4><p>Mol* works by selecting parts of the structure and then applying actions to that selection (color, transparency, representations, or making a separate component).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>WRITE: In step4_structure_mapping.txt add: PDB used, Viewer (Mol*), and which objects you kept visible.</p>
+</div><h3 id="step-4.3">4.3 Prepare the residue positions you need to map</h3><h4>Goal</h4><p>Have a clean list of residue numbers you must highlight.</p>
+<h4>What to do</h4><p>1. Open step3_variant_list.txt.</p>
+<p>2. Extract only the residue numbers (positions).</p>
+<p>3. Write them as a comma-separated list.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: Residue positions from step3_variant_list.txt.</p>
+<p>WRITE: In step4_structure_mapping.txt add a line: Variant positions to map: 80, 116, 156, ...</p>
+<p>RULE: If PDB residue numbering does not match your sequence numbering, document the mismatch (see sanity checks).</p>
+</div><h3 id="step-4.4">4.4 Select the changed residues in Mol*</h3><h4>Goal</h4><p>Create a selection that contains all your variant residues.</p>
+<h3 id="step-4.4.1">4.4.1 Turn on Selection Mode and set Picking Level to Residue</h3><p>1. Click the cursor icon to enable Selection Mode.</p>
+<p>2. Set Picking Level to Residue (so you select whole amino acids, not single atoms).</p>
+<p>3. Click a residue once to confirm it becomes highlighted.</p>
+<p>CHECK: When you click a residue, it highlights in the 3D view and in the sequence panel.</p>
+<details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>Viewer controls can vary with the Mol* version. Check both the selected residue label and its highlighted position in the sequence panel.</p></details><h3 id="step-4.4.2">4.4.2 Select residues from the Sequence panel</h3><p>1. In Selection Mode, click the residue in the sequence panel at the correct position.</p>
+<p>2. To select a range, hold Shift while clicking along the sequence.</p>
+<p>3. To select multiple separate residues, use Add/Union selection and click each residue one by one until all are included.</p>
+<p>GOAL: You end with one selection that contains all variant residues.</p>
+<p>TIP: Use Add/Union selection to accumulate non-adjacent residues.</p>
+<h3 id="step-4.4.3">4.4.3 Select residues by clicking in the 3D canvas</h3><p>1. Rotate the structure until the region is visible.</p>
+<p>2. Click the residue on the 3D model.</p>
+<p>3. Use Add/Union selection for multiple residues (same as above).</p>
+<h3 id="step-4.5">4.5 Color your selected residues so they stay visible</h3><h4>Goal</h4><p>Make the mutated residues stand out.</p>
+<h4>What to do</h4><p>1. With your residues selected, click Apply Theme to Selection.</p>
+<p>2. Choose a strong color and apply it.</p>
+<p>3. Confirm that the selection remains visible after you click elsewhere.</p>
+<p>WRITE: In step4_structure_mapping.txt add: Color applied to variants: yes/no; How: Apply Theme to Selection (Mol*).</p>
+<h3 id="step-4.6">4.6 Show the HLA heavy chain as a surface (exposed vs buried)</h3><h4>Goal</h4><p>Decide if each polymorphism is accessible to antibody binding.</p>
+<h4>What to do</h4><p>1. Ensure the HLA heavy chain is visible.</p>
+<p>2. Change the representation to include a molecular surface for the heavy chain component.</p>
+<p>3. Optional: set the surface slightly transparent so you can still see colored sticks underneath.</p>
+<p>DECIDE (for each residue): Exposed (visible on surface), Buried (inside), or Unclear (ambiguous).</p>
+<p>SAVE: In step4_structure_mapping.txt create one block per variant: Position, Change, Surface call, Notes (1 line).</p>
+<h3 id="step-4.7">4.7 Optional: make a separate component for the variant residues (clean pictures)</h3><h4>Goal</h4><p>Surface plus colored sticks is the clearest way to present results.</p>
+<h4>What to do</h4><p>1. Select the variant residues.</p>
+<p>2. Use Create Component of Selection with Representation.</p>
+<p>3. Choose a representation like sticks.</p>
+<p>4. Use the eye icon to show/hide the component.</p>
+<h3 id="step-4.8">4.8 Export a screenshot</h3><h4>What to do</h4><p>1. Set the view: surface visible, residues colored, peptide visible if present.</p>
+<p>2. Use the camera/screenshot option and download the image.</p>
+<p>SAVE: Recommended filenames: step4_HLA-A0201_surface_variants.png; optional: step4_HLA-A0201_zoom_variant80.png</p>
+<p>WRITE: In step4_structure_mapping.txt add: Screenshots saved yes/no; file names.</p>
+<details><summary><span class="badge" aria-hidden="true">?</span>Quick sanity checks (do these before you conclude)</summary><p>Residue numbers do not exist in the PDB sequence panel: you may have a numbering offset or a trimmed construct. Pick a different PDB entry or document the offset in step4_pdb_model.txt.</p>
+<p>Extra chains block the view: hide them using the Components panel (eye icon), or keep only the pMHC components.</p>
+<p>Selected residues disappear after clicking elsewhere: apply the theme immediately or create a separate component from the selection.</p>
+</details></section><nav class="page-turn" aria-label="Previous and next step"><a href="step-3.html">← Step 3</a><a href="downloads.html">Downloads →</a></nav></main>
+<footer>European Federation for Immunogenetics · <a href="01-bitcom-at-efi.html">Bioinformatics &amp; IT Committee</a></footer>
+</body>
+</html>
