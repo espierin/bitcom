@@ -1,0 +1,28 @@
+EFI Summer School 2026 - HLA Sequence Analysis
+
+Reference allele:
+Variant case:
+Input files and tools used:
+
+1. Annotation
+Exon boundaries:
+CDS length / protein length:
+
+2. Alignment
+Reference and variant residue:
+Numbering convention (precursor or mature):
+
+3. Coding integrity
+ORF span / premature stop:
+Frameshift or splice-site evidence:
+
+4. Antigen recognition domain
+ARD nucleotide differences / relative G-group:
+ARD amino-acid differences / relative P-group:
+
+5. Surface and structure
+RSA / exposure call:
+PDB ID, chain and mapped residue:
+Interpretation and uncertainty:
+
+6. Five-bullet conclusion

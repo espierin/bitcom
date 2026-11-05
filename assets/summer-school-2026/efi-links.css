@@ -1,0 +1,15 @@
+/* EFI shared interaction layer v1.1 · 2026-11-03.
+   Load AFTER the existing product styles. No font, spacing or banner overrides.
+   Official reference: https://efi-web.org/dist/assets/app-LaxFMXV4.css
+   Dark coral is the existing Journal Club text accent, used for small-text contrast. */
+:root{--efi-link:#064a89;--efi-link-hover:#a83e3e;--efi-coral:#de5757;--efi-focus:#064a89}
+/* Keep buttons, cards, navigation and white banner links in their own components. */
+:where(main,article,.wysiwyg,.efi-prose) a[href]:not(:where(.button,.btn,[role="button"],.brand,.home-role,.metric,.skip,.skip-link,nav a,header a,.hero a,.banner a,.banner-frame a,.cycle-strip a)){
+ color:var(--efi-link);text-decoration-line:underline;text-decoration-thickness:1px;text-underline-offset:4px;transition:color 150ms ease,text-decoration-color 150ms ease;
+}
+:where(main,article,.wysiwyg,.efi-prose) a[href]:not(:where(.button,.btn,[role="button"],.brand,.home-role,.metric,.skip,.skip-link,nav a,header a,.hero a,.banner a,.banner-frame a,.cycle-strip a)):visited{color:var(--efi-link)}
+:where(main,article,.wysiwyg,.efi-prose) a[href]:not(:where(.button,.btn,[role="button"],.brand,.home-role,.metric,.skip,.skip-link,nav a,header a,.hero a,.banner a,.banner-frame a,.cycle-strip a)):is(:hover,:focus-visible){color:var(--efi-link-hover);text-decoration-color:currentColor}
+a[href]:focus-visible{outline:2px solid var(--efi-focus);outline-offset:4px;border-radius:2px}
+:where(header,.hero,.banner,.banner-frame) a[href]:focus-visible{outline-color:currentColor}
+.site-nav a[href]:is(:hover,:focus-visible),.site-nav a[aria-current="page"]{color:var(--efi-link-hover);text-decoration-line:underline;text-decoration-thickness:1px;text-underline-offset:6px}
+@media(prefers-reduced-motion:reduce){a[href]{transition:none}}
