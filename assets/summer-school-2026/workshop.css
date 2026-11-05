@@ -93,6 +93,9 @@ summary:focus-visible, .screen-example a:focus-visible { outline: 3px solid var(
 button, .action-link { display:inline-block; padding:.7rem 1rem; background:var(--efi-blue); color:white; border:1px solid var(--efi-blue); border-radius:4px; font:inherit; cursor:pointer; min-height:44px; }
 .action-link:visited, .action-link:hover {color:white;}
 .workbook-actions,.start-actions {display:flex;flex-wrap:wrap;gap:.7rem;}
+.workbook-sections {position:sticky;top:0;z-index:5;background:white;border-bottom:2px solid var(--efi-blue);padding:.6rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;}
+#workbook-form fieldset {scroll-margin-top:8rem;}
+.field-guidance {color:var(--efi-ink);background:var(--efi-surface);padding:.7rem;}
 fieldset {border:1px solid var(--efi-line);padding:1.2rem;margin:1.5rem 0;min-width:0;}
 legend {color:var(--efi-blue);font-size:1.3rem;font-weight:700;padding:0 .4rem;}
 #workbook-form label {display:block;font-weight:600;margin:1rem 0 .4rem;}
