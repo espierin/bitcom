@@ -244,6 +244,9 @@ button, .action-link { display:inline-block; padding:.7rem 1rem; background:var(
 #workbook-actions {scroll-margin-top:2rem;}
 .field-guidance {color:var(--efi-ink);background:var(--efi-surface);padding:.7rem;}
 .workbook-hint {font-size:.9rem;color:#4e5b66;margin:.2rem 0 .45rem;}
+.workbook-copy {display:flex;align-items:center;flex-wrap:wrap;gap:.25rem .65rem;margin:.4rem 0;font-size:.9rem;color:var(--efi-ink);}
+.workbook-copy button {padding:.35rem .65rem;}
+.workbook-copy button:focus-visible {outline:3px solid var(--efi-blue);outline-offset:2px;}
 fieldset {border:1px solid var(--efi-line);padding:1.2rem;margin:1.5rem 0;min-width:0;}
 legend {color:var(--efi-blue);font-size:1.3rem;font-weight:700;padding:0 .4rem;}
 #workbook-form label {display:block;font-weight:600;margin:1rem 0 .4rem;}

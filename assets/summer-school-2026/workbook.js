@@ -13,6 +13,36 @@ function save() {
 }
 try { const data = JSON.parse(localStorage.getItem(key) || '{}'); if (data && typeof data === 'object') show(data); status.textContent = 'Ready. Your answers are saved here as you type. Keep the workbook open in one tab.'; }
 catch { status.textContent = 'Could not read browser storage. Download a backup before closing this page.'; }
+for (const field of fields.filter(field => field.dataset.copyable !== undefined)) {
+  const actions = document.createElement('div');
+  actions.className = 'workbook-copy';
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = 'Copy all';
+  button.setAttribute('aria-label', 'Copy all: ' + field.labels[0].textContent);
+  const feedback = document.createElement('span');
+  feedback.setAttribute('role', 'status');
+  actions.append(button, feedback);
+  field.after(actions);
+
+  field.addEventListener('input', () => { feedback.textContent = ''; });
+  button.addEventListener('click', async () => {
+    const text = field.value;
+    feedback.textContent = '';
+    if (!text) {
+      feedback.textContent = 'This field is empty.';
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      feedback.textContent = 'Copied to clipboard.';
+    } catch {
+      field.focus();
+      field.select();
+      feedback.textContent = 'Text selected. Press Ctrl+C or Command+C, or use your device’s Copy command.';
+    }
+  });
+}
 form.addEventListener('input', event => {
   try {
     const latest = unsaved ? null : JSON.parse(localStorage.getItem(key) || '{}');
