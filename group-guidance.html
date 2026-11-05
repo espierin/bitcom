@@ -3,37 +3,154 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Follow the EFI International Summer School 2026 hands-on workshop in HLA sequence analysis.">
-<title>Group guidance | EFI BITCom workshop</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Critical task checks, case notes and fallback decisions for the EFI BITCom on-site support team.">
+<title>On-site support guide | EFI BITCom workshop</title>
 <link rel="stylesheet" href="assets/summer-school-2026/workshop.css?v=20261105-review">
 <link rel="stylesheet" href="assets/summer-school-2026/efi-links.css?v=2">
-<script src="assets/summer-school-2026/progress-data.js?v=3" defer></script>
-<script src="assets/summer-school-2026/registration-config.js?v=3" defer></script>
-<script src="assets/summer-school-2026/cloud-work.js?v=1" defer></script>
-<script src="assets/summer-school-2026/progress.js?v=4" defer></script>
-<script src="assets/summer-school-2026/workbook-window.js?v=1" defer></script>
-<script src="assets/summer-school-2026/progress-gate.js?v=2" defer></script></head>
+<style>
+.support-guide {max-width:1040px}
+.support-guide section {scroll-margin-top:1rem}
+.support-guide h3 {margin:1.4rem 0 .45rem}
+.support-guide li + li {margin-top:.45rem}
+.support-guide .guide-table {overflow-x:auto}
+.support-guide table {width:100%;border-collapse:collapse;margin:.8rem 0 1.2rem}
+.support-guide th,.support-guide td {padding:.65rem .75rem;border:1px solid var(--efi-line);vertical-align:top;text-align:left}
+.support-guide th {background:var(--efi-surface)}
+.support-guide th[scope="row"] {min-width:8rem}
+.support-guide details {margin:.55rem 0}
+.support-guide code {overflow-wrap:anywhere}
+@media(max-width:600px) {
+  .support-guide .guide-table td,.support-guide .guide-table th {padding:.45rem}
+}
+@media print {
+  .support-guide {padding:0}
+  .support-guide h2,.support-guide h3 {break-after:avoid}
+  .support-guide tr {break-inside:avoid}
+  .support-guide thead {display:table-header-group}
+}
+</style>
+</head>
 <body>
-<a class="skip" href="#main">Skip to workshop</a>
+<a class="skip" href="#main">Skip to support guide</a>
 <header>
 <div class="top"><a href="https://efi-web.org/" rel="noopener noreferrer" target="_blank">European Federation for Immunogenetics</a><span>Bioinformatics &amp; IT Committee</span></div>
 <div class="banner">
-<div><p class="eyebrow">International Summer School 2026 · Crete</p><h1>Hands-on HLA Sequence Analysis</h1><p>From genomic DNA to structure</p></div>
+<div><p class="eyebrow">International Summer School 2026 · Crete</p><h1>On-site support guide</h1><p>Hands-on HLA Sequence Analysis</p></div>
 <img src="assets/summer-school-2026/efi-logo-white.svg" alt="EFI" width="90" height="87">
 </div>
 </header>
-<main id="main"><nav aria-label="Workshop navigation"><a href="index.html">Overview</a><a href="register.html">Sign in</a><a href="introduction.html">Introduction</a><a href="step-1.html">Step 1</a><a href="step-2.html">Step 2</a><a href="step-3.html">Step 3</a><a href="step-4.html">Step 4</a><a href="workbook.html" target="EFI_BITCom_Workbook" rel="noopener" title="Open workbook in a separate window">My workbook</a><a href="downloads.html">Downloads</a><a aria-current="page" href="group-guidance.html">Group guidance</a></nav><section id="group-route"><h2>Working together in a group of 40</h2>
-<p>Keep one workshop tab and your workbook open. Download the fallback package before class, extract all files to one folder, and check that you can open both <code>alignment-results.html</code> and <code>index.html</code>. The first contains saved alignments. The second opens the NetSurfP viewer with the prediction data included.</p>
-<p><a class="action-link" href="downloads/summer-school-2026/netsurfp/offline-results.zip" download>Download offline alignment and NetSurfP package</a></p>
+<main id="main" class="support-guide">
+<section id="critical-checks">
+<h2>Critical checks by task</h2>
+<h3>Step 1 · Genomic DNA, annotation and protein</h3>
+<p><strong>See before moving on.</strong> One genomic FASTA record, the locus and input level used in SFAT, the annotated CDS or a documented matching fallback, and the resulting protein or a recorded limitation. The workbook should distinguish sequence lengths in bases and residues.</p>
+<ul>
+<li>For “sequence rejected” or an implausible annotation, check for a pasted header in a letters-only field, a second FASTA record, copied line numbers, or a genomic file selected as CDS. Check locus A for the workshop HLA-A cases.</li>
+<li>If the translation is unexpectedly short, inspect the annotated frame and first stop. Repeat the translation from the verified CDS where appropriate. A longer ORF in another frame is insufficient evidence that the annotated frame is wrong.</li>
+<li>If SFAT is unavailable, use the packaged CDS and protein only when they correspond to the exact assigned input. Document when the file is a provided result. Independent CDS and genomic exercises must remain separate.</li>
+</ul>
+<h3>Step 2 · Comparator and alignment</h3>
+<p><strong>See before moving on.</strong> Input identity, a supported reference choice, and either two aligned rows with traceable lengths or an explicit unresolved-protein note. Record the database or tool and any difference between the selected BLAST hit and the workshop reference.</p>
+<ul>
+<li>Check sequence type, database, identity and query coverage together. A high percentage over a short region cannot justify a full-length comparator. Compare relevant tied hits and record uncertainty.</li>
+<li>Use SMS2 first. Put one complete FASTA entry in each box, confirm the two input lengths, and open the results window. The workshop settings are BLOSUM62, gap opening 12 and extension 2. If a pop-up is blocked or the page does not load, open the saved pair.</li>
+<li>Watch for silent filtering of <code>X</code> and other symbols. For the archived Case 05 short protein, the saved alignment covers the known prefix. Its exact NetSurfP input still contains the terminal <code>X</code>. A confirmed stop marker in Case 04 is treated according to its preparation note.</li>
+<li>Count residue letters in each row separately. Gaps do not advance that row’s sequence number. An unaligned terminal tail after a stop or frameshift does not imply a separate deletion at every column.</li>
+</ul>
+<p><a href="alignment-help.html">SMS2 instructions and pop-up help</a> · <a href="alignment-results.html">Saved pairs with exact inputs</a></p>
+<h3>Step 3 · Coding consequences and immune interpretation</h3>
+<p><strong>See before moving on.</strong> The variant list includes coordinates and reference/variant letters, the correct distinction between observed DNA evidence and predicted product, and a result or limitation for each applicable interpretation task.</p>
+<ul>
+<li>Separate early stop, coding frameshift and possible splice disruption. A standard SFAT annotation can report conventional exons even when a splice-site change makes the transcript uncertain. Report unresolved protein rather than attaching a protein prediction to the wrong input.</li>
+<li>For class I HLA-A, compare coding exons 2 and 3 for ARD nucleotide and protein evidence. Keep G-group nucleotide identity, P-group protein identity and official membership separate. The presence of a translated sequence does not establish expression.</li>
+<li>Before RSA lookup, check the exact archived sequence, the entered precursor position and its amino-acid letter. If comparing with a reference, use its separately mapped position. A 24-residue shift is valid only after confirming the leader in the actual sequence being used.</li>
+<li>Record numeric RSA, model version and input alongside an interpretation. Around the workshop threshold of 0.25, retain the number and the uncertainty. An RSA prediction describes solvent exposure under the model and does not establish antibody, NK or T-cell recognition.</li>
+<li>For Bw4/Bw6, check the mature 77–83 window and the locus/allotype context. Keep the peptide groove, potential epitope and receptor hypotheses separate. Treat structure and eplet checks as evidence with limits.</li>
+</ul>
+<h3>Step 4 · Structure mapping</h3>
+<p><strong>See before moving on.</strong> One defensible mapping from the chosen precursor and mature numbering to the PDB ID, heavy chain and displayed residue. Check the residue letter and flanking sequence before selecting the site.</p>
+<ul>
+<li>Distinguish the manual’s A*02:01 teaching template from an A*01 comparator. Label any homologous template. For the core case, 3BO8 gives an A*01 reference site, with chain A His 188 available for inspection.</li>
+<li>In Mol*, check the correct chain instance and select at residue level. If the number exists but the residue or neighbour disagrees, recheck the mapping. If the region lacks coordinates, record it as unmapped.</li>
+<li>Keep the peptide and beta2-microglobulin visible where they affect interpretation. When observing a coloured site, distinguish the modelled reference residue, a surface estimate and the hypothesised variant effect.</li>
+<li>If the viewer fails, use the relevant screen example to practise identifying the chain and selection controls. Record the intended mapping and any model-dependent assessment as unresolved.</li>
+</ul>
+<p><a href="https://www.rcsb.org/structure/3BO8" rel="noopener noreferrer" target="_blank">RCSB 3BO8</a> · <a href="https://www.rcsb.org/docs/3d-viewers/mol*/getting-started" rel="noopener noreferrer" target="_blank">RCSB Mol* guide</a></p>
+</section>
+
+<section id="case-notes">
+<h2>Case notes for facilitators</h2>
+<p>Use these to diagnose an input or interpretation problem after the learner has made an attempt. The saved HLA-A comparisons use the workshop A*01:01:01:01 reference. An independently chosen reference can lead to a different comparison.</p>
+<details><summary>Case 01 · Core substitution and numbering check</summary><div class="support-content">
+<p>The verified HLA-A precursor inputs are 365 residues. The relevant comparison is H212L in precursor numbering and H188L in mature numbering, after confirming the 24-residue leader. The change is in exon 4, outside the class I ARD. For the exact archived input pair, RSA is about 0.331 for H and 0.360 for L. Both exceed the workshop threshold. Use 3BO8 chain A His 188 as the reference structural check. No antibody result follows from the accessibility estimate.</p>
+</div></details>
+<details><summary>Case 02 · Genomic and independent CDS routes</summary><div class="support-content">
+<p>The genomic file changes the acceptor immediately before exon 2 from AG to AA. Its resulting protein remains unresolved. The separate CDS file has a one-base insertion and a first stop at codon 31. The 30-residue archived prediction applies to that exact CDS-derived translation. If a learner moves the CDS prediction onto the genomic file, ask them to state the source of each piece of evidence again.</p>
+</div></details>
+<details><summary>Case 03 · Exon 3 acceptor and unresolved translation</summary><div class="support-content">
+<p>The genomic variant changes the acceptor immediately before exon 3 from AG to AT. SFAT can return the conventional annotated CDS. Record the splice-site evidence and uncertainty about the actual transcript. Use the HLA-B demonstration to practise the protein steps and keep its results labelled separately.</p>
+</div></details>
+<details><summary>Case 04 · Coding insertion, stop and terminal marker</summary><div class="support-content">
+<p>A one-base insertion in the supplied coding comparison shifts the frame and produces a first stop at codon 220, after 219 amino acids. The 660-base coding span includes the stop. Verify the terminal marker against the CDS and use the archived 219-residue input for alignment and NetSurfP. The supplied record is an A*01:04:01:01N example. Check published group membership separately from expression.</p>
+</div></details>
+<details><summary>Case 05 · Keep the short protein and CDS separate</summary><div class="support-content">
+<p>The provided CDS is identical to the workshop reference CDS, while the supplied short protein is a different record and ends in an unresolved <code>X</code>. The saved short alignment uses the known prefix. Its NetSurfP record requires the exact short input including <code>X</code>. The full CDS translation is a separate archive choice. Neither record establishes that the null allele produces an expressed protein.</p>
+</div></details>
+<details><summary>Case 06 · ARD differences and official grouping</summary><div class="support-content">
+<p>The supplied protein differs at precursor F33S and R41S, which are in the ARD. Use the provided genomic and protein files. The original item labelled as CDS contained protein, so derive the CDS from genomic annotation when needed. IPD-IMGT/HLA 3.66.0 lists A*01:02:01G and A*01:02P for A*01:02:01:01, different from the workshop reference groups. The expected-outcomes note about a shared G group was corrected in the workshop.</p>
+</div></details>
+<p>If the assigned case cannot support a protein comparison, have the learner record why and complete the mechanics on a labelled demonstration. The HLA-B pair supports alignment practice and a separate HLA-B prediction supports RSA lookup. Use the Case 01 pair as a separate exercise if a matched reference–variant RSA comparison is needed.</p>
+<p><a href="downloads.html">Detailed case answers and original inputs</a> · <a href="https://github.com/ANHIG/IMGTHLA/blob/Latest/wmda/hla_nom_g.txt" rel="noopener noreferrer" target="_blank">IPD G-group table</a> · <a href="https://github.com/ANHIG/IMGTHLA/blob/Latest/wmda/hla_nom_p.txt" rel="noopener noreferrer" target="_blank">IPD P-group table</a></p>
+</section>
+
+<section id="outages">
+<h2>Fallback decisions under time pressure</h2>
+<div class="guide-table" role="region" aria-label="Fallback decision table" tabindex="0">
+<table>
+<thead><tr><th scope="col">Signal</th><th scope="col">Check once</th><th scope="col">Keep the exercise moving</th></tr></thead>
+<tbody>
+<tr><th scope="row">SMS2 fails or pop-up is blocked</th><td>Check whether the results opened in another tab or whether the browser blocked the window. Verify the two FASTA entries and supported residues.</td><td>Open the saved comparison, check the exact pair, and use its residue ranges. If your comparator differs, name the workshop reference in the notes. Avoid shifting the room to simultaneous UniProt jobs.</td></tr>
+<tr><th scope="row">NetSurfP is slow or unavailable</th><td>Keep the facilitator’s job ID. Allow two minutes for the shared demonstration. On immediate error, switch at once.</td><td>Use the saved-results viewer. Choose the exact input, verify the amino-acid sequence, enter the mapped position and read the numeric RSA. Use the exported CSV if the viewer is unavailable.</td></tr>
+<tr><th scope="row">Archive rejects the sequence</th><td>Check whether a leader was removed, an <code>X</code> was excluded, a different record was copied, or a CDS was pasted. Read the archive preparation note.</td><td>Use the appropriate exact file if supported. Otherwise record the mismatch and practise with a separate example. A different input cannot inherit the archive’s values.</td></tr>
+<tr><th scope="row">SFAT or BLAST fails across the room</th><td>Check one exact input and one result page on a second device. Confirm whether the failure is submission, queue or display.</td><td>Use the verified matching CDS/protein and workshop comparator for the practical comparison. Record which live evidence was unavailable. Keep independent input records separate.</td></tr>
+<tr><th scope="row">GitHub Pages or venue Wi-Fi fails</th><td>Verify the issue on another laptop. Ask venue staff to check the connection while the lead announces the fallback.</td><td>Open the pre-extracted offline pages. Work with text or CSV as needed. Record answers in a local plain-text file and transfer them when the workbook is accessible.</td></tr>
+<tr><th scope="row">3D view is blank or unusable</th><td>Check whether the 3D view is still loading or the browser reports WebGL trouble. Try the correct structure view once.</td><td>Use the screenshot and mapped reference sequence to practise identification. Record which observations were available and which require the live model.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Earlier checks exercised the archived routes with 40 simulated clients online and again with networking blocked. A single live SMS2 demonstration and a single live NetSurfP job also completed. The venue Wi-Fi, 40 physical laptops and 40 concurrent DTU jobs were outside that test. SMS2 computes in each browser after loading. EMBL-EBI requests batches of at most 30 simultaneous Web Services jobs, and the DTU input limits do not specify classroom capacity.</p>
+<p><a href="https://www.bioinformatics.org/sms2/about.html" rel="noopener noreferrer" target="_blank">SMS2 local processing</a> · <a href="https://www.ebi.ac.uk/jdispatcher/docs/webservices/#fair-use-policy" rel="noopener noreferrer" target="_blank">EMBL-EBI fair use</a> · <a href="https://services.healthtech.dtu.dk/services/NetSurfP-3.0/" rel="noopener noreferrer" target="_blank">DTU NetSurfP instructions</a></p>
+</section>
+
+<section id="accounts">
+<h2>Optional email sign-in and saving</h2>
+<ul>
+<li><strong>At entry.</strong> Invite sign-in for people who want to resume on another device. The workshop remains usable as a guest. Confirm that the participant opens the latest mail link within 20 minutes, enters the receiving address again and chooses <strong>Confirm sign-in</strong>. Use the 30-day option only on the participant’s own device.</li>
+<li><strong>Mail delayed or missing.</strong> Check the typed address and spam folder. “Request accepted” indicates the relay accepted the send. A previous live test arrived after a delay. Continue as a guest while waiting and avoid repeated requests. Keep the participant’s email and confirmation link off shared screens and out of support logs.</li>
+<li><strong>Moving from guest to sign-in.</strong> Ask them to export a JSON backup first. During confirmation, the copy option can bring guest work into empty server sections. If there is existing work on the server, retain both copies and reconcile with the participant. Restoring a backup can replace the currently open work.</li>
+<li><strong>Before closing.</strong> Guests open My workbook and choose <strong>Download backup (.json)</strong>. Signed-in learners wait for <strong>Saved on the server</strong> or click <strong>Save on server now</strong>. If the sync is pending or fails, download JSON. A text report or PDF is readable but cannot restore the workbook.</li>
+<li><strong>Conflicting server copy.</strong> Export the local version first. Discuss which copy to use before selecting <strong>Load server copy</strong>. Do not repeatedly save over an unresolved conflict. Confirm the same browser profile and address when continuing.</li>
+<li><strong>Locked page.</strong> Check the saved-progress panel for the first unfinished task. Open that task and ask what evidence or limitation was recorded. An optional or inapplicable task can be marked complete once the participant has documented why. A missing browser record can be recovered by signing in to the correct account or restoring their own JSON backup.</li>
+<li><strong>Shared laptop.</strong> Have the participant keep their backup, verify the server-save message if applicable, then sign out. Keep FASTA downloads and structure images separately from the JSON backup.</li>
+</ul>
+<p><a href="register.html">Participant sign-in</a> · <a href="workbook.html#workbook-actions" target="EFI_BITCom_Workbook" rel="noopener" title="Open workbook in a separate window">Workbook backup and restore</a></p>
+</section>
+
+<section id="handover">
+<h2>Escalation and handover</h2>
+<h3>Give the lead a short, actionable report</h3>
+<p>Record the time, task number, case/input type, affected tool, visible error, how many desks are affected and which fallback is working. Add a public tool job ID only if useful and appropriate. Use a case label or desk number. Keep participant addresses, workbook content and confirmation links out of group messages.</p>
+<p>Suggested room announcement: “Please keep your current job open. We’re switching to the saved result now. Choose your exact input, check the reference and record the archived source with your observation.”</p>
+<h3>Check the handoff at the end of each block</h3>
 <ol>
-<li><strong>Protein alignment.</strong> Use <a href="alignment-help.html">SMS2</a> first. It calculates on each laptop. If the site or results window fails, use the <a href="alignment-results.html">saved protein comparisons</a>. Check both input sequences and the reference, then use the aligned rows to find your positions.</li>
-<li><strong>NetSurfP.</strong> Watch one facilitator submission, then use the <a href="netsurfp-viewer.html#saved-results">saved-results viewer</a> for the assigned case. If you are invited to submit, keep the job ID and switch to the archive after two minutes, or immediately if the service fails. Record the exact input, residue position and RSA, then write your interpretation.</li>
-<li><strong>Unresolved or unmatched input.</strong> Document the limitation. For Case 02 genomic or Case 03, keep the genomic splice evidence and use the separately labelled HLA-B example to practise alignment and RSA lookup. If you need a full reference–variant RSA comparison, use Case 01 as a separate practice exercise. Keep demonstration results apart from the assigned case.</li>
-<li><strong>Workshop site or Wi-Fi unavailable.</strong> Open the extracted package. Use the local alignment text and the offline viewer or the included CSV exports. Keep notes in a local text file until you can return to the workbook.</li>
+<li>Ask the learner to show the named input, one traceable observation and one uncertainty.</li>
+<li>Check that their work is saved or backed up, that they know the next unfinished task, and that any downloaded inputs and screenshots remain in their workshop folder.</li>
+<li>Share outstanding issues with the lead in aggregate. Note which fallback kept the learning goal achievable and which steps need follow-up.</li>
 </ol>
-<details><summary><span class="badge" aria-hidden="true">?</span>Facilitator setup</summary><div class="support-content"><ol><li>Distribute the package before the session and keep a second local copy. Ask participants to extract it and open both pages before starting.</li><li>Assign the exact input and comparator. Confirm who is working on a genomic splice question, an independent CDS or a supplied protein.</li><li>Demonstrate one NetSurfP submission. Have the group use the archive for the interpretation exercise, so everyone can begin together.</li><li>For a local browser failure, open the comparison text or per-residue CSV in a text editor or spreadsheet. The workbook can be supplemented with local notes.</li></ol></div></details>
-<details><summary><span class="badge" aria-hidden="true">!</span>Service capacity and what the archive covers</summary><div class="support-content"><p>SMS2 runs its alignment calculation locally after the web page loads. The saved comparisons cover six defined HLA-A input routes and one separate HLA-B pair. The NetSurfP archive contains eight predictions and separate notices for two genomic inputs without an established variant protein.</p><p>EMBL-EBI asks users of its Web Services to limit batches to 30 simultaneous jobs and wait before submitting the next batch. UniProt Align uses EMBL-EBI Clustal Omega. DTU documents NetSurfP input limits but gives no reserved capacity for 40 live jobs. Run the shared demonstration and make the archive the group’s working route.</p><p><a href="https://www.ebi.ac.uk/jdispatcher/docs/webservices/#fair-use-policy" rel="noopener noreferrer" target="_blank">EMBL-EBI fair use</a> · <a href="https://services.healthtech.dtu.dk/services/NetSurfP-3.0/" rel="noopener noreferrer" target="_blank">NetSurfP instructions</a></p></div></details>
-</section></main>
+<p><a href="#critical-checks">Back to the top of the support guide</a></p>
+</section>
+</main>
 <footer>European Federation for Immunogenetics · <a href="01-bitcom-at-efi.html">Bioinformatics &amp; IT Committee</a></footer>
 </body>
 </html>
