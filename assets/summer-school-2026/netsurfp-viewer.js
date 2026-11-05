@@ -94,7 +94,8 @@
       for(const[label,r]of rows){const tr=document.createElement('tr');for(const value of [label,r.position,r.aa,r.rsa.toFixed(4),r.asa.toFixed(2)]){const td=document.createElement('td');td.textContent=value;tr.append(td);}$('ns-values').append(tr);}
       chart($('ns-chart'),chosenData,row.position,chosen.label);$('ns-reference-chart').hidden=!refValue;
       if(refValue)chart($('ns-reference-chart'),reference,Number(refValue),'Reference');
-      $('ns-observation').value=rows.map(([label,r])=>`${label}: input position ${r.position}; amino acid ${r.aa}; RSA ${r.rsa.toFixed(4)}; ASA ${r.asa.toFixed(2)} Å²`).join('\n')+`\nNetSurfP-${manifest.version}; precomputed ${manifest.run_date}; input SHA-256 ${chosen.sequence_sha256}\nMy exposure interpretation and evidence: \nNumbering / mapping notes: `;
+      observation.value=rows.map(([label,r])=>`${label}: input position ${r.position}; amino acid ${r.aa}; RSA ${r.rsa.toFixed(4)}; ASA ${r.asa.toFixed(2)} Å²`).join('\n')+`\nNetSurfP-${manifest.version}; precomputed ${manifest.run_date}; input SHA-256 ${chosen.sequence_sha256}\nMy exposure interpretation and evidence: \nNumbering / mapping notes: `;
+      copyStatus.textContent='';
       $('ns-results').hidden=false;
       $('ns-lookup-status').textContent='Values loaded. Make your own exposure interpretation before opening the explanation.';
     }catch(e){if(version===generation&&lookupVersion===lookupGeneration)$('ns-lookup-status').textContent=e.message;}
@@ -109,6 +110,24 @@
     a.click();
     setTimeout(()=>URL.revokeObjectURL(url),10000);
   }
-  $('ns-download-observation').addEventListener('click',()=>download($('ns-observation').value,'netsurfp-observation.txt'));
+  const observation = $('ns-observation');
+  const copyStatus = $('ns-copy-status');
+  observation.addEventListener('input', () => { copyStatus.textContent = ''; });
+  $('ns-copy-observation').addEventListener('click', async () => {
+    copyStatus.textContent = '';
+    if (!observation.value) {
+      copyStatus.textContent = 'This field is empty.';
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(observation.value);
+      copyStatus.textContent = 'Copied to clipboard.';
+    } catch {
+      observation.focus();
+      observation.select();
+      copyStatus.textContent = 'Text selected. Press Ctrl+C or Command+C, or use your device’s Copy command.';
+    }
+  });
+  $('ns-download-observation').addEventListener('click',()=>download(observation.value,'netsurfp-observation.txt'));
   json('manifest.json').then(m=>{manifest=m;for(const item of m.inputs){const o=document.createElement('option');o.value=item.id;o.textContent=item.label;$('ns-case').append(o);}$('ns-case').disabled=false;$('ns-case-status').textContent='Choose a case to begin. No residue position or interpretation is prefilled.';}).catch(e=>{$('ns-case-status').textContent=e.message;});
 })();
