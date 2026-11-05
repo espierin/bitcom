@@ -61,6 +61,14 @@ footer { padding: 1.25rem; background: var(--efi-surface); text-align: center; }
 .page-turn { justify-content: space-between; margin-top: 2rem; }
 
 .learning-support { margin: 1rem 0 1.75rem; }
+.progress-panel { padding:1rem; margin:1rem 0 1.5rem; background:var(--efi-surface); border-left:4px solid var(--efi-blue); }
+.progress-panel h2 { font-size:1.2rem; margin:0 0 .5rem; }
+.progress-panel p { margin:.5rem 0; }
+.progress-panel .action-link { font-size:.95rem; }
+.progress-note { font-size:.9rem; }
+.task-complete { display:flex; align-items:center; gap:.7rem; min-height:44px; padding:.5rem; margin:.5rem 0; border:1px solid var(--efi-line); }
+.task-complete input { width:1.2rem; height:1.2rem; flex-shrink:0; }
+@media print { .progress-panel,.task-complete { display:none!important; } }
 .registration { max-width: 800px; }
 .registration form > label:first-child { display:block; font-weight:650; margin-bottom:.5rem; }
 .registration input[type=email] { width:100%; padding:.8rem; font:inherit; border:1px solid var(--efi-blue); border-radius:4px; box-sizing:border-box; }
