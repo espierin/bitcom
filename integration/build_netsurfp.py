@@ -33,7 +33,8 @@ for item in items:
     item['source_sha256'] = {}
     for source in item['source_file'].split('; '):
         path = root / source if source.startswith('assets/') else base.parent / source
-        item['source_sha256'][source] = sha(path.read_bytes())
+        item['source_sha256'][source] = sha(path.read_bytes().replace(b'\r\n', b'\n'))
+    item['source_hash_note'] = 'Source FASTA checksums use LF newlines, matching repository files and bundled source copies.'
     with (base / item['csv_file']).open('w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         fields = ['rsa', 'asa', 'q3', 'q8', 'phi', 'psi', 'disorder', 'q3_prob', 'q8_prob']
@@ -79,5 +80,5 @@ with zipfile.ZipFile(base / 'offline-results.zip', 'w', zipfile.ZIP_DEFLATED) as
     for item in items:
         for source in item['source_file'].split('; '):
             path = root/source if source.startswith('assets/') else base.parent/source
-            if str(path.relative_to(root)).replace('\\','/') not in z.namelist(): z.write(path, path.relative_to(root))
+            if str(path.relative_to(root)).replace('\\','/') not in z.namelist(): z.writestr(str(path.relative_to(root)).replace('\\','/'), path.read_bytes().replace(b'\r\n', b'\n'))
 print('Verified 8 exact predictions, 2271 residues; archived unresolved-input explanations and offline viewer.')
