@@ -3,7 +3,25 @@
   const $=id=>document.getElementById(id),base='downloads/summer-school-2026/netsurfp/';
   const core=window.NetSurfPCore;let manifest,selected,data,reference,verified=false,generation=0,lookupGeneration=0,fileGeneration=0;
   const cache=new Map();
-  async function json(file){if(window.NetSurfPOffline?.[file])return window.NetSurfPOffline[file];if(cache.has(file))return cache.get(file);const r=await fetch(base+file);if(!r.ok)throw Error('Saved data could not be loaded. Download the offline bundle or try again.');const d=await r.json();cache.set(file,d);return d;}
+  async function json(file){
+    if(cache.has(file))return cache.get(file);
+    if(window.NetSurfPOffline){
+      const saved=window.NetSurfPOffline[file];
+      if(!saved)throw Error('This file is missing from the offline data. Download the ZIP again and extract all files.');
+      const data=JSON.parse(saved);
+      cache.set(file,data);
+      return data;
+    }
+    try{
+      const response=await fetch(base+file);
+      if(!response.ok)throw Error('Saved data unavailable.');
+      const saved=await response.json();
+      cache.set(file,saved);
+      return saved;
+    }catch{
+      throw Error('Saved data could not be loaded. Check your connection or open index.html from the extracted offline package.');
+    }
+  }
   function invalidate(){
     lookupGeneration++;
     verified=false;
@@ -90,6 +108,29 @@
   });
   // Never leave stale values visible after a position edit.
   for(const id of ['ns-position','ns-reference-position'])$(id).addEventListener('input',()=>{lookupGeneration++;$('ns-results').hidden=true;$('ns-lookup-status').textContent='';});
-  $('ns-download-observation').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([$('ns-observation').value],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='netsurfp-observation.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);});
+  function download(text,filename){
+    const url=URL.createObjectURL(new Blob([text],{type:'application/octet-stream'}));
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=filename;
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),10000);
+  }
+  $('ns-download-observation').addEventListener('click',()=>download($('ns-observation').value,'netsurfp-observation.txt'));
+  if(window.NetSurfPOffline){
+    // Chrome may ignore the download attribute on links between local files.
+    const downloadOfflineFile=event=>{
+      const a=event.target.closest('a[download]');
+      const href=a?.getAttribute('href');
+      if(!href?.startsWith(base))return;
+      const filename=href.slice(base.length);
+      const content=window.NetSurfPOffline[filename];
+      if(typeof content!=='string')return;
+      event.preventDefault();
+      download(content,filename);
+    };
+    $('ns-dataset').addEventListener('click',downloadOfflineFile);
+    $('ns-batch-files').addEventListener('click',downloadOfflineFile);
+  }
   json('manifest.json').then(m=>{manifest=m;for(const item of m.inputs){const o=document.createElement('option');o.value=item.id;o.textContent=item.label;$('ns-case').append(o);}$('ns-case').disabled=false;$('ns-case-status').textContent='Choose a case to begin. No residue position or interpretation is prefilled.';}).catch(e=>{$('ns-case-status').textContent=e.message;});
 })();

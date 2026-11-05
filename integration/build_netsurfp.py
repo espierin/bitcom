@@ -51,7 +51,8 @@ for item in items:
     item['answer'] = case_answers[case[1]] if case else 'This is a reference or demonstration input. Interpret the residue selected by you; the prediction alone does not establish immune recognition.'
     if item['id'] in ['case02cds', 'case04', 'case05protein', 'case05cds']:
         item['notice'] = 'Read Exact input and provenance before use. This prepared input does not establish expression or the biological protein product.'
-    payload[item['result_file']] = result
+    for name in (item['input_file'], item['result_file'], item['csv_file']):
+        payload[name] = (base / name).read_bytes().decode('utf-8')
 
 unresolved = [
     {'id': 'case02genomic', 'label': 'Case 02 — genomic input', 'notice': 'No unique translated protein is established for this genomic input. Do not use the independent Case 02 CDS prediction for it. Resolve the transcript with the facilitator; record the uncertainty. You may inspect the reference as a separate exercise, not as a prediction of this variant.', 'answer': case_answers['02']},
@@ -65,21 +66,61 @@ manifest = {'tool': 'NetSurfP', 'version': '3.0', 'method': 'ESM1b', 'run_date':
             'numbering': '1-based in exact submitted protein; no implicit mature-protein offset',
             'inputs': ordered}
 (base / 'manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8', newline='\n')
-payload['manifest.json'] = manifest
-(base / 'README.txt').write_text('EFI BITCom offline workshop package\nNetSurfP-3.0 calculated 5 November 2026. Job: '+manifest['job_id']+'\n\nExtract the entire ZIP. Open alignment-results.html for saved protein comparisons and index.html for the NetSurfP viewer.\nThe data and plots are read locally. External tool and workshop links require internet.\nThe participant FASTA bundle is in downloads/summer-school-2026/.\nFull original exports: raw-batch.json / .csv / .zip. Per-input JSON retains all output fields.\nExact inputs, hashes and preparation notes accompany both archives.\nPositions are 1-based in each input. Match sequences exactly before interpretation.\nGenomic splice cases without a resolved protein can use the separately labelled practice routes.\nThis archive has no automatic expiry. Keep a local backup.\n', encoding='utf-8', newline='\n')
+for name in ('manifest.json', 'inputs.fasta', 'raw-batch.csv', 'raw-batch.json'):
+    payload[name] = (base / name).read_bytes().decode('utf-8')
+readme = f"""EFI BITCom offline workshop package
+NetSurfP-3.0 calculated 5 November 2026. Job: {manifest['job_id']}
 
-html = (root / 'netsurfp-viewer.html').read_text(encoding='utf-8')
-html = re.sub(r'<script\b[^>]*>.*?</script>', '', html, flags=re.S)
-html = html.replace('</head>', '<script src="offline-data.js" defer></script><script src="assets/summer-school-2026/netsurfp-core.js" defer></script><script src="assets/summer-school-2026/netsurfp-timer.js" defer></script><script src="assets/summer-school-2026/netsurfp-viewer.js" defer></script></head>')
+1. Extract all files to a folder. On Windows, use Extract All.
+2. Open index.html from the extracted folder. Select the case and input type.
+3. Under Input and output for this case, open the FASTA, CSV or JSON.
+4. For the interactive lookup, load your own protein and click Verify sequence.
+   To practise separately, load the exact archived FASTA for the selected case.
+   Enter a 1-based position in that protein and click Show residue and graph.
+5. Download your observation as a text file to keep it with your notes.
+
+Find the files directly in downloads/summer-school-2026/netsurfp/:
+  inputs.fasta               Exact protein inputs for the full batch
+  <case>.fasta               Exact input for one prediction
+  <case>.csv / <case>.json    Per-residue table / full result for one prediction
+  raw-batch.csv / .json      Original NetSurfP exports for the full batch
+  manifest.json              Case labels, file names and provenance
+
+Open alignment-results.html for saved protein comparisons. The participant
+FASTA bundle is in downloads/summer-school-2026/. The two unresolved genomic
+splice inputs have no established protein and therefore no variant prediction.
+The data and plots are read locally. This archive has no automatic expiry.
+"""
+(base / 'README.txt').write_text(readme, encoding='utf-8', newline='\n')
+
 def offline_links(page):
     page = page.replace('href="netsurfp-viewer.html', 'href="index.html')
     # Other workshop pages are online. The two offline tools stay linked locally.
     return re.sub(r'href="((?!index\.html|alignment-results\.html)[a-z0-9-]+\.html[^"]*)"',
                   lambda m: 'href="https://espierin.github.io/bitcom/'+m[1]+'"', page)
 
-# The original Overview link still points to the online workshop.
-html = offline_links(html.replace('href="index.html">Overview', 'href="https://espierin.github.io/bitcom/">Overview'))
-html = html.replace('href="downloads/summer-school-2026/netsurfp/offline-results.zip"', 'href="downloads/summer-school-2026/netsurfp/README.txt"').replace('Download offline alignment and NetSurfP package (ZIP)', 'Read offline archive instructions')
+offline = BeautifulSoup((root / 'netsurfp-viewer.html').read_text(encoding='utf-8'), 'html.parser')
+for script in offline.select('script'):
+    script.decompose()
+for src in ('offline-data.js', 'assets/summer-school-2026/netsurfp-core.js',
+            'assets/summer-school-2026/netsurfp-viewer.js'):
+    offline.head.append(offline.new_tag('script', src=src, defer=True))
+offline.title.string = 'NetSurfP offline viewer | EFI BITCom'
+offline.select_one('main > nav').decompose()
+offline.select_one('#ns-timer-start').find_parent('section').decompose()
+offline.select_one('#ns-offline-download').decompose()
+offline.select_one('#ns-batch-files').find_next_sibling('section').decompose()
+offline.select_one('#saved-results h2').string = 'NetSurfP offline viewer'
+offline.select_one('#saved-results h2').insert_after(BeautifulSoup(
+    '<p>Select your case below. If the menu stays on “Loading saved datasets”, '
+    'extract all files from the ZIP and open <code>index.html</code> from the extracted folder.</p>'
+    '<p><a href="README.txt">File locations and offline instructions</a> · '
+    '<a href="#ns-batch-files">Files for the full batch</a></p>', 'html.parser'))
+offline.select_one('a[href="workbook.html#surface"]').decompose()
+offline.select_one('#ns-download-observation').parent.insert_after(BeautifulSoup(
+    '<p>Keep the text file with your notes and transfer it to the online workbook when you reconnect.</p>',
+    'html.parser'))
+html = str(offline)
 with zipfile.ZipFile(base / 'offline-results.zip', 'w', zipfile.ZIP_DEFLATED) as z:
     z.writestr('index.html', html)
     z.writestr('offline-data.js', 'window.NetSurfPOffline='+json.dumps(payload).replace('<', '\\u003c')+';')
