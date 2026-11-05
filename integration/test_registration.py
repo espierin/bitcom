@@ -2,6 +2,9 @@
 import os
 import smtplib
 import unittest
+from email import policy
+from email.parser import BytesParser
+from html.parser import HTMLParser
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -10,6 +13,32 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, select, update
 from sqlalchemy.pool import StaticPool
 import bitcom_registration as module
+
+
+class RegistrationMailTests(unittest.TestCase):
+    def test_workshop_sender_and_clickable_confirmation(self):
+        settings = SimpleNamespace(smtp_host='smtp.invalid', smtp_port=587,
+                                   smtp_sender='EPT Insight <relay@example.org>',
+                                   smtp_user='', smtp_password='')
+        token = 'synthetic_token'
+        with patch.object(module.smtplib, 'SMTP') as smtp:
+            module.send_link(settings, 'participant@example.org', token)
+            message = smtp.return_value.__enter__.return_value.send_message.call_args.args[0]
+
+        decoded = BytesParser(policy=policy.default).parsebytes(message.as_bytes(policy=policy.SMTP))
+        self.assertEqual(decoded['From'].addresses[0].display_name, 'EFI BITCom')
+        self.assertEqual(decoded['From'].addresses[0].addr_spec, 'relay@example.org')
+        url = f'{module.CALLBACK}#bitcom_token={token}'
+        self.assertIn(url, decoded.get_body(('plain',)).get_content())
+
+        class Links(HTMLParser):
+            def handle_starttag(self, tag, attrs):
+                if tag == 'a':
+                    hrefs.append(dict(attrs).get('href'))
+
+        hrefs = []
+        Links().feed(decoded.get_body(('html',)).get_content())
+        self.assertEqual(hrefs, [url])
 
 
 class RegistrationTests(unittest.TestCase):

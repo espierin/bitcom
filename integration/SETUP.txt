@@ -11,6 +11,8 @@ Deployment
   setup fails. GET /api/bitcom/registration/status reports the workshop status.
 - The extension uses the existing EPT PostgreSQL connection to Supabase and
   the EPT SMTP relay. Supabase Auth settings and EPT email templates are separate.
+- BITCom mail uses the relay's existing mailbox with the display name EFI
+  BITCom. It includes a clickable HTML link and a plain-text alternative.
 - Set the public workshop configuration to enabled:true once the live route is
   available. The API URL and enable flag are public. Credentials stay on Render.
 

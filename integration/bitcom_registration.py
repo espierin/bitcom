@@ -12,7 +12,10 @@ import smtplib
 import ssl
 import time
 from datetime import datetime, timezone
+from email.headerregistry import Address
 from email.message import EmailMessage
+from email.utils import parseaddr
+from html import escape
 from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException
@@ -79,15 +82,24 @@ class Save(Revoke):
     data: dict
 
 def send_link(settings, address, token):
+    url = f'{CALLBACK}#bitcom_token={token}'
     message = EmailMessage()
-    message['From'] = settings.smtp_sender
+    # Keep the relay's authorised mailbox; brand only the BITCom message.
+    message['From'] = Address(display_name='EFI BITCom', addr_spec=parseaddr(settings.smtp_sender)[1])
     message['To'] = address
     message['Subject'] = 'Your EFI BITCom workshop sign-in link'
     message.set_content(
         'Open the link and confirm your address to sign in to the EFI BITCom workshop.\n'
         'The link can be used once within 20 minutes.\n\n'
-        f'{CALLBACK}#bitcom_token={token}\n\n'
+        f'{url}\n\n'
         'If you did not request this link, you can ignore this email.\n'
+    )
+    message.add_alternative(
+        '<p>Confirm your email address to sign in to the EFI BITCom workshop.</p>'
+        f'<p><a href="{escape(url, quote=True)}">Confirm email and sign in</a></p>'
+        '<p>You can use this link once within 20 minutes.</p>'
+        '<p>If you did not request this link, you can ignore this email.</p>',
+        subtype='html',
     )
     context = ssl.create_default_context()
     with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=10) as smtp:
