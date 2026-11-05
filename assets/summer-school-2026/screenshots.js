@@ -10,7 +10,17 @@
     'netsurfp-result.jpg':[5,24,89,73], 'molstar-selection.jpg':[0,0,99,83],
     'molstar-color.jpg':[16,12,41,44], 'molstar-surface-menu.jpg':[72,37,27,51],
     'molstar-export.jpg':[42,12,27,52], 'sms-input.jpg':[14,17,51,40],
-    'sms-result.jpg':[0,0,68,44]
+    'sms-result.jpg':[0,0,68,44],
+    'molstar-entry.jpg':[0,12,64,67],
+    'molstar-workspace.jpg':[0,0,100,82],
+    'molstar-visibility.jpg':[78,25,22,30],
+    'molstar-residue-selection.jpg':[0,0,100,40],
+    'molstar-theme-controls.jpg':[24,10,34,40],
+    'molstar-theme-applied.jpg':[22,29,42,52],
+    'molstar-heavychain-menu.jpg':[0,0,100,42],
+    'molstar-heavychain-surface.jpg':[21,22,79,61],
+    'molstar-component-named.jpg':[24,10,34,28],
+    'molstar-capture-panel.jpg':[54,10,26,47]
   };
   const images=[...document.querySelectorAll('.screen-example figure a > img')];
   const notes=window.BITCOM_SCREEN_NOTES||{};
@@ -25,9 +35,7 @@
     'find-record':['FASTA file → one record','Use Find on the raw FASTA page and check that the exact allele is on a header line. The record ends before the next > header.','>reference_example\nACGTTACG\n>next_record'],
     'dna-copy':['Plain-text editor → DNA letters','For a letters-only input, start below the > header and stop before the next >. Paste into a blank plain-text file; keep the original FASTA as a separate source.','>demonstration  ← leave out\nACGTTACG        ← copy these letters'],
     'save-text':['Plain-text editor → File → Save As','Choose your workshop folder, enter the filename printed in the task, and save as plain text. If your editor adds .txt to a required .fasta name, choose All files and check the final extension.','File → Save As\n  Folder: your workshop folder\n  Name: use the exact name in this step'],
-    'fasta-paste':['Plain-text editor → new FASTA','On the first line type a unique header beginning with >. Press Enter and paste the amino-acid letters below it. Do not include a terminal stop character in the alignment input.','>demonstration_protein\nMAVTGL'],
-    'record-workbook':['My workbook → linked answer field','Use the link on this line. It opens or brings forward the separate workbook and jumps to the intended field. Paste your evidence or type your answer; it saves automatically.','Linked workbook field\n  Enter your own observations here'],
-    'record-scratchpad':['My workbook → Scratchpad','Use the linked scratchpad for rough notes only. Move your final evidence into the named answer field so it is easy to find in the report.','Scratchpad\n  Draft notes and copied snippets']
+    'fasta-paste':['Plain-text editor → new FASTA','On the first line type a unique header beginning with >. Press Enter and paste the amino-acid letters below it. Do not include a terminal stop character in the alignment input.','>demonstration_protein\nMAVTGL']
   };
   if(!images.length&&!document.querySelector('[data-show-where]'))return;
 
@@ -50,10 +58,22 @@
     if(!active)return;
     const r=active.getBoundingClientRect();
     if(r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth){dismiss();return;}
-    const width=bubble.offsetWidth,height=bubble.offsetHeight;
-    const below=r.bottom+5,above=r.top-height-5;
-    bubble.style.left=Math.max(8,Math.min(r.left,innerWidth-width-8))+'px';
-    bubble.style.top=Math.max(8,Math.min(below+height<=innerHeight?below:above,innerHeight-height-8))+'px';
+    const gap=8;
+    const width=bubble.offsetWidth;
+    const right=r.right+gap;
+    const left=r.left-width-gap;
+    if(right+width<=innerWidth-gap||left>=gap){
+      bubble.style.maxHeight='';
+      bubble.style.left=(right+width<=innerWidth-gap?right:left)+'px';
+      bubble.style.top=Math.max(gap,Math.min(r.top,innerHeight-bubble.offsetHeight-gap))+'px';
+      return;
+    }
+    const spaceBelow=innerHeight-r.bottom-2*gap;
+    const spaceAbove=r.top-2*gap;
+    const below=spaceBelow>=spaceAbove;
+    bubble.style.maxHeight=Math.max(0,below?spaceBelow:spaceAbove)+'px';
+    bubble.style.left=Math.max(gap,Math.min(r.left,innerWidth-width-gap))+'px';
+    bubble.style.top=(below?r.bottom+gap:r.top-bubble.offsetHeight-gap)+'px';
   }
   function show(button,entry,visual){
     clearTimeout(hideTimer);
@@ -71,7 +91,7 @@
     }else if(!spot&&visual){
       bubbleExample.textContent=entry[2];
     }
-    bubble.classList.toggle('pointer-visual',visual);
+    bubble.classList.toggle('pointer-visual',Boolean(spot&&visual));
     bubble.hidden=false;place();
   }
   bubbleImage.addEventListener('load',place);
@@ -96,14 +116,11 @@
   document.addEventListener('pointerdown',e=>{if(active&&!active.contains(e.target)&&!bubble.contains(e.target))dismiss();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&active){e.preventDefault();e.stopPropagation();dismiss();}},true);
   window.addEventListener('resize',place);
-  window.addEventListener('scroll',place,true);
+  window.addEventListener('scroll',event=>{if(event.target!==bubble)place();},true);
 
   for(const node of document.querySelectorAll('[data-show-where]')){
     const key=node.dataset.showWhere;
-    const linkedField=key==='record-workbook'&&node.querySelector('a[href^="workbook.html#"]');
-    const entry=linkedField
-      ? ['My workbook → '+linkedField.textContent.replace(/\s*↗\s*$/,''),local[key][1],local[key][2]]
-      : byId.get(key)||local[key];
+    const entry=byId.get(key)||local[key];
     if(!entry)continue;
     const button=document.createElement('button');
     button.className='show-where-button';button.textContent='Show where';
@@ -169,7 +186,7 @@
     link.classList.add('screenshot-preview');link.setAttribute('aria-haspopup','dialog');link.setAttribute('aria-label','Enlarge screenshot: '+img.alt);
     const file=new URL(img.src).pathname.split('/').pop();
     const region=regions[file];
-    function crop(){if(!region||!img.naturalWidth)return;const[x,y,w,h]=region;frame.style.maxWidth=Math.min(900,img.naturalWidth*w/100*1.3)+"px";link.style.aspectRatio=`${img.naturalWidth*w} / ${img.naturalHeight*h}`;link.classList.add('focused-preview');img.style.width=(10000/w)+'%';img.style.left=(-100*x/w)+'%';img.style.top=(-100*y/h)+'%';}
+    function crop(){if(!region||!img.naturalWidth)return;const[x,y,w,h]=region;frame.style.maxWidth=Math.min(1800,img.naturalWidth*w/100*2.6)+"px";link.style.aspectRatio=`${img.naturalWidth*w} / ${img.naturalHeight*h}`;link.classList.add('focused-preview');img.style.width=(10000/w)+'%';img.style.left=(-100*x/w)+'%';img.style.top=(-100*y/h)+'%';}
     img.addEventListener('load',crop);crop();
     const button=document.createElement('button');button.type='button';button.className='screenshot-magnifier';button.title='View complete screenshot';button.setAttribute('aria-label','View complete screenshot: '+img.alt);button.setAttribute('aria-haspopup','dialog');
     button.innerHTML='<svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6M7 10h6M10 7v6"/></svg>';

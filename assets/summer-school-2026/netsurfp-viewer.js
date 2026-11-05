@@ -88,7 +88,7 @@
     node('line',{x1:x(p-1),x2:x(p-1),y1:25,y2:200,stroke:'#a83e3e','stroke-dasharray':'4 4'});
     node('circle',{cx:x(p-1),cy:y(d.rsa[p-1]),r:5,fill:'#a83e3e'});
     node('text',{x:50,y:223,'font-size':13},'1');node('text',{x:775,y:223,'text-anchor':'end','font-size':13},String(d.seq.length));
-    node('text',{x:410,y:242,'text-anchor':'middle','font-size':13},'Position in the submitted protein');node('text',{x:50,y:16,'font-size':14},label+' · RSA (0–1)');target.append(svg);
+    node('text',{x:410,y:242,'text-anchor':'middle','font-size':13},'Position in the submitted protein');node('text',{x:50,y:16,'font-size':14},label+' · RSA (0 to 1)');target.append(svg);
   }
   $('ns-lookup-form').addEventListener('submit',async event=>{
     event.preventDefault();$('ns-results').hidden=true;$('ns-lookup-status').textContent='';if(!verified)return;

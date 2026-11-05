@@ -23,10 +23,10 @@ assert.equal(short.at(-1), 'X');
 
 const pairs = [
   ['case01', 'Case 01', reference, readProtein('case01'), 'Use the supplied Case 01 protein and the workshop A*01:01:01:01 reference.'],
-  ['case02cds', 'Case 02 — independent CDS', reference, readProtein('case02cds'), 'Use the verified translation of the independent CDS before its first stop. This pair does not apply to the genomic input.'],
+  ['case02cds', 'Case 02 · independent CDS', reference, readProtein('case02cds'), 'Use the verified translation of the independent CDS before its first stop. This pair does not apply to the genomic input.'],
   ['case04', 'Case 04', reference, readProtein('case04'), 'Use the CDS-verified amino-acid segment before the stop. The terminal marker in the original protein file is excluded.'],
-  ['case05protein', 'Case 05 — supplied short protein', reference, short.slice(0,-1), 'The alignment covers the known amino-acid prefix only. The original terminal X remains unresolved and is outside this alignment. Use the unmodified short sequence when verifying its exact NetSurfP archive.'],
-  ['case05cds', 'Case 05 — supplied CDS', reference, readProtein('case05cds'), 'Use the independent CDS translation. Treat the short protein file as a separate record.'],
+  ['case05protein', 'Case 05 · supplied short protein', reference, short.slice(0,-1), 'The alignment covers the known amino-acid prefix only. The original terminal X remains unresolved and is outside this alignment. Use the unmodified short sequence when verifying its exact NetSurfP archive.'],
+  ['case05cds', 'Case 05 · supplied CDS', reference, readProtein('case05cds'), 'Use the independent CDS translation. Treat the short protein file as a separate record.'],
   ['case06', 'Case 06', reference, readProtein('case06'), 'Use the supplied Case 06 protein and the workshop A*01:01:01:01 reference.'],
   ['demoB', 'HLA-B demonstration', demo, 'A' + demo.slice(1), 'Separate practice pair for an unresolved or unmatched case. The second input is an artificial demonstration sequence.'],
 ];
@@ -50,7 +50,7 @@ const records = pairs.map(([id, label, first, second, preparation]) => {
     firstEnd += a.replaceAll('-', '').length;
     secondEnd += b.replaceAll('-', '').length;
     const matches = Array.from(a, (letter, j) => letter === b[j] ? '|' : a[j] === '-' || b[j] === '-' ? ' ' : '*').join('');
-    const range = (start, end) => start === end ? 'gap' : `${start+1}–${end}`;
+    const range = (start, end) => start === end ? 'gap' : `${start+1}-${end}`;
     blocks.push(`Reference  ${a}  ${range(firstStart,firstEnd)}\n${('           '+matches).trimEnd()}\nCompared   ${b}  ${range(secondStart,secondEnd)}`);
   }
   fs.writeFileSync(path.join(destination,id+'-inputs.fasta'),fasta);

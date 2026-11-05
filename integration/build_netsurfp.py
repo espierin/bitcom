@@ -55,8 +55,8 @@ for item in items:
         payload[name] = (base / name).read_bytes().decode('utf-8')
 
 unresolved = [
-    {'id': 'case02genomic', 'label': 'Case 02 — genomic input', 'notice': 'No unique translated protein is established for this genomic input. Do not use the independent Case 02 CDS prediction for it. Resolve the transcript with the facilitator; record the uncertainty. You may inspect the reference as a separate exercise, not as a prediction of this variant.', 'answer': case_answers['02']},
-    {'id': 'case03', 'label': 'Case 03 — genomic input', 'notice': 'No unique translated protein is established from this genomic input. A conventional annotation does not resolve an altered splice outcome. No variant prediction is fabricated here. Discuss the transcript and record the uncertainty; the reference can be inspected separately for learning.', 'answer': case_answers['03']}
+    {'id': 'case02genomic', 'label': 'Case 02 · genomic input', 'notice': 'No unique translated protein is established for this genomic input. Do not use the independent Case 02 CDS prediction for it. Resolve the transcript with the facilitator; record the uncertainty. You may inspect the reference as a separate exercise, not as a prediction of this variant.', 'answer': case_answers['02']},
+    {'id': 'case03', 'label': 'Case 03 · genomic input', 'notice': 'No unique translated protein is established from this genomic input. A conventional annotation does not resolve an altered splice outcome. No variant prediction is fabricated here. Discuss the transcript and record the uncertainty; the reference can be inspected separately for learning.', 'answer': case_answers['03']}
 ]
 ordered = [items[0], items[1], items[2], unresolved[0], unresolved[1], *items[3:]]
 manifest = {'tool': 'NetSurfP', 'version': '3.0', 'method': 'ESM1b', 'run_date': '2026-11-05',
@@ -71,13 +71,19 @@ for name in ('manifest.json', 'inputs.fasta', 'raw-batch.csv', 'raw-batch.json')
 readme = f"""EFI BITCom offline workshop package
 NetSurfP-3.0 calculated 5 November 2026. Job: {manifest['job_id']}
 
-1. Extract all files to a folder. On Windows, use Extract All.
-2. Open index.html from the extracted folder. Select the case and input type.
-3. Under Input and output for this case, open the FASTA, CSV or JSON.
-4. For the interactive lookup, load your own protein and click Verify sequence.
-   To practise separately, load the exact archived FASTA for the selected case.
-   Enter a 1-based position in that protein and click Show residue and graph.
-5. Download your observation as a text file to keep it with your notes.
+1. While you have internet, download the ZIP and extract all files to a folder.
+   On Windows, use Extract All. Open index.html from the extracted folder.
+2. Select the case and input type you analysed. Paste your protein from Step 2
+   or load its file, then click Verify sequence.
+3. Enter the ungapped position from your variant list, counting from 1 in
+   the verified protein. Click Show residue and graph. Check the amino-acid
+   letter, read RSA and download your observation as text for your workbook.
+4. If the interactive viewer cannot be used, open the case CSV listed below.
+   Find the position, verify amino_acid, and read rsa. When importing into a
+   spreadsheet, select comma as the delimiter if the columns are not split.
+
+For a separate practice run, choose the HLA-B demonstration and load its
+exact archived FASTA. At position 25 the amino-acid letter is G.
 
 Find the files directly in downloads/summer-school-2026/netsurfp/:
   inputs.fasta               Exact protein inputs for the full batch

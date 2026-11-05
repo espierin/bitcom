@@ -20,7 +20,7 @@
     },
     {
       "id": "case02cds",
-      "label": "Case 02 — independent CDS",
+      "label": "Case 02 · independent CDS",
       "reference": "A*01:01:01:01 workshop reference",
       "preparation": "Use the verified translation of the independent CDS before its first stop. This pair does not apply to the genomic input.",
       "lengths": [
@@ -50,7 +50,7 @@
     },
     {
       "id": "case05protein",
-      "label": "Case 05 — supplied short protein",
+      "label": "Case 05 · supplied short protein",
       "reference": "A*01:01:01:01 workshop reference",
       "preparation": "The alignment covers the known amino-acid prefix only. The original terminal X remains unresolved and is outside this alignment. Use the unmodified short sequence when verifying its exact NetSurfP archive.",
       "lengths": [
@@ -65,7 +65,7 @@
     },
     {
       "id": "case05cds",
-      "label": "Case 05 — supplied CDS",
+      "label": "Case 05 · supplied CDS",
       "reference": "A*01:01:01:01 workshop reference",
       "preparation": "Use the independent CDS translation. Treat the short protein file as a separate record.",
       "lengths": [

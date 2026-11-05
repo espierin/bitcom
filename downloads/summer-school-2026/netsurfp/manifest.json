@@ -48,11 +48,11 @@
         "case-01-protein.fasta": "074879ef6ea66f112e19f97fa167447b9daae35f54fe9248d24cb877a4b9fe63"
       },
       "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files and bundled source copies.",
-      "answer": "Case 01 | An \u03b13-domain substitution\n\nThe 3,503-base genomic record differs from the supplied reference at position 1885 (A\u2192T). The aligned CDS changes at base 635. The codon changes from CAT to CTT. Both proteins have 365 residues. The substitution is H212L in precursor numbering and H188L in mature numbering after verifying the 24-residue leader.\n\nThe change lies in exon 4, outside the class I ARD. The reference and variant retain identical exon 2\u20133 sequence in this comparison. In NetSurfP-3.0, precursor position 212 has RSA 0.3309 (H) and 0.3603 (L). Both exceed the workshop threshold of 0.25. Map the reference histidine to chain A, residue 188 in 3BO8. The structure shows the reference side chain. The prediction supports accessibility and does not establish antibody reactivity."
+      "answer": "Case 01 | An \u03b13-domain substitution\n\nThe 3,503-base genomic record differs from the supplied reference at position 1885 (A\u2192T). The aligned CDS changes at base 635. The codon changes from CAT to CTT. Both proteins have 365 residues. The substitution is H212L in precursor numbering and H188L in mature numbering after verifying the 24-residue leader.\n\nThe change lies in exon 4, outside the class I ARD. The reference and variant retain identical sequence across exons 2 and 3 in this comparison. In NetSurfP-3.0, precursor position 212 has RSA 0.3309 (H) and 0.3603 (L). Both exceed the workshop threshold of 0.25. Map the reference histidine to chain A, residue 188 in 3BO8. The structure shows the reference side chain. The prediction supports accessibility and does not establish antibody reactivity."
     },
     {
       "id": "case02cds",
-      "label": "Case 02 \u2014 supplied CDS",
+      "label": "Case 02 \u00b7 supplied CDS",
       "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMR",
       "length": 30,
       "source_file": "case-02-cds.fasta",
@@ -72,13 +72,13 @@
     },
     {
       "id": "case02genomic",
-      "label": "Case 02 \u2014 genomic input",
+      "label": "Case 02 \u00b7 genomic input",
       "notice": "No unique translated protein is established for this genomic input. Do not use the independent Case 02 CDS prediction for it. Resolve the transcript with the facilitator; record the uncertainty. You may inspect the reference as a separate exercise, not as a prediction of this variant.",
       "answer": "Case 02 | Two independent inputs\n\nThe genomic record has G\u2192A at position 503. The acceptor immediately before exon 2 changes from AG to AA. Record the splice-site evidence and leave the resulting transcript and protein unresolved without further evidence.\n\nThe independent CDS contains one additional A, aligned at CDS position 92 in the supplied comparison. Translation in the reference coding frame reaches its first stop at codon 31, after 30 residues. This demonstrates a coding frameshift in the CDS exercise. The 30-residue NetSurfP result applies to that exact translation. Keep the genomic and CDS observations separate."
     },
     {
       "id": "case03",
-      "label": "Case 03 \u2014 genomic input",
+      "label": "Case 03 \u00b7 genomic input",
       "notice": "No unique translated protein is established from this genomic input. A conventional annotation does not resolve an altered splice outcome. No variant prediction is fabricated here. Discuss the transcript and record the uncertainty; the reference can be inspected separately for learning.",
       "answer": "Case 03 | Exon 3 acceptor\n\nThe genomic substitution at position 1014 changes the acceptor before exon 3 from AG to AT. Compare the same interval in the reference and variant and label it using genomic input coordinates.\n\nSFAT returned a full-length annotated CDS during the workshop test. This is compatible with annotation of the usual exon boundaries. An altered splice outcome remains unresolved. Record the boundary change and explain why there is no unique variant protein or NetSurfP value to interpret."
     },
@@ -105,7 +105,7 @@
     },
     {
       "id": "case05protein",
-      "label": "Case 05 \u2014 supplied protein",
+      "label": "Case 05 \u00b7 supplied protein",
       "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGDPGPGRRSRPLIPHGRARSPTVSGSEIHPEAAGLRDPCPGRGPGAFTRFHFQFRPKIPPGWSGRGGARGTGLTAGSGPGSHTIQX",
       "length": 200,
       "source_file": "case-05-protein.fasta",
@@ -125,7 +125,7 @@
     },
     {
       "id": "case05cds",
-      "label": "Case 05 \u2014 supplied CDS",
+      "label": "Case 05 \u00b7 supplied CDS",
       "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSLTACKV",
       "length": 365,
       "source_file": "case-05-cds.fasta",

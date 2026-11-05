@@ -2,14 +2,14 @@
 
 ## Page map
 
-1. **BITCom at EFI** — stable overview of purpose and the three workstreams.
-2. **About BITCom** — remit and current membership. The current prototype includes a verified ORCID link for each member and institution-based affiliation text; confirm roles, affiliations, biographies and portraits with each member before production publication.
-3. **Data standards** — an explainer of the H&amp;I data-standards ecosystem: GL String/GLSC for genotype representation, HML for structured genotyping exchange, and PL String/PLSC plus HAML for phenotype- and antibody-oriented data. Link to primary specifications rather than reproducing draft guidance. Clearly distinguish an external specification, an educational explanation and an approved EFI requirement.
-4. **Training & events** — active and completed BITCom learning activities. Every listing needs a date, audience, delivery format, owner and registration/resource link.
-5. **Digital infrastructure** — member-facing description of website, educational platform and conference workflow support. Keep security, contracts and technical architecture out of this public page.
-6. **Current activities** — short dated updates, with a named source or committee approval.
-7. **Join BITCom** — committee vacancy notices and application route. Remove/archive an expired call promptly.
-8. **Resources & archive** — durable official EFI publications and educational materials.
+1. **BITCom at EFI**. stable overview of purpose and the three workstreams.
+2. **About BITCom**. remit and current membership. The current prototype includes a verified ORCID link for each member and institution-based affiliation text; confirm roles, affiliations, biographies and portraits with each member before production publication.
+3. **Data standards**. an explainer of the H&amp;I data-standards ecosystem: GL String/GLSC for genotype representation, HML for structured genotyping exchange, and PL String/PLSC plus HAML for phenotype- and antibody-oriented data. Link to primary specifications rather than reproducing draft guidance. Clearly distinguish an external specification, an educational explanation and an approved EFI requirement.
+4. **Training & events**. active and completed BITCom learning activities. Every listing needs a date, audience, delivery format, owner and registration/resource link.
+5. **Digital infrastructure**. member-facing description of website, educational platform and conference workflow support. Keep security, contracts and technical architecture out of this public page.
+6. **Current activities**. short dated updates, with a named source or committee approval.
+7. **Join BITCom**. committee vacancy notices and application route. Remove/archive an expired call promptly.
+8. **Resources & archive**. durable official EFI publications and educational materials.
 
 ## Update cadence
 

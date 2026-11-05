@@ -73,5 +73,59 @@ window.BITCOM_SCREEN_NOTES = {
   'molstar-export.jpg': [
     ['mol-camera', 42, 15, 'Screenshot / State Snapshot', 'Open the camera menu once you have a useful orientation. Check that your variant markers and intended components are visible in the preview.'],
     ['mol-download', 61, 40, 'Download PNG', 'Choose a readable resolution and download. Save the image in your workshop folder, and note the filename, PDB ID, chain and colour key in the workbook.']
+  ],
+  'molstar-entry.jpg': [
+    ['mol-entry-id', 38, 24, 'PDB ID and structure title', 'Read the PDB ID and confirm the allotype in the entry title or molecule information. This is the HLA-B demonstration.'],
+    ['mol-entry-assembly', 14, 17, 'Biological Assembly 1', 'Check which assembly contains the heavy chain, β2-microglobulin and peptide before opening the viewer.'],
+    ['mol-entry', 13, 69, 'Explore in 3D → Structure', 'Click Structure under the assembly image to open the Mol* viewer for this entry. The screenshot uses PDB 7S79 for practice.']
+  ],
+  'molstar-workspace.jpg': [
+    ['mol-workspace', 24, 2, 'Sequence panel: entity and chain', 'Choose the HLA heavy-chain entity by name, then its chain. This controls the sequence row displayed at the top.'],
+    ['mol-workspace-canvas', 41, 56, '3D canvas', 'Drag to rotate and scroll to zoom. In this view teal is the heavy chain, orange is β2-microglobulin and the purple peptide lies in the groove. Verify the labels in your model.'],
+    ['mol-workspace-controls', 86, 30, 'Components panel', 'A component groups atoms for display. Use its eye to show or hide it. The same component may contain several chains.']
+  ],
+  'molstar-visibility.jpg': [
+    ['mol-visibility', 94, 45, 'Eye icons for Water and Ion', 'The crossed-out eyes indicate these two components are hidden in the demonstration. Click an eye again to restore its component.'],
+    ['mol-visibility-polymer', 85, 38, 'Polymer remains visible', 'Polymer groups several chains here. Hiding its row would remove their cartoon views together.']
+  ],
+  'molstar-residue-hover.jpg': [
+    ['mol-residue-hover', 2, 5, 'Hovered G in the sequence', 'Hover the letter to see its residue identifier. The demonstration starts at mature G1.'],
+    ['mol-residue-label', 70, 97, 'Chain and residue label', 'Read the label at the lower right of the canvas. Here it identifies chain A, GLY 1, of 7S79 in the first assembly instance. Record the equivalent label from your own model.']
+  ],
+  'molstar-canvas-hover.jpg': [
+    ['mol-canvas-pick', 39, 34, 'Hover a residue on the model', 'The magenta patch is the residue under the pointer. Here the canvas label identifies chain A, TRP 133.'],
+    ['mol-canvas-label', 70, 97, 'Check the canvas hover label', 'Move the pointer over the ribbon or atom and check the chain, residue number and amino acid before clicking. Use the sequence panel if the intended site is difficult to pick.']
+  ],
+  'molstar-residue-selection.jpg': [
+    ['mol-mode', 77, 34, 'Toggle Selection Mode', 'The cursor icon enables the selection toolbar. A click in Selection Mode changes the active selection.'],
+    ['mol-level', 27, 13, 'Picking Level: Residue', 'Choose Residue so a click acts on one amino acid. Use Chain temporarily only when you need the entire heavy chain.'],
+    ['mol-select-two', 3, 5, 'Two individual letters selected', 'The green G and M are separate practice sites. Click each intended letter once and check the selection count.'],
+    ['mol-select-count', 86, 23, 'Selection count and Clear', 'Check that the count matches your intended sites. The small clear button at the right resets the current selection.']
+  ],
+  'molstar-theme-controls.jpg': [
+    ['mol-theme-menu', 41, 13, 'Paintbrush: Apply Theme to Selection', 'Open this menu with your mapped residues selected. Keep Current Selection and choose Color.'],
+    ['mol-theme-palette', 42, 29, 'Choose a contrasting colour', 'Choose a colour you can distinguish from the model and the temporary green selection. Keep the colour key with your notes.'],
+    ['mol-theme-apply', 51, 47, 'Apply Theme', 'Apply the theme, then clear the temporary selection and check that the colour remains on the representation you styled.']
+  ],
+  'molstar-theme-applied.jpg': [
+    ['mol-theme-result', 48, 50, 'Colour after clearing the selection', 'The red patch persists on the styled cartoon even though the green sequence selection and counter have cleared.']
+  ],
+  'molstar-heavychain-menu.jpg': [
+    ['mol-surface-chain', 27, 13, 'Picking Level: Chain', 'Click the mapped heavy-chain sequence and verify that only this chain is selected. The right-hand panel shows 1 Chain Selected.'],
+    ['mol-surface-choice', 38, 23, 'Representation: Molecular Surface', 'In Add Component, choose Molecular Surface for the current heavy-chain selection. Give it a label in Options and click Create Component.'],
+    ['mol-surface-count', 86, 23, '1 Chain Selected', 'Check this counter before creating the surface. Selecting the grouped Polymer component can include other chains.']
+  ],
+  'molstar-heavychain-surface.jpg': [
+    ['mol-surface-result', 39, 41, 'Heavy-chain surface', 'The teal molecular surface follows the heavy-chain component. The peptide and β2-microglobulin remain available for context. Inspect the site from multiple angles.'],
+    ['mol-surface-component', 94, 55, 'Component visibility', 'Use the eyes next to the labelled rows to toggle the heavy-chain surface or the mapped sticks independently.']
+  ],
+  'molstar-component-named.jpg': [
+    ['mol-create-menu', 44, 13, 'Cube: Create Component of Selection with Representation', 'Open this tool with the mapped residues selected to make a separately controllable component.'],
+    ['mol-stick-choice', 38, 23, 'Representation: Ball & Stick', 'Keep Current Selection, choose Ball & Stick, and open Options to enter a label for the sites.'],
+    ['mol-stick-create', 49, 36, 'Create Component', 'Confirm the settings, then look for the new component row in the right-hand panel.']
+  ],
+  'molstar-capture-panel.jpg': [
+    ['mol-export-camera', 77, 17, 'Screenshot / State Snapshot', 'Use the camera menu to export the model view. Review the preview and crop before downloading.'],
+    ['mol-export-download', 72, 35, 'Download PNG', 'Click Download in the screenshot panel. Open the saved PNG and check the view, marked sites and readability.']
   ]
 };
