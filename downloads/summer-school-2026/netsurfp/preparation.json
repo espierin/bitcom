@@ -1,0 +1,82 @@
+[
+  {
+    "id": "reference",
+    "label": "Reference A*01:01:01:01",
+    "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSLTACKV",
+    "length": 365,
+    "source_file": "HLA-A01-01-01-01_Original_Protein.fasta",
+    "preparation": "Exact supplied protein; whitespace removed, sequence unchanged.",
+    "sequence_sha256": "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+    "input_file": "reference.fasta"
+  },
+  {
+    "id": "case01",
+    "label": "Case 01",
+    "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTLMTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSLTACKV",
+    "length": 365,
+    "source_file": "case-01-protein.fasta",
+    "preparation": "Exact supplied protein; sequence unchanged.",
+    "sequence_sha256": "102c1c49133efd66dd5604034d101fa269cf65246effa70202680739c2a67eac",
+    "input_file": "case01.fasta"
+  },
+  {
+    "id": "case02cds",
+    "label": "Case 02 \u2014 supplied CDS",
+    "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMR",
+    "length": 30,
+    "source_file": "case-02-cds.fasta",
+    "preparation": "Standard genetic code, frame +1 from first base; translated up to but excluding first stop. Applies only to the independent CDS input, not the genomic input. Short hypothetical translation; does not establish expression or folding.",
+    "sequence_sha256": "c937cf354d78889f36805717deeb2683f98cdff56f2787930da487d776f0abf2",
+    "input_file": "case02cds.fasta"
+  },
+  {
+    "id": "case04",
+    "label": "Case 04",
+    "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPQDTYDPPPHL",
+    "length": 219,
+    "source_file": "case-04-protein.fasta; case-04-cds.fasta",
+    "preparation": "219 residues verified by translating the supplied CDS in frame +1 to the first stop. The terminal X in the supplied protein corresponds to that stop and is excluded from model input. This does not establish expression or stable folding.",
+    "sequence_sha256": "ff6de431a9494594f2ae42e9a4e8ccc210f988bd3dcb87736afdf208b89c4bb9",
+    "input_file": "case04.fasta"
+  },
+  {
+    "id": "case05protein",
+    "label": "Case 05 \u2014 supplied protein",
+    "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGDPGPGRRSRPLIPHGRARSPTVSGSEIHPEAAGLRDPCPGRGPGAFTRFHFQFRPKIPPGWSGRGGARGTGLTAGSGPGSHTIQX",
+    "length": 200,
+    "source_file": "case-05-protein.fasta",
+    "preparation": "Exact supplied short protein including its terminal X as unknown amino acid. Kept separate from the incompatible full-length CDS translation. Model prediction does not establish the biological product or expression.",
+    "sequence_sha256": "13c4274f1547f4c4840b1a8f8625a19b6d02c538c6d82ad40a79b4face67b8bd",
+    "input_file": "case05protein.fasta"
+  },
+  {
+    "id": "case05cds",
+    "label": "Case 05 \u2014 supplied CDS",
+    "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSLTACKV",
+    "length": 365,
+    "source_file": "case-05-cds.fasta",
+    "preparation": "Standard genetic code, frame +1, up to first stop. Independent full-length CDS translation, distinct from supplied short protein; do not infer expression from this input.",
+    "sequence_sha256": "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+    "input_file": "case05cds.fasta"
+  },
+  {
+    "id": "case06",
+    "label": "Case 06",
+    "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFSTSVSRPGSGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSLTACKV",
+    "length": 365,
+    "source_file": "case-06-protein.fasta",
+    "preparation": "Exact supplied protein; sequence unchanged.",
+    "sequence_sha256": "17b4b5fa63a07c4ddd61833482863161f687926900d1bb514d7706cca6a64620",
+    "input_file": "case06.fasta"
+  },
+  {
+    "id": "demoB",
+    "label": "HLA-B demonstration",
+    "sequence": "MLVMAPRTVLLLLSAALALTETWAGSHSMRYFYTSVSRPGRGEPRFISVGYVDDTQFVRFDSDAASPREEPRAPWIEQEGPEYWDRNTQIYKAQAQTDRESLRNLRGYYNQSEAGSHTLQSMYGCDVGPDGRLLRGHDQYAYDGKDYIALNEDLRSWTAADTAAQITQRKWEAAREAEQRRAYLEGECVEWLRRYLENGKDKLERADPPKTHVTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDRTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEPSSQSTVPIVGIVAGLAVLAVVVIGAVVAAVMCRRKSSGGKGGSYSQAACSDSAQGSDVSLTA",
+    "length": 362,
+    "source_file": "assets/summer-school-2026/screenshots/demo-protein.fasta",
+    "preparation": "Exact HLA-B screenshot demonstration; not a participant case.",
+    "sequence_sha256": "5de81f208e7148a6c5163dc26042423d3e3fdd21b2eb3c95625b3a80f58583fb",
+    "input_file": "demoB.fasta"
+  }
+]

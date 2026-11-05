@@ -102,7 +102,7 @@ window.BITCOM_STEPS = [
   {
     "id": "step-3.3.1",
     "page": "step-3.html",
-    "title": "3.3.1 Run the surface accessibility analysis (NetSurfP-2.0)"
+    "title": "3.3.1 Run the surface accessibility analysis (NetSurfP-3.0)"
   },
   {
     "id": "step-3.3.2",

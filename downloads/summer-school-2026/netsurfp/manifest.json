@@ -1,0 +1,177 @@
+{
+  "tool": "NetSurfP",
+  "version": "3.0",
+  "method": "ESM1b",
+  "run_date": "2026-11-05",
+  "job_id": "6AEC44F200009710C695E525",
+  "source_url": "https://services.healthtech.dtu.dk/services/NetSurfP-3.0/tmp/6AEC44F200009710C695E525/6AEC44F200009710C695E525.json",
+  "raw_sha256": {
+    "json": "68a795f46eb47ddb8f6c81d440964b55336c116063a584d5b121398b36091d9a",
+    "csv": "6ef54be16e5013e7ae76214a6f97091959def2e29ef19b1cf20c7ffc4775b0d6",
+    "zip": "8c2d77c77edc3d68b7728bb1733bd005be404d0c8ccd4f135f68aac4d102817a"
+  },
+  "numbering": "1-based in exact submitted protein; no implicit mature-protein offset",
+  "inputs": [
+    {
+      "id": "reference",
+      "label": "Reference A*01:01:01:01",
+      "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSLTACKV",
+      "length": 365,
+      "source_file": "HLA-A01-01-01-01_Original_Protein.fasta",
+      "preparation": "Exact supplied protein; whitespace removed, sequence unchanged.",
+      "sequence_sha256": "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+      "input_file": "reference.fasta",
+      "result_file": "reference.json",
+      "csv_file": "reference.csv",
+      "result_sha256": "f2459da883a3224b0365bb9e499ceb3c0536a69a48332041b73124d6ebd4e1dc",
+      "input_file_sha256": "e2c15b92aac0cd5cd0d4058b84f82c0a0ccc3343decdacf5128c55ef3ceaca4c",
+      "source_sha256": {
+        "HLA-A01-01-01-01_Original_Protein.fasta": "1f52bf50306c9fbeaf759a2b6ad6d8e83c5f1bf2659f212cf06de1e7766ec0ed"
+      },
+      "answer": "This is a reference or demonstration input. Interpret the residue selected by you; the prediction alone does not establish immune recognition."
+    },
+    {
+      "id": "case01",
+      "label": "Case 01",
+      "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTLMTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSLTACKV",
+      "length": 365,
+      "source_file": "case-01-protein.fasta",
+      "preparation": "Exact supplied protein; sequence unchanged.",
+      "sequence_sha256": "102c1c49133efd66dd5604034d101fa269cf65246effa70202680739c2a67eac",
+      "input_file": "case01.fasta",
+      "result_file": "case01.json",
+      "csv_file": "case01.csv",
+      "result_sha256": "7a72b2c83c96a69ec382195bd29294d7483ecc734ee8c56c78c79daab9e8e726",
+      "input_file_sha256": "097e7635a9bcb874dc7aa0ba9a37b663a99dde4caee0ee25cd2edc83612bba55",
+      "source_sha256": {
+        "case-01-protein.fasta": "c64f2ad1ee64a0a5680c3fd229025b77520b8c0b3991be5e497b755151869ab1"
+      },
+      "answer": "Exon 4 substitution Genomic position 1885 A\u2192T maps to CDS position 635. The codon CAT changes to CTT, giving H212L in the precursor and H188L in mature numbering. The protein remains 365 residues long. The change is outside the ARD, in the \u03b13 region. NetSurfP predicted RSA of about 0.331 for the reference histidine and 0.360 for the variant leucine. In PDB 3BO8, inspect chain A His 188."
+    },
+    {
+      "id": "case02cds",
+      "label": "Case 02 \u2014 supplied CDS",
+      "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMR",
+      "length": 30,
+      "source_file": "case-02-cds.fasta",
+      "preparation": "Standard genetic code, frame +1 from first base; translated up to but excluding first stop. Applies only to the independent CDS input, not the genomic input. Short hypothetical translation; does not establish expression or folding.",
+      "sequence_sha256": "c937cf354d78889f36805717deeb2683f98cdff56f2787930da487d776f0abf2",
+      "input_file": "case02cds.fasta",
+      "result_file": "case02cds.json",
+      "csv_file": "case02cds.csv",
+      "result_sha256": "dffd1e9ca958caa5a8a1f6b54b1532951d5c688057ec7d70ad7bf4e2892d39e8",
+      "input_file_sha256": "6a698be34dadc5bae74542f5b8f6b8ba060021c3bd4ff585b8286e0862e76b07",
+      "source_sha256": {
+        "case-02-cds.fasta": "0e7a3dcc21c04f1e4d7473906a1dd573d50cae045388dc395143bcc6f9599421"
+      },
+      "answer": "Exon 2 frameshift exercise The genomic input contains G\u2192A at position 503, changing the acceptor AG to AA immediately before exon 2. The supplied CDS is an independent example with a one-base insertion in exon 2. SFAT translated that CDS to 30 residues. Analyse the two records separately and record the sequence level used.",
+      "notice": "Read Exact input and provenance before use. This prepared input does not establish expression or the biological protein product."
+    },
+    {
+      "id": "case02genomic",
+      "label": "Case 02 \u2014 genomic input",
+      "notice": "No unique translated protein is established for this genomic input. Do not use the independent Case 02 CDS prediction for it. Resolve the transcript with the facilitator; record the uncertainty. You may inspect the reference as a separate exercise, not as a prediction of this variant.",
+      "answer": "Exon 2 frameshift exercise The genomic input contains G\u2192A at position 503, changing the acceptor AG to AA immediately before exon 2. The supplied CDS is an independent example with a one-base insertion in exon 2. SFAT translated that CDS to 30 residues. Analyse the two records separately and record the sequence level used."
+    },
+    {
+      "id": "case03",
+      "label": "Case 03 \u2014 genomic input",
+      "notice": "No unique translated protein is established from this genomic input. A conventional annotation does not resolve an altered splice outcome. No variant prediction is fabricated here. Discuss the transcript and record the uncertainty; the reference can be inspected separately for learning.",
+      "answer": "Exon 3 splice-site exercise The substitution at genomic position 1014 changes the acceptor AG to AT immediately before exon 3. This supports possible splice disruption. SFAT returned a full-length coding sequence in the workshop test, so the translation alone does not resolve the splice consequence."
+    },
+    {
+      "id": "case04",
+      "label": "Case 04",
+      "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPQDTYDPPPHL",
+      "length": 219,
+      "source_file": "case-04-protein.fasta; case-04-cds.fasta",
+      "preparation": "219 residues verified by translating the supplied CDS in frame +1 to the first stop. The terminal X in the supplied protein corresponds to that stop and is excluded from model input. This does not establish expression or stable folding.",
+      "sequence_sha256": "ff6de431a9494594f2ae42e9a4e8ccc210f988bd3dcb87736afdf208b89c4bb9",
+      "input_file": "case04.fasta",
+      "result_file": "case04.json",
+      "csv_file": "case04.csv",
+      "result_sha256": "ae916b512a1485c91e3a83671311eecf49983660ae550d17536bfb64b079457b",
+      "input_file_sha256": "749a0b7f39fa7a0414a11a38ef3e907cd1149ff52b3e25c5228fab07ab2d8e0d",
+      "source_sha256": {
+        "case-04-protein.fasta": "13b830b7e97e394c1a158bec4b29200660ecd42b79e606d46250338c6694daed",
+        "case-04-cds.fasta": "e7803e4b4412cd024c1ad4b1c823e44d296bfddc8b3efc738da92f566a3d432f"
+      },
+      "answer": "A*01:04:01:01N premature stop The supplied A*01:04:01:01N example contains an early in-frame stop. Translation of the CDS reaches the first stop at codon 220, after 219 amino acids. The 660-base span includes that stop codon. Compare this with the 365-amino-acid reference. Check how the supplied protein represents the terminal stop.",
+      "notice": "Read Exact input and provenance before use. This prepared input does not establish expression or the biological protein product."
+    },
+    {
+      "id": "case05protein",
+      "label": "Case 05 \u2014 supplied protein",
+      "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGDPGPGRRSRPLIPHGRARSPTVSGSEIHPEAAGLRDPCPGRGPGAFTRFHFQFRPKIPPGWSGRGGARGTGLTAGSGPGSHTIQX",
+      "length": 200,
+      "source_file": "case-05-protein.fasta",
+      "preparation": "Exact supplied short protein including its terminal X as unknown amino acid. Kept separate from the incompatible full-length CDS translation. Model prediction does not establish the biological product or expression.",
+      "sequence_sha256": "13c4274f1547f4c4840b1a8f8625a19b6d02c538c6d82ad40a79b4face67b8bd",
+      "input_file": "case05protein.fasta",
+      "result_file": "case05protein.json",
+      "csv_file": "case05protein.csv",
+      "result_sha256": "5a7da79401efa27373868ac1f8505e601d0ae69c799cb793e92e9bff06e3129a",
+      "input_file_sha256": "b51d81147579d17bab8d12f8ea97e77fa3da29a1de715a35ba998bf93522b344",
+      "source_sha256": {
+        "case-05-protein.fasta": "d1012c4ff26481043a05c1f08e0a18702ff8a5bcb67c427cb8c05a5fae1a2b80"
+      },
+      "answer": "A*01:01:01:02N null allele This case represents A*01:01:01:02N. Compare the genomic and coding inputs separately and record how they relate to the supplied short protein. The null designation concerns expression. Compare exons 2 and 3 to assess ARD identity, and consult the current IPD record for the documented expression and group assignments. A full-length supplied CDS alone cannot establish expression.",
+      "notice": "Read Exact input and provenance before use. This prepared input does not establish expression or the biological protein product."
+    },
+    {
+      "id": "case05cds",
+      "label": "Case 05 \u2014 supplied CDS",
+      "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSLTACKV",
+      "length": 365,
+      "source_file": "case-05-cds.fasta",
+      "preparation": "Standard genetic code, frame +1, up to first stop. Independent full-length CDS translation, distinct from supplied short protein; do not infer expression from this input.",
+      "sequence_sha256": "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+      "input_file": "case05cds.fasta",
+      "result_file": "case05cds.json",
+      "csv_file": "case05cds.csv",
+      "result_sha256": "7de31b77267776ca15a816a3fd72080802aa8dc38d928d6263d08d421743180b",
+      "input_file_sha256": "a56503bd47412864711260cf5c20b1fc1ea86a84bdfeb7a057a638da6448b9de",
+      "source_sha256": {
+        "case-05-cds.fasta": "3e99c30706e6ef0cbce0c498a2953a9d7fdf9e398f6f338a997952889abe4b8b"
+      },
+      "answer": "A*01:01:01:02N null allele This case represents A*01:01:01:02N. Compare the genomic and coding inputs separately and record how they relate to the supplied short protein. The null designation concerns expression. Compare exons 2 and 3 to assess ARD identity, and consult the current IPD record for the documented expression and group assignments. A full-length supplied CDS alone cannot establish expression.",
+      "notice": "Read Exact input and provenance before use. This prepared input does not establish expression or the biological protein product."
+    },
+    {
+      "id": "case06",
+      "label": "Case 06",
+      "sequence": "MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFSTSVSRPGSGEPRFIAVGYVDDTQFVRFDSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQIMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQRRVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWELSSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSLTACKV",
+      "length": 365,
+      "source_file": "case-06-protein.fasta",
+      "preparation": "Exact supplied protein; sequence unchanged.",
+      "sequence_sha256": "17b4b5fa63a07c4ddd61833482863161f687926900d1bb514d7706cca6a64620",
+      "input_file": "case06.fasta",
+      "result_file": "case06.json",
+      "csv_file": "case06.csv",
+      "result_sha256": "c3ca07b982e27c40412378909eee403eb09e78404a9fcf910dc9cb0e00060716",
+      "input_file_sha256": "5bf2cc0aa1f5f5b814daf32091373491f5907a99dcd85c414e3171b029db1a12",
+      "source_sha256": {
+        "case-06-protein.fasta": "1f21064a9866ff9089e74fa95b0f55a9d221463bf72978f1d1517e5909d0fe13"
+      },
+      "answer": "A*01:02:01:01 ARD comparison This case represents A*01:02:01:01. Derive the CDS from the genomic input with SFAT, then compare coding exons 2 and 3 and the aligned protein with A*01:01:01:01. Record each nucleotide and amino-acid difference before drawing relative G- and P-group conclusions. The original file labelled CDS contained protein, so only genomic DNA and protein are provided here."
+    },
+    {
+      "id": "demoB",
+      "label": "HLA-B demonstration",
+      "sequence": "MLVMAPRTVLLLLSAALALTETWAGSHSMRYFYTSVSRPGRGEPRFISVGYVDDTQFVRFDSDAASPREEPRAPWIEQEGPEYWDRNTQIYKAQAQTDRESLRNLRGYYNQSEAGSHTLQSMYGCDVGPDGRLLRGHDQYAYDGKDYIALNEDLRSWTAADTAAQITQRKWEAAREAEQRRAYLEGECVEWLRRYLENGKDKLERADPPKTHVTHHPISDHEATLRCWALGFYPAEITLTWQRDGEDQTQDTELVETRPAGDRTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEPSSQSTVPIVGIVAGLAVLAVVVIGAVVAAVMCRRKSSGGKGGSYSQAACSDSAQGSDVSLTA",
+      "length": 362,
+      "source_file": "assets/summer-school-2026/screenshots/demo-protein.fasta",
+      "preparation": "Exact HLA-B screenshot demonstration; not a participant case.",
+      "sequence_sha256": "5de81f208e7148a6c5163dc26042423d3e3fdd21b2eb3c95625b3a80f58583fb",
+      "input_file": "demoB.fasta",
+      "result_file": "demoB.json",
+      "csv_file": "demoB.csv",
+      "result_sha256": "d8f2f135886dccd85b5db9c4e108799e83ef84d7b614dbc417777b55b2e3d2d3",
+      "input_file_sha256": "5a388c40e1f5a148c914f23fa7c2a3344e947c1f5610caad07eb379a2de10469",
+      "source_sha256": {
+        "assets/summer-school-2026/screenshots/demo-protein.fasta": "bb51ececeb0a1e51e2bcfc78b9991d0052845df773839c06a0546b5d2490b345"
+      },
+      "answer": "This is a reference or demonstration input. Interpret the residue selected by you; the prediction alone does not establish immune recognition."
+    }
+  ]
+}

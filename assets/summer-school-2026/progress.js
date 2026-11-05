@@ -6,6 +6,10 @@
   let memory = {completed: [], last: null, updatedAt: null};
   let unavailable = false;
   let unsaved = false;
+  function missingBefore(page) {
+    const number=Number((page.match(/^step-(\d)\.html$/)||[])[1]);
+    return steps.filter(s=>Number(s.page.match(/\d/)[0])<number&&!memory.completed.includes(s.id));
+  }
   function validate(value) {
     if (!value || typeof value !== 'object' || !Array.isArray(value.completed) ||
         value.completed.length > steps.length || value.completed.some(id => !byId.has(id))) throw Error('Invalid progress in backup.');
@@ -24,6 +28,7 @@
     try { localStorage.setItem(key,JSON.stringify(memory));unavailable=false;unsaved=false; }
     catch { unavailable=true;unsaved=true; }
     render();
+    if(window.dispatchEvent)window.dispatchEvent(new Event('bitcom-progress'));
   }
   const box=document.createElement('section');box.className='progress-panel';box.setAttribute('aria-label','Your saved progress');
   const heading=document.createElement('h2');heading.textContent='Your saved progress';
@@ -36,7 +41,8 @@
   document.querySelector('nav[aria-label="Workshop navigation"]').after(box);
   function render() {
     count.textContent=`${memory.completed.length} of ${steps.length} tasks marked complete. Your reading position is saved separately.`;
-    const step=byId.get(memory.last)||steps[0];
+    const savedStep=byId.get(memory.last)||steps[0];
+    const step=missingBefore(savedStep.page)[0]||savedStep;
     resume.href=step.page+'#'+step.id;
     resume.textContent=memory.last?'Continue: '+step.title:'Begin Step 1';
     note.textContent=unavailable?'Browser storage could not be read or written. Download a backup before leaving.':
@@ -50,7 +56,9 @@
     const input=document.createElement('input');input.type='checkbox';input.dataset.completeStep=h.id;
     input.checked=memory.completed.includes(h.id);
     label.append(input,document.createTextNode('I have completed task '+h.id.slice(5)));
-    h.after(label);
+    const next=headings[headings.indexOf(h)+1];
+    if(next && next.parentElement===h.parentElement)next.before(label);
+    else h.parentElement.append(label);
     input.addEventListener('change',()=>{
       const value=snapshot();const completed=new Set(value.completed);
       input.checked?completed.add(h.id):completed.delete(h.id);
@@ -58,7 +66,7 @@
     });
   }
   function position() {
-    if(!headings.length)return;
+    if(!headings.length||missingBefore(byId.get(headings[0].id).page).length)return;
     let current=null;
     for(const h of headings) { if(h.getBoundingClientRect().top<=180)current=h; else break; }
     if(!current)return;
@@ -70,13 +78,13 @@
   window.addEventListener('pagehide',position);
   window.addEventListener('hashchange',()=>{
     const current=headings.find(h=>h.id===location.hash.slice(1));
-    if(current)store({...snapshot(),last:current.id,updatedAt:new Date().toISOString()});
+    if(current&&!missingBefore(byId.get(current.id).page).length)store({...snapshot(),last:current.id,updatedAt:new Date().toISOString()});
   });
   window.addEventListener('storage',event=>{if(event.key===key){snapshot();render();}});
-  if(headings.length) {
+  if(headings.length&&!missingBefore(byId.get(headings[0].id).page).length) {
     const anchor=location.hash.slice(1);
     const current=headings.find(h=>h.id===anchor)||headings.find(h=>h.id===memory.last)||headings[0];
     store({...snapshot(),last:current.id,updatedAt:new Date().toISOString()});
   }
-  window.WorkshopProgress={snapshot,validate,restore:store,steps};
+  window.WorkshopProgress={snapshot,validate,restore:store,steps,missingBefore};
 })();
