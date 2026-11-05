@@ -20,6 +20,20 @@
           event.data?.type !== 'efi-bitcom-workbook-jump' || event.data.hash !== location.hash) return;
       jump(location.hash);
     });
+    document.addEventListener('click', event => {
+      const link = event.target.closest('a.workbook-instruction');
+      if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey ||
+          event.shiftKey || event.altKey || !window.opener || window.opener.closed) return;
+      const url = new URL(link.href, current);
+      if (url.origin !== current.origin) return;
+      try {
+        window.opener.location.href = url.href;
+        window.opener.focus();
+        event.preventDefault();
+      } catch {
+        // A workbook opened independently can follow the link normally.
+      }
+    });
     return;
   }
   for (const link of document.querySelectorAll('a[href]')) {
