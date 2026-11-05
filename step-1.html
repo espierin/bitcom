@@ -10,7 +10,7 @@
 <script src="assets/summer-school-2026/progress-data.js?v=3" defer></script>
 <script src="assets/summer-school-2026/registration-config.js?v=3" defer></script>
 <script src="assets/summer-school-2026/cloud-work.js?v=1" defer></script>
-<script src="assets/summer-school-2026/progress.js?v=4" defer></script>
+<script src="assets/summer-school-2026/progress.js?v=5" defer></script>
 <script src="assets/summer-school-2026/workbook-window.js?v=2" defer></script>
 <script src="assets/summer-school-2026/screenshot-notes.js?v=2" defer></script>
 <script src="assets/summer-school-2026/screenshots.js?v=3" defer></script>
@@ -47,7 +47,7 @@
 </div><h4>What you have now</h4><p>One long genomic DNA sequence (exons + introns) for one allele saved in a local txt file</p>
 <p class="task-workbook"><strong>In My workbook:</strong> <a class="workbook-jump" href="workbook.html#reference_files" target="EFI_BITCom_Workbook" rel="noopener">Reference file and source ↗</a>.</p>
 <div class="learning-support"><details><summary><span class="badge" aria-hidden="true">?</span>Help me through this step</summary><div class="support-content"><h4>Work through it</h4><ol><li>Open the repository link at the top of this page. Open the fasta folder and choose the file ending in _gen.fasta for your locus, for example A_gen.fasta for HLA-A. Use Raw or View raw, then search for the exact allele name with Ctrl+F (Windows) or Command+F (Mac). Check that the search hit is on a header starting with >.</li><li>Start selecting on the line below that header. Stop immediately before the next line starting with >. Copy the selected DNA into Notepad or a plain-text TextEdit document. Remove layout whitespace, then save in your workshop folder as your_allele_genomic.txt. On Windows choose All files if the editor adds an extra .txt extension.</li></ol><h4>Check your result or recover</h4><p>Reopen the saved file. It should contain one record’s DNA letters and no header, numbers or second entry. If Raw is slow, use the genomic reference on <a href="downloads.html#reference-files">Downloads → Reference</a> and record that source. If your sequence contains unexpected letters, check the original record with the facilitator before changing it.</p></div></details><details><summary><span class="badge" aria-hidden="true">!</span>Understand what you are doing</summary><div class="support-content"><h4>What the result means</h4><p>FASTA has two parts. The header identifies the record and the body contains its sequence. Keep the allele name and database release or retrieval date in <a class="workbook-jump" href="workbook.html#reference_files" target="EFI_BITCom_Workbook" rel="noopener">Saved reference files and observations ↗</a> even when the header is omitted from the working copy.</p><h4>How to interpret it</h4><p>A genomic record can include untranslated regions as well as exons and introns. The genomic, CDS and protein files for the same allele have different lengths and cannot be swapped. The screenshot shows a different locus for demonstration.</p></div></details><details class="screen-example"><summary><span class="badge" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M12 17v3M7 21h10"/></svg></span>Show a screen example</summary><div class="support-content"><p><strong>Demonstration only:</strong> HLA-B*07:02:01:01, separate from your HLA-A case. Follow the task instructions for your own allele, settings and positions. Screens captured on 5 November 2026; external websites may change.</p><figure><a aria-label="Open full-size example: SFAT input" href="assets/summer-school-2026/screenshots/sfat-input.jpg" rel="noopener"><img src="assets/summer-school-2026/screenshots/sfat-input.jpg" alt="SFAT input (HLA-B demonstration)" loading="lazy" decoding="async"></a><figcaption><strong>SFAT input.</strong> Paste DNA letters only. For this HLA-B demonstration the locus is B and the level is Genomic. For your workshop case, select its own locus (usually A), not B. Check these two menus before submitting. <a href="https://www.ebi.ac.uk/ipd/imgt/hla/annotation/" rel="noopener noreferrer" target="_blank">Open tool ↗</a></figcaption></figure><p>Use the magnifier to view the complete screenshot in a popup on this page. These examples illustrate the interface and do not replace your own observations or answer the case questions.</p></div></details></div><h3 id="step-1.2">1.2 Convert genomic DNA to coding DNA sequences with the Sequence Feature Annotation Tool</h3><p>Goal: The Sequence Feature Annotation Tool (SFAT) identifies exon/intron features and outputs the coding sequence (CDS), which is the exonic sequence with introns removed.</p>
-<h4>Tool to use</h4><p>IPD-IMGT/HLA Sequence Feature Annotation Tool (SFAT).</p>
+<h4>Tool to use</h4><p><a href="https://www.ebi.ac.uk/ipd/imgt/hla/annotation/" target="_blank" rel="noopener noreferrer">SFAT</a>. Select <strong>Genomic</strong> and the locus in your FASTA header.</p>
 <h4>What you do (click-by-click)</h4><p>Open the <a href="https://www.ebi.ac.uk/ipd/imgt/hla/annotation/" target="_blank" rel="noopener noreferrer">Sequence Feature Annotation Tool (SFAT)</a>.</p>
 <p data-show-where="sfat-paste">Paste your genomic DNA letters only (no FASTA header, no spaces).</p>
 <p data-show-where="sfat-locus">Select the locus that matches your sequence (e.g., A, B, DRB1, MICB, etc.).</p>
@@ -56,7 +56,7 @@
 <div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the full content of <a href="#step-1.1">your_allele_genomic.txt from task 1.1</a></p>
 <p data-show-where="sfat-paste">PASTE: into SFAT (letters only; no header).</p>
 <p data-show-where="sfat-level">SELECT: correct locus and Level = Genomic.</p>
-<p data-show-where="sfat-cds">SAVE: copy the CDS output into your_allele_CDS.txt</p>
+<p data-show-where="sfat-cds">SAVE: below the Feature Map, click the <strong>CDS</strong> tab, then scroll to <strong>Sequence</strong>. Copy the sequence letters into <code>your_allele_CDS.txt</code>.</p>
 <p data-show-where="sfat-boundary">WRITE DOWN: exon/intron boundaries and codon_start (if shown). <a class="workbook-jump" href="workbook.html#annotation" target="EFI_BITCom_Workbook" rel="noopener">Annotation and boundaries ↗</a></p>
 </div><h4>What to look for in the results</h4><p>Exon/intron boundaries (where each exon starts/ends in your input).</p>
 <p>A coding sequence (CDS): the coding portions of exons joined in order.</p>
@@ -69,11 +69,11 @@
 <p data-show-where="save-text">SAVE: as your_allele_protein.txt</p>
 </div><h4>Option B (manual/universal): translate the CDS with ExPASy Translate</h4><p>Open <a href="https://web.expasy.org/translate/" target="_blank" rel="noopener noreferrer">ExPASy Translate</a>.</p>
 <p data-show-where="translate-paste">Paste the coding DNA sequence from your_allele_CDS.txt.</p>
-<p>Choose an output format (default is Compact: M, -, no spaces).</p>
-<p>Press the “TRANSLATE!” button.</p>
-<p>By default ExPASy shows 6 possible frames (3 forward, 3 reverse).</p>
-<p>If SFAT provides codon_start, use it to select the correct forward frame: start=1 (in SFAT) -&gt; frame 1 (in ExPASy); start=2 (in SFAT) -&gt; frame 2 (in ExPASy); start=3 (SFAT)-&gt; frame 3 (in ExPASy).</p>
-<p data-show-where="translate-copy">Copy the relevant protein sequence into your_allele_protein.txt.</p>
+<p data-show-where="translate-settings">Select <strong>Compact</strong>, leave only <strong>forward</strong> checked for the coding-strand CDS, keep <strong>Standard</strong> genetic code and click <strong>TRANSLATE!</strong>. Under <strong>Results of translation</strong>, read the three forward frames. If SFAT gives <code>codon_start</code>, use the corresponding frame (1, 2 or 3). Check the first stop in that frame against the reference.</p>
+
+
+
+<p data-show-where="translate-copy">Copy the amino-acid letters from the verified frame into <code>your_allele_protein.txt</code>. Record the stop location separately in your workbook. The dash in Compact output marks a stop.</p>
 <p>Optional: ExPASy can download all frames as one text file.</p>
 <div class="copy-box"><h4>Copy / Paste / Save</h4><p data-show-where="sfat-cds">COPY: the full content of <a href="#step-1.2">your_allele_CDS.txt from task 1.2</a></p>
 <p data-show-where="translate-paste">PASTE: into ExPASy Translate (not genomic DNA).</p>

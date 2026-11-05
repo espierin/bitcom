@@ -36,8 +36,9 @@
   const heading=document.createElement('h2');heading.textContent='Your saved progress';
   const count=document.createElement('p');
   const resume=document.createElement('a');resume.className='action-link';
+  const nextTask=document.createElement('a');
   const backup=document.createElement('a');backup.href='workbook.html#workbook-actions';backup.textContent='Save or restore a backup';
-  const links=document.createElement('div');links.className='workbook-actions';links.append(resume,backup);
+  const links=document.createElement('div');links.className='workbook-actions';links.append(resume,nextTask,backup);
   const note=document.createElement('p');note.className='progress-note';
   box.append(heading,count,links,note);
   cloud?.attach(box);
@@ -48,6 +49,12 @@
     const step=missingBefore(savedStep.page)[0]||savedStep;
     resume.href=step.page+'#'+step.id;
     resume.textContent=memory.last?'Continue: '+step.title:'Begin Step 1';
+    const firstUnchecked=steps.find(task=>!memory.completed.includes(task.id));
+    nextTask.hidden=!firstUnchecked||firstUnchecked.id===step.id;
+    if(firstUnchecked){
+      nextTask.href=firstUnchecked.page+'#'+firstUnchecked.id;
+      nextTask.textContent='First unchecked task: '+firstUnchecked.id.slice(5);
+    }
     note.textContent=unavailable?'Browser storage could not be read or written. Download a backup before leaving.':
       cloud?.session() ? 'Signed-in work is saved on this browser and synced to the server. Check the server status before closing.' :
       'Guest mode. This browser keeps a local copy. Before ending the session, download a JSON backup to keep or transfer your progress.';
@@ -66,9 +73,15 @@
     if(chapterStatus?.dataset?.chapterStatus){
       const chapter=steps.filter(step=>step.page===chapterStatus.dataset.chapterStatus);
       const remaining=chapter.filter(step=>!memory.completed.includes(step.id));
-      chapterStatus.textContent=remaining.length
-        ? `${chapter.length-remaining.length} of ${chapter.length} tasks complete. Next unchecked task: ${remaining[0].id.slice(5)}.`
-        : `All ${chapter.length} tasks on this page are complete.`;
+      if(remaining.length){
+        const taskLink=document.createElement('a');
+        taskLink.href='#'+remaining[0].id;
+        taskLink.textContent='Go to task '+remaining[0].id.slice(5);
+        chapterStatus.textContent=`${chapter.length-remaining.length} of ${chapter.length} tasks complete. `;
+        chapterStatus.append(taskLink);
+      }else{
+        chapterStatus.textContent=`All ${chapter.length} tasks on this page are complete.`;
+      }
     }
   }
   snapshot();render();
