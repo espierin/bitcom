@@ -28,7 +28,7 @@
       "source_sha256": {
         "HLA-A01-01-01-01_Original_Protein.fasta": "e5cf75870747cef637fff3594a5ab639a94ef3c75d6d50be3f42e3e7441f6271"
       },
-      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files and bundled source copies.",
+      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files.",
       "answer": "This is a reference or demonstration input. Interpret the residue selected by you; the prediction alone does not establish immune recognition."
     },
     {
@@ -47,7 +47,7 @@
       "source_sha256": {
         "case-01-protein.fasta": "074879ef6ea66f112e19f97fa167447b9daae35f54fe9248d24cb877a4b9fe63"
       },
-      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files and bundled source copies.",
+      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files.",
       "answer": "Case 01 | An \u03b13-domain substitution\n\nThe 3,503-base genomic record differs from the supplied reference at position 1885 (A\u2192T). The aligned CDS changes at base 635. The codon changes from CAT to CTT. Both proteins have 365 residues. The substitution is H212L in precursor numbering and H188L in mature numbering after verifying the 24-residue leader.\n\nThe change lies in exon 4, outside the class I ARD. The reference and variant retain identical sequence across exons 2 and 3 in this comparison. In NetSurfP-3.0, precursor position 212 has RSA 0.3309 (H) and 0.3603 (L). Both exceed the workshop threshold of 0.25. Map the reference histidine to chain A, residue 188 in 3BO8. The structure shows the reference side chain. The prediction supports accessibility and does not establish antibody reactivity."
     },
     {
@@ -66,7 +66,7 @@
       "source_sha256": {
         "case-02-cds.fasta": "f616f72e4c255565f435dd14c787c7d597cac7314e4e3fc4b70ad029372284ef"
       },
-      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files and bundled source copies.",
+      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files.",
       "answer": "Case 02 | Two independent inputs\n\nThe genomic record has G\u2192A at position 503. The acceptor immediately before exon 2 changes from AG to AA. Record the splice-site evidence and leave the resulting transcript and protein unresolved without further evidence.\n\nThe independent CDS contains one additional A, aligned at CDS position 92 in the supplied comparison. Translation in the reference coding frame reaches its first stop at codon 31, after 30 residues. This demonstrates a coding frameshift in the CDS exercise. The 30-residue NetSurfP result applies to that exact translation. Keep the genomic and CDS observations separate.",
       "notice": "Read Exact input and provenance before use. This prepared input does not establish expression or the biological protein product."
     },
@@ -99,7 +99,7 @@
         "case-04-protein.fasta": "619670d867dcd713fd84dba2665927a6ee716757ac60a5cf71e92cda275445f4",
         "case-04-cds.fasta": "a7fbf2d0d566fd01bc0015ceac502d9c8310b0e5ca1bd626d99f2e61f4888353"
       },
-      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files and bundled source copies.",
+      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files.",
       "answer": "Case 04 | A*01:04:01:01N and premature termination\n\nRelative to the supplied A*01:01:01:01 reference, the genomic and coding inputs contain one additional C. In this alignment the insertion is at genomic position 1878 and CDS position 628. The coding insertion shifts the frame before codon 210 and introduces a stop at codon 220. The 660-base span includes the stop. There are 219 amino acids before it.\n\nThe supplied protein ends with X after those 219 amino acids. Translation of the matching CDS establishes the stop at that position. The archived predictor used the verified 219-residue segment. IPD-IMGT/HLA 3.66.0 lists this allele in A*01:01:01G. The P-group table omits this null allele. Protein length and annotation are separate from evidence of cellular expression.",
       "notice": "Read Exact input and provenance before use. This prepared input does not establish expression or the biological protein product."
     },
@@ -119,7 +119,7 @@
       "source_sha256": {
         "case-05-protein.fasta": "d7e147d48794e2d6cf82ddfc2a049711ff106e0eec109083586dc3254c2cf26d"
       },
-      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files and bundled source copies.",
+      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files.",
       "answer": "Case 05 | A*01:01:01:02N and expression\n\nThe supplied CDS is identical to the A*01:01:01:01 reference CDS and translates to 365 residues before its terminal stop. The supplied short protein has 200 symbols including a terminal X and does not match that translation. The shorter genomic record also has different boundaries. Compare the records at their own sequence levels and keep their origins in your notes.\n\nIPD-IMGT/HLA 3.66.0 lists A*01:01:01:02N in A*01:01:01G. The P-group table omits this null allele. The two NetSurfP entries apply to the exact supplied short protein and to the independent CDS translation, respectively. Neither establishes that an HLA molecule with that sequence is expressed. Do not infer a unique transcript from the supplied records alone.",
       "notice": "Read Exact input and provenance before use. This prepared input does not establish expression or the biological protein product."
     },
@@ -139,7 +139,7 @@
       "source_sha256": {
         "case-05-cds.fasta": "05127ff1a9140e43354098352bb4fd55ee6808e9d27790c5477dcc6614eb1906"
       },
-      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files and bundled source copies.",
+      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files.",
       "answer": "Case 05 | A*01:01:01:02N and expression\n\nThe supplied CDS is identical to the A*01:01:01:01 reference CDS and translates to 365 residues before its terminal stop. The supplied short protein has 200 symbols including a terminal X and does not match that translation. The shorter genomic record also has different boundaries. Compare the records at their own sequence levels and keep their origins in your notes.\n\nIPD-IMGT/HLA 3.66.0 lists A*01:01:01:02N in A*01:01:01G. The P-group table omits this null allele. The two NetSurfP entries apply to the exact supplied short protein and to the independent CDS translation, respectively. Neither establishes that an HLA molecule with that sequence is expressed. Do not infer a unique transcript from the supplied records alone.",
       "notice": "Read Exact input and provenance before use. This prepared input does not establish expression or the biological protein product."
     },
@@ -159,7 +159,7 @@
       "source_sha256": {
         "case-06-protein.fasta": "87e53d8b679121184b2663fdba8966a83ca667a08a149b2a4f10d6534ce361cd"
       },
-      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files and bundled source copies.",
+      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files.",
       "answer": "Case 06 | A*01:02:01:01 and ARD comparison\n\nThe supplied genomic sequence differs from A*01:01:01:01 at positions 476, 528, 551, 553, 556 and 574. Derive the CDS with SFAT and map the coding changes to the exon boundaries. The originally labelled CDS file contained protein, so it is excluded from the participant downloads.\n\nThe supplied proteins differ at F33S and R41S in precursor numbering (F9S and R17S in mature numbering with the verified 24-residue leader). Both are in the class I ARD. The ARD nucleotide and amino-acid sequences differ. IPD-IMGT/HLA 3.66.0 assigns A*01:02:01G and A*01:02P, versus A*01:01:01G and A*01:01P for the reference. This corrects the expected-outcomes note about a shared G group."
     },
     {
@@ -178,7 +178,7 @@
       "source_sha256": {
         "assets/summer-school-2026/screenshots/demo-protein.fasta": "bb51ececeb0a1e51e2bcfc78b9991d0052845df773839c06a0546b5d2490b345"
       },
-      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files and bundled source copies.",
+      "source_hash_note": "Source FASTA checksums use LF newlines, matching repository files.",
       "answer": "This is a reference or demonstration input. Interpret the residue selected by you; the prediction alone does not establish immune recognition."
     }
   ]

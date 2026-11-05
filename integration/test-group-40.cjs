@@ -1,4 +1,4 @@
-// node integration/test-group-40.cjs URL extracted-offline-directory sms2-source-directory
+// node integration/test-group-40.cjs URL sms2-source-directory
 // Sends only GET requests to the supplied BITCom origin. DTU failure and wait
 // are simulated. Upstream SMS2 code runs locally in separate JavaScript contexts.
 const assert = require('node:assert/strict');
@@ -9,13 +9,12 @@ const { runInNewContext } = require('node:vm');
 const { createHash } = require('node:crypto');
 const { parseProtein } = require('../assets/summer-school-2026/netsurfp-core.js');
 
-const [address, offlineDir, smsDir] = process.argv.slice(2);
+const [address, smsDir] = process.argv.slice(2);
 const site = new URL(address);
 const archive = 'downloads/summer-school-2026/netsurfp/';
 const alignments = 'downloads/summer-school-2026/saved-alignments/';
 const assets = 'assets/summer-school-2026/';
-const file = name => readFileSync(resolve(offlineDir,name),'utf8');
-const offlineData = file('offline-data.js');
+const file = name => readFileSync(resolve(__dirname,'..',name),'utf8');
 const sources = ['netsurfp-core.js','netsurfp-timer.js','netsurfp-viewer.js'].map(name => file(assets+name));
 const alignmentManifest = JSON.parse(file(alignments+'manifest.json'));
 const sms = ['sms_common.js','pairwise_affine_align.js','pairwise_align_protein.js'].map(name => readFileSync(join(smsDir,name),'utf8')).join('\n');
@@ -69,23 +68,20 @@ function element() {
     replaceChildren(){this.children=[];},
     addEventListener(type,listener){this.events[type]=listener;}};
 }
-async function testViewer(id, offline, source, slow) {
+async function testViewer(id, slow) {
   const elements = new Map(), persisted = new Map();
   const lookup = id=>{if(!elements.has(id))elements.set(id,element());return elements.get(id);};
-  let now = 1000, tick, fetches = 0;
+  let now = 1000, tick;
   const ctx = {
     window:{addEventListener(){}},
     document:{getElementById:lookup,createElement:element,createElementNS:element},
     localStorage:{getItem:key=>persisted.get(key),setItem:(key,value)=>persisted.set(key,value)},
     Date:{now:()=>now},setInterval:callback=>{tick=callback;},
     fetch:async name=>{
-      fetches++;
-      assert.ok(!offline,'Offline viewer attempted a network request');
       assert.ok(name.startsWith(archive),name);
       return {ok:true,json:async()=>JSON.parse(await get(name))};
     },
   };
-  if(offline)runInNewContext(offlineData,ctx);
   for(const script of sources)runInNewContext(script,ctx);
   if(slow){
     lookup('ns-timer-start').events.click();
@@ -109,7 +105,7 @@ async function testViewer(id, offline, source, slow) {
     await lookup('ns-case').events.change();
     id = 'demoB';
   }
-  const sequence = await source(archive+id+'.fasta');
+  const sequence = await get(archive+id+'.fasta');
   lookup('ns-sequence').value=sequence;
   lookup('ns-verify').events.click();
   assert.match(lookup('ns-verify-status').textContent,/Exact sequence match/);
@@ -121,38 +117,34 @@ async function testViewer(id, offline, source, slow) {
   assert.equal(row[2],parseProtein(sequence)[0]);
   assert.ok(Number(row[3])>=0 && Number(row[3])<=1);
   assert.ok(lookup('ns-chart').children.length);
-  if(offline)assert.equal(fetches,0);
 }
 
-async function client(index, offline) {
+async function client(index) {
   const start = performance.now();
   const id = cases[index % cases.length];
   const pair = unresolved.has(id)||id==='reference'?'demoB':id;
-  const source = offline ? async name=>file(name) : get;
-  const guide = await source('alignment-results.html');
+  const guide = await get('alignment-results.html');
   assert.ok(guide.includes(pair+'-comparison.txt'));
   const pairFiles = [];
   for(const suffix of ['inputs.fasta','aligned.fasta','comparison.txt']){
-    pairFiles.push(await source(alignments+pair+'-'+suffix));
+    pairFiles.push(await get(alignments+pair+'-'+suffix));
   }
   testAlignment(pair,...pairFiles);
-  const viewer = await source(offline?'index.html':'netsurfp-viewer.html');
+  const viewer = await get('netsurfp-viewer.html');
   assert.ok(viewer.includes('ns-lookup-form'));
-  await testViewer(id,offline,source,index<20);
+  await testViewer(id,index<20);
   return performance.now()-start;
 }
 
 (async()=>{
-  for(const offline of [false,true]){
-    const start = performance.now();
-    const outcomes = await Promise.allSettled(Array.from({length:40},(_,i)=>client(i,offline)));
-    const failures = outcomes.flatMap((outcome,i)=>outcome.status==='rejected'?[{client:i+1,error:outcome.reason.message}]:[]);
-    const durations = outcomes.flatMap(o=>o.status==='fulfilled'?[o.value]:[]).sort((a,b)=>a-b);
-    console.log(JSON.stringify({mode:offline?'offline, network blocked':'online archive',
-      passed:durations.length, failed:failures.length, failures,
-      p95Seconds:Number((durations[Math.ceil(durations.length*.95)-1]/1000).toFixed(2)),
-      elapsedSeconds:Number(((performance.now()-start)/1000).toFixed(2)),
-      httpRequests:offline?0:requests,peakInFlight:offline?0:peak}));
-    assert.equal(failures.length,0);
-  }
+  const start = performance.now();
+  const outcomes = await Promise.allSettled(Array.from({length:40},(_,i)=>client(i)));
+  const failures = outcomes.flatMap((outcome,i)=>outcome.status==='rejected'?[{client:i+1,error:outcome.reason.message}]:[]);
+  const durations = outcomes.flatMap(o=>o.status==='fulfilled'?[o.value]:[]).sort((a,b)=>a-b);
+  console.log(JSON.stringify({mode:'online archive',
+    passed:durations.length, failed:failures.length, failures,
+    p95Seconds:Number((durations[Math.ceil(durations.length*.95)-1]/1000).toFixed(2)),
+    elapsedSeconds:Number(((performance.now()-start)/1000).toFixed(2)),
+    httpRequests:requests,peakInFlight:peak}));
+  assert.equal(failures.length,0);
 })().catch(error=>{console.error(error);process.exitCode=1;});

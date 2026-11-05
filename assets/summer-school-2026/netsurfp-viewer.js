@@ -5,13 +5,6 @@
   const cache=new Map();
   async function json(file){
     if(cache.has(file))return cache.get(file);
-    if(window.NetSurfPOffline){
-      const saved=window.NetSurfPOffline[file];
-      if(!saved)throw Error('This file is missing from the offline data. Download the ZIP again and extract all files.');
-      const data=JSON.parse(saved);
-      cache.set(file,data);
-      return data;
-    }
     try{
       const response=await fetch(base+file);
       if(!response.ok)throw Error('Saved data unavailable.');
@@ -19,7 +12,7 @@
       cache.set(file,saved);
       return saved;
     }catch{
-      throw Error('Saved data could not be loaded. Check your connection or open index.html from the extracted offline package.');
+      throw Error('Saved data could not be loaded. Check your connection and reload the viewer.');
     }
   }
   function invalidate(){
@@ -117,20 +110,5 @@
     setTimeout(()=>URL.revokeObjectURL(url),10000);
   }
   $('ns-download-observation').addEventListener('click',()=>download($('ns-observation').value,'netsurfp-observation.txt'));
-  if(window.NetSurfPOffline){
-    // Chrome may ignore the download attribute on links between local files.
-    const downloadOfflineFile=event=>{
-      const a=event.target.closest('a[download]');
-      const href=a?.getAttribute('href');
-      if(!href?.startsWith(base))return;
-      const filename=href.slice(base.length);
-      const content=window.NetSurfPOffline[filename];
-      if(typeof content!=='string')return;
-      event.preventDefault();
-      download(content,filename);
-    };
-    $('ns-dataset').addEventListener('click',downloadOfflineFile);
-    $('ns-batch-files').addEventListener('click',downloadOfflineFile);
-  }
   json('manifest.json').then(m=>{manifest=m;for(const item of m.inputs){const o=document.createElement('option');o.value=item.id;o.textContent=item.label;$('ns-case').append(o);}$('ns-case').disabled=false;$('ns-case-status').textContent='Choose a case to begin. No residue position or interpretation is prefilled.';}).catch(e=>{$('ns-case-status').textContent=e.message;});
 })();
