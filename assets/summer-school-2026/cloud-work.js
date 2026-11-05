@@ -6,7 +6,7 @@
   const kinds = Object.keys(keys);
   let session = config?.enabled ? read(sessionKey) : null;
   if (!session?.receipt || !session.scope || session.expires <= Date.now()/1000) session = null;
-  let timer, loading, flushing;
+  let timer, retryTimer, loading, flushing;
   let status = session ? 'Checking your server copy…' : '';
   const conflicts = new Set();
 
@@ -22,6 +22,9 @@
   }
   function metaKey(kind) { return storageKey(kind)+':sync'; }
   function meta(kind) { return read(metaKey(kind), { revision:0 }); }
+  function hasPendingWork() {
+    return kinds.some(kind=>!conflicts.has(kind) && meta(kind).pending!==undefined);
+  }
   function tell(message) {
     status = message;
     for (const element of document.querySelectorAll('[data-cloud-status]')) element.textContent = status;
@@ -66,10 +69,10 @@
   }
   async function savePending() {
     if (loading) await loading;
-    for (const kind of kinds) {
-      let current = meta(kind);
-      if (conflicts.has(kind) || current.pending === undefined) continue;
-      while (current.pending !== undefined) {
+    while (hasPendingWork()) {
+      for (const kind of kinds) {
+        const current = meta(kind);
+        if (conflicts.has(kind) || current.pending === undefined) continue;
         const pending = current.pending;
         const {revision} = await request('/save',{
           receipt:session.receipt,kind,revision:current.revision,data:pending,
@@ -80,7 +83,6 @@
         const latest = meta(kind);
         put(metaKey(kind), JSON.stringify(latest.pending)===JSON.stringify(pending)
           ? {revision} : {...latest,revision});
-        current = meta(kind);
       }
     }
     if (conflicts.size) {
@@ -113,9 +115,16 @@
     clearTimeout(timer);
     timer=setTimeout(flush,850);
   }
+  function retryPending() {
+    if (session?.expires > Date.now()/1000 && hasPendingWork()) return flush();
+  }
+  function scheduleRetry() {
+    if (retryTimer===undefined) retryTimer=setInterval(retryPending,10*60*1000);
+  }
   async function connect(confirmed, copyGuest) {
     session={receipt:confirmed.receipt,scope:confirmed.scope,expires:confirmed.expires};
     put(sessionKey,session);
+    scheduleRetry();
     if (!(await load())) return false;
     if (copyGuest) {
       for (const kind of kinds) {
@@ -177,10 +186,11 @@
   }
   window.WorkshopCloud={storageKey,queue,attach,request,connect,session:()=>session,signOut};
   if (session) {
-    load().then(ok=>{if(ok && kinds.some(kind=>meta(kind).pending!==undefined)) flush();});
-    window.addEventListener('online',flush);
-    document.addEventListener('visibilitychange',()=>{if(document.hidden && kinds.some(kind=>meta(kind).pending!==undefined)) flush();});
+    scheduleRetry();
+    load().then(ok=>{if(ok) retryPending();});
   }
+  window.addEventListener('online',retryPending);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden) retryPending();});
   window.addEventListener('storage',event=>{
     if (event.key===sessionKey && (read(sessionKey)?.scope || null)!==(session?.scope || null)) location.reload();
   });

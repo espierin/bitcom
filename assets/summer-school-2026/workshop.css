@@ -53,6 +53,80 @@ footer { padding: 1.25rem; background: var(--efi-surface); text-align: center; }
 .copy-box { padding: .8rem 1.1rem; background: var(--efi-surface); border-left: 4px solid var(--efi-blue); margin: 1rem 0; }
 .copy-box h4 { margin-top: 0; }
 
+.step-resources { display: grid; gap: 1rem; margin: 1.5rem 0 2rem; }
+.step-resource-card {
+  min-width: 0;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--efi-line);
+  border-radius: 12px;
+  background: #f7f9fc;
+}
+.step-resource-heading { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .65rem; margin-bottom: .7rem; }
+.manual-step .step-resource-heading h3 { margin: 0; font-size: 1.08rem; }
+.step-resource-meta { color: #516376; font-size: .82rem; }
+.step-resource-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  background: #e4eff9;
+  color: var(--efi-blue);
+}
+.step-resource-icon svg, .step-tool-arrow { width: 1rem; height: 1rem; flex-shrink: 0; }
+.step-tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,300px),1fr));
+  gap: .55rem;
+}
+.step-resource-list, .step-tool-grid { padding: 0; margin: 0; list-style: none; }
+.step-tool-grid > li, .step-resource-list > li { min-width: 0; max-width: none; }
+.step-tool-grid .step-tool-link, .step-tool-grid .step-tool-link:visited {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .65rem;
+  height: 100%;
+  min-height: 60px;
+  padding: .55rem .7rem;
+  border: 1px solid var(--efi-line);
+  border-radius: 8px;
+  background: white;
+  color: var(--efi-blue);
+  text-decoration: none;
+  line-height: 1.35;
+}
+.step-tool-link:hover, .step-tool-link:focus-visible { border-color: var(--efi-blue); background: #edf5fb; }
+.step-tool-link:is(:hover,:focus-visible) .step-tool-title { text-decoration: underline; }
+.step-tool-title { display: block; font-size: .92rem; font-weight: 700; }
+.step-tool-description, .step-file-description { display: block; color: #435568; font-size: .84rem; }
+.step-tool-description { margin-top: .15rem; }
+.step-resource-tag {
+  display: inline-block;
+  padding: .08rem .4rem;
+  margin-inline-start: .3rem;
+  border: 1px solid #decaca;
+  border-radius: 999px;
+  background: #fff4f3;
+  color: #813535;
+  font-size: .68rem;
+  font-weight: 650;
+  vertical-align: .08em;
+  white-space: nowrap;
+}
+.step-resource-files { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(min(100%,300px),1fr)); }
+.step-resource-files > :only-child .step-resource-list {
+  display: grid;
+  gap: .2rem 1.2rem;
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,245px),1fr));
+}
+.step-resource-list > li { padding: .42rem 0; line-height: 1.45; }
+.step-resource-list > li + li { border-top: 1px solid var(--efi-line); }
+.step-resource-files > :only-child .step-resource-list > li { border-top: 0; }
+.step-resource-list code { font-size: .87em; overflow-wrap: anywhere; }
+.step-resource-list a { font-weight: 650; }
+.manual-step .step-resource-note { margin: .65rem 0 0; color: #435568; font-size: .84rem; }
+
 .course-list { padding-left: 1.5rem; }
 .course-list li { margin: .75rem 0; }
 .course-list a { display: block; padding: .75rem 1rem; background: var(--efi-surface); }
