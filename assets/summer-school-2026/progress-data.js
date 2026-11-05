@@ -37,7 +37,7 @@ window.BITCOM_STEPS = [
   {
     "id": "step-2.5",
     "page": "step-2.html",
-    "title": "2.5 Align your synthetic protein with the closest matched allele (UniProt Align)"
+    "title": "2.5 Prepare the closest matched allele protein for alignment"
   },
   {
     "id": "step-2.6",
@@ -47,7 +47,7 @@ window.BITCOM_STEPS = [
   {
     "id": "step-2.7",
     "page": "step-2.html",
-    "title": "2.7 Align the two proteins with the UniProt Align web tool"
+    "title": "2.7 Align the two proteins (SMS2 first choice)"
   },
   {
     "id": "step-3.0",
