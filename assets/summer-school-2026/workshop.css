@@ -61,6 +61,14 @@ footer { padding: 1.25rem; background: var(--efi-surface); text-align: center; }
 .page-turn { justify-content: space-between; margin-top: 2rem; }
 
 .learning-support { margin: 1rem 0 1.75rem; }
+.registration { max-width: 800px; }
+.registration form > label:first-child { display:block; font-weight:650; margin-bottom:.5rem; }
+.registration input[type=email] { width:100%; padding:.8rem; font:inherit; border:1px solid var(--efi-blue); border-radius:4px; box-sizing:border-box; }
+.registration-remember { display:flex; align-items:flex-start; gap:.6rem; margin:1rem 0; }
+.registration input[type=checkbox] { margin-top:.3rem; }
+.registration button:disabled { opacity:.6; cursor:not-allowed; }
+#registration-status { padding:1rem; background:var(--efi-surface); border-left:4px solid var(--efi-blue); }
+#registration-success { padding:1rem; border:1px solid var(--efi-blue); margin:1.5rem 0; }
 .learning-support .screen-example summary { color: var(--efi-blue); }
 .screen-example figure { margin: 1.25rem 0; }
 .screen-example figure img { display: block; width: 100%; height: auto; border: 1px solid var(--efi-line); border-radius: 4px; }

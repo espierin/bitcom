@@ -1,0 +1,84 @@
+EFI BITCom registration — prepared integration with the existing EPT service
+5 November 2026
+
+STATUS: prepared and disabled. No live EPT settings, tables or accounts were changed.
+The public workshop remains accessible. This is attendance registration, not a
+security gate for public GitHub Pages content. Workbook answers remain local.
+
+EXISTING INFRASTRUCTURE (from the EPT project's hosting documentation)
+Render: efi-ept-api.onrender.com
+Supabase project: efi-ept-pilot, gkgrzsznpkobwdvklnum, Frankfurt
+Identity email: existing Supabase Auth/Brevo configuration
+Database access: existing server-side PostgreSQL connection; Data API stays OFF.
+Never put database passwords, SMTP passwords or service-role keys in this repo.
+
+BACKEND INSTALLATION
+1. Copy bitcom_registration.py into the EPT backend/ept_api package.
+2. In ept_api/main.py, import it: from . import bitcom_registration
+3. In the existing lifespan startup, after the database engine is initialised,
+   call bitcom_registration.initialise(engine) ONLY when
+   os.getenv('BITCOM_REGISTRATION_ENABLED') == 'true'. Add import os if necessary.
+4. After creating app and assigning app.state.settings, call
+   bitcom_registration.install(app).
+5. Reuse the existing SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY on Render.
+   Reuse app.state.engine. No new secrets or permissions are needed.
+6. Set BITCOM_REGISTRATION_ENABLED=true on the existing service after review.
+   The extension creates only three bitcom_* tables. RLS is enabled and
+   anon/authenticated receive no privileges. No EPT roles are assigned.
+7. Keep existing EPT CORS settings: https://espierin.github.io is already allowed.
+   Preserve existing authentication, recovery, MFA and EPT routes. Run the EPT
+   regression suite before deploying the extended service.
+
+SUPABASE AUTH CONFIGURATION
+1. Add this EXACT additional redirect URL; retain all EPT URLs and Site URL:
+   https://espierin.github.io/bitcom/register.html
+2. Confirm email sign-in and new-user signups are enabled. If signups are currently
+   restricted by an EPT policy, resolve that shared-project decision first; do not
+   silently weaken it. An independent workshop project is the alternative.
+3. Check the Magic Link template. The standard {{ .ConfirmationURL }} route is
+   supported, including its access-token callback. Prefer an explicit confirmation
+   page so an email scanner does not consume the link: use the link
+   {{ .RedirectTo }}#token_hash={{ .TokenHash }}&type=email
+   in the Magic Link template. The participant must then enter their own address
+   and press Confirm registration. Do not modify EPT recovery/signup templates.
+   First verify whether any other EPT flow uses the shared Magic Link template.
+4. Reuse existing SMTP. Verify current Supabase/Brevo sending limits for at least
+   40 participants plus retries. Do not assume EPT's prior successful test means
+   the quota is sufficient today. The extension limits sends to 120/hour overall
+   and one per address per minute; Supabase and SMTP may impose lower limits.
+5. Test with an organiser-owned address, checking actual inbox receipt, one-time
+   confirmation, mismatched address, expiry, repeat visit and forgetting browser.
+   Do not send tests to fabricated addresses or real participants without request.
+
+FRONTEND ACTIVATION
+After a successful end-to-end test, change enabled:false to enabled:true in
+assets/summer-school-2026/registration-config.js and publish the workshop.
+The register page starts with an empty email input. A checked Remember option
+stores an opaque workshop-only receipt for 30 days in localStorage. Otherwise
+the browser retains it only in sessionStorage, with a server expiry of 12 hours.
+The backend checks the address AND receipt. Browser storage is never proof by
+itself. Supabase credentials from confirmation are never persisted by the site.
+Registration confirmation can be downloaded by the participant as a JSON file
+without an authentication token. Email syntax checks are not ownership checks.
+
+PRIVATE ORGANISER EXPORT
+Use an authorised SQL connection or Supabase SQL editor and export this result
+as CSV to private organiser storage (NOT this public repository):
+SELECT email, workshop, confirmed_at,
+       to_timestamp(registered_at) AS registered_at,
+       to_timestamp(last_seen) AS last_seen
+FROM public.bitcom_registrations ORDER BY registered_at;
+There is deliberately no public endpoint listing participants.
+Choose and document the organiser's retention period before opening registration.
+Deleting a workshop record should also remove its receipts. Do not delete shared
+Supabase Auth accounts because they may belong to EPT users.
+
+VERIFICATION
+Run test_registration.py with the EPT backend virtual environment. Tests use an
+isolated SQLite database and a mocked identity provider; they send NO email and
+do not access EPT data. These tests do not prove SMTP delivery or production RLS.
+
+Official references:
+https://supabase.com/docs/guides/auth/auth-email-passwordless
+https://supabase.com/docs/guides/auth/redirect-urls
+https://supabase.com/docs/guides/auth/rate-limits
