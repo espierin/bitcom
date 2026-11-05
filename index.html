@@ -18,47 +18,387 @@
 </div>
 </header>
 <main id="main">
-<nav aria-label="Workshop navigation"><a href="./" aria-current="page">Workshop</a><a href="#part1">Part 1</a><a href="#part2">Part 2</a><a href="#downloads">Downloads</a><a href="01-bitcom-at-efi.html">About BITCom</a></nav>
+<nav aria-label="Workshop navigation"><a href="./" aria-current="page">Workshop</a><a href="#manual-1">Step 1</a><a href="#manual-2">Step 2</a><a href="#manual-3">Step 3</a><a href="#manual-4">Step 4</a><a href="#downloads">Downloads</a><a href="01-bitcom-at-efi.html">About BITCom</a></nav>
 <section aria-labelledby="start">
 <p class="eyebrow">Thursday 12 November · Hersonissos, Crete</p>
 <h2 id="start">Start here</h2>
-<p>The EFI Bioinformatics &amp; IT Committee (BITCom) guides this workshop in two 45-minute blocks. Bring a laptop with a browser and keep a plain-text editor open for your sequences and notes. The core exercise follows an HLA-A reference and a workshop variant through annotation, alignment and interpretation. If this is your first time working with FASTA, start at 1.1 and keep the workshop open in one browser tab. Create a local folder named <code>EFI-HLA-workshop</code> for everything you save. Complete the core case before trying the additional cases.</p>
+<p>The EFI Bioinformatics &amp; IT Committee (BITCom) guides this workshop in two 45-minute blocks. Bring a laptop with a browser and keep a plain-text editor open for your sequences and notes. Follow the four steps below using your assigned sequence and the reference you identify during the analysis. If this is your first time working with FASTA, start at 1.1 and keep the workshop open in one browser tab. Create a local folder named <code>EFI-HLA-workshop</code> for everything you save. Complete the core case before trying the additional cases.</p>
 <div class="schedule"><a href="#part1"><strong>Part 1 · 11:30–12:15</strong><span>Annotate and compare sequences</span></a><a href="#part2"><strong>Part 2 · 13:15–14:00</strong><span>Interpret and map variants</span></a></div>
 <p><a href="https://efi-web.org/uploads/files/20261027-Programme-ISS-Crete-2026-final-with-abstracts.pdf">Official programme</a> · <a href="downloads/summer-school-2026/workshop-notes.txt" download>Download notes template</a></p>
 </section>
 <section id="group-route"><h2>Working together in a group of 40</h2><p>Your facilitator will demonstrate one live alignment and one NetSurfP submission for the core pair. Everyone can then inspect the same saved results. Submit additional jobs only when your facilitator invites your group.</p><p>If a job is queued or fails, continue with the downloads below. Keep the job identifier and check the existing job later. Repeated submissions create extra work for the server.</p><ol><li>For step 2.7, open <a href="downloads/summer-school-2026/core-protein-comparison.txt" download>the complete core protein comparison</a>. Each block gives its residue range. Vertical bars mark agreement and an asterisk marks the substitution. Record the changed position and both residues.</li><li>For steps 3.3.1–3.3.2, download <a href="downloads/summer-school-2026/netsurfp-results.csv" download>the saved NetSurfP predictions</a>. Open the CSV in Excel or a text editor. Find precursor_position 212 for reference and variant and compare amino_acid and RSA.</li></ol><p>The predictions come from a completed NetSurfP-3.0 run on the two supplied proteins, retrieved 5 November 2026. <a href="downloads/summer-school-2026/netsurfp-reference.json" download>Reference raw result</a> · <a href="downloads/summer-school-2026/netsurfp-variant.json" download>Variant raw result</a>.</p><details><summary>Facilitator guidance and service limits</summary><p>EMBL-EBI asks for batches of at most 30 simultaneous Web Services jobs, waiting for completion before another batch. This is a fair-use limit, not reserved capacity. UniProt Align uses the EBI Clustal Omega service, so switching to that service directly does not provide independent capacity. NetSurfP documents sequence-size limits and a mirror, but gives no guarantee for 40 simultaneous jobs. One shared demonstration plus saved results is the default classroom route. Use the downloaded reference sequences if GitHub or SFAT is slow, and ExPASy for translation if ORFfinder fails.</p><p><a href="https://www.ebi.ac.uk/jdispatcher/docs/webservices/#fair-use-policy">EMBL-EBI fair use</a> · <a href="https://services.healthtech.dtu.dk/services/NetSurfP-3.0/">NetSurfP instructions and mirror</a></p></details></section>
-<section id="part1"><p class="eyebrow">Part 1 · 11:30–12:15</p><h2>Get and compare HLA sequences</h2><p><strong>Reference files</strong> · <a href="downloads/summer-school-2026/HLA-A01-01-01-01_Original_Genomic.fasta" download>Genomic DNA</a> · <a href="downloads/summer-school-2026/HLA-A01-01-01-01_Original_CDS.fasta" download>Reference CDS</a> · <a href="downloads/summer-school-2026/HLA-A01-01-01-01_Original_Protein.fasta" download>Reference protein</a></p><p><strong>Synthetic exon 4 files</strong> · <a href="downloads/summer-school-2026/HLA-A01-01-01-01_Exon4_change_Genomic.fasta" download>Genomic DNA</a> · <a href="downloads/summer-school-2026/HLA-A01-01-01-01_Exon4_change_CDS.fasta" download>CDS</a> · <a href="downloads/summer-school-2026/HLA-A01-01-01-01_Exon4_change_Protein.fasta" download>Protein</a></p><p>Jump to <a href="#step-1.1">Step 1</a> · <a href="#step-2.1">Step 2</a></p><section class="step" id="step-1.1"><h3>1.1 Download the reference genomic DNA</h3><ol><li>Open <a href='https://github.com/ANHIG/IMGTHLA/tree/Latest/fasta'>ANHIG/IMGTHLA → fasta</a>. For this exercise open <code>A_gen.fasta</code>. Click <strong>Raw</strong>, <strong>View raw</strong> or the download icon. If the full file opens in your browser, press Ctrl+F (Mac: Cmd+F) and search for <code>A*01:01:01:01</code>.</li><li>Find the line starting with <code>&gt;</code> that contains that allele. Copy the DNA on the lines below it, stopping just before the next <code>&gt;</code> line. Paste into Notepad or TextEdit in plain-text mode. Save as <code>your_allele_genomic.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>If you cannot open the large GitHub file, use the reference genomic download above. The sequence is 3,503 bases. Make sure your editor did not add a second .txt extension.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Genomic DNA contains exons, introns and untranslated regions. The FASTA header identifies the record.</p></details></section>
-<section class="step" id="step-1.2"><h3>1.2 Annotate the reference in SFAT</h3><ol><li>Open <a href='https://www.ebi.ac.uk/ipd/imgt/hla/annotation/'>Sequence Feature Annotation Tool (SFAT)</a>. Paste the DNA letters from your text file into the sequence field. Select locus <strong>A</strong>, level <strong>Genomic</strong>, then click <strong>Annotate Sequence Now</strong>.</li><li>In the <strong>Feature Map</strong>, look for numbered exons and introns. Record the boundaries. Copy the letters shown under <strong>Coding sequence</strong> and save as <code>your_allele_CDS.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Remove the FASTA header before pasting. Expect a CDS of 1,098 bases. If the service fails, use the supplied reference CDS and record that you used the fallback.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>The CDS is the spliced coding region. Compare genomic and coding coordinates to see which sequence was removed.</p></details></section>
-<section class="step" id="step-1.3"><h3>1.3 Save the reference protein</h3><ol><li>Copy the one-letter <strong>Protein sequence</strong> from SFAT into <code>your_allele_protein.txt</code>.</li><li>To translate it yourself, open <a href='https://web.expasy.org/translate/'>ExPASy Translate</a>. Paste the CDS letters, leave <strong>Compact</strong> and <strong>Forward</strong> selected, click <strong>TRANSLATE!</strong>, and read <strong>5′→3′ Frame 1</strong> for this reference. Copy the amino-acid letters up to the terminal dash.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Expect 365 amino acids. A dash in ExPASy Compact output marks a stop. If you see many dashes, check that you pasted CDS and selected the annotated frame.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>The CDS contains 366 codons, including the terminal stop. Record SFAT’s codon_start if it is available.</p></details></section>
-<section class="step" id="step-2.1"><h3>2.1 Prepare the synthetic allele</h3><ol><li>Download the exon 4 genomic FASTA above. Open it in your text editor. Copy the sequence lines below the header into a new file named <code>synthetic_input_sequence.txt</code>.</li><li>Check that the contents consist of A, C, G and T plus line breaks. Keep the lowercase base if you want to see which position was edited.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Copy all sequence lines. The sequence is 3,503 bases, the same length as the reference.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>This is an exercise variant. Start by analysing the sequence before looking at the supplied protein.</p></details></section>
-<section class="step" id="step-2.2"><h3>2.2 Annotate the synthetic DNA</h3><ol><li>Paste <code>synthetic_input_sequence.txt</code> into SFAT. Select <strong>A</strong> and <strong>Genomic</strong>. Click <strong>Annotate Sequence Now</strong>.</li><li>Save the output under <strong>Coding sequence</strong> as <code>synthetic_CDS.txt</code>. Copy the protein if shown and save it as <code>synthetic_protein.txt</code>. Start <code>closest_match_notes.txt</code> and record the locus, input level and codon_start.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Both reference and exon 4 variant should return 1,098 coding bases. Use the supplied variant CDS and protein if SFAT is unavailable.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>If you switch to a supplied CDS exercise, choose level CDS. Use genomic input for checking intron-side splice motifs.</p></details></section>
-<section class="step" id="step-2.3"><h3>2.3 Translate the synthetic CDS</h3><ol><li>If SFAT provided a protein, keep that file. To check it independently, paste <code>synthetic_CDS.txt</code> into ExPASy, choose Compact and Forward, then translate.</li><li>Use the forward frame corresponding to SFAT’s codon_start. For the exon 4 exercise, this is Frame 1. Save the protein letters in <code>synthetic_protein.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Keep the 365 amino-acid letters. Leave the terminal dash out of the protein FASTA you will make later.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>An early stop may be biologically relevant. Confirm which reading frame you used before interpreting a short translation.</p></details></section>
-<section class="step" id="step-2.4"><h3>2.4 Find and document a close match with BLAST</h3><ol><li>Open <a href='https://blast.ncbi.nlm.nih.gov/Blast.cgi?PROGRAM=blastn&amp;PAGE_TYPE=BlastSearch'>NCBI Nucleotide BLAST</a>. Paste the synthetic genomic DNA under <strong>Enter Query Sequence</strong>. Run BLAST. If needed, expand the descriptions or click a hit to inspect its alignment.</li><li>In <code>closest_match_notes.txt</code>, record up to three hits with accession or allele name, query coverage, identity, mismatches and gaps. Explain why your selected hit is a suitable comparator. For the rest of the core exercise use A*01:01:01:01, so everyone uses the same reference.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>If the database search is slow, select <strong>Align two or more sequences</strong>, put the synthetic genomic DNA in Query and the reference genomic DNA in Subject, then run the direct comparison.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>For a direct comparison expect a single substitution at genomic position 1885. Database search rankings depend on the selected database, coverage and alignment score.</p></details></section>
-<section class="step" id="step-2.5"><h3>2.5 Retrieve the reference protein FASTA</h3><ol><li>Return to the <a href='https://github.com/ANHIG/IMGTHLA/tree/Latest/fasta'>IPD-IMGT/HLA FASTA directory</a>. Open <code>A_prot.fasta</code>, view the raw data and search for <code>A*01:01:01:01</code>.</li><li>Copy the header and all amino-acid lines for that entry. Save as <code>reference_protein.fasta</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>If the large file is difficult to navigate, download the reference protein above. The FASTA must have one header starting with >.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Use the same allele as your reference throughout the core exercise.</p></details></section>
-<section class="step" id="step-2.6"><h3>2.6 Make a FASTA record for the synthetic protein</h3><ol><li>Create a new plain-text file. Type <code>&gt;synthetic_exon4</code> on line 1. Paste the amino-acid letters from <code>synthetic_protein.txt</code> on the following lines.</li><li>Save as <code>synthetic_protein.fasta</code>. Check that it has one header and 365 amino-acid letters.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>In Windows Notepad, choose All files if needed when saving the .fasta extension. The supplied variant protein FASTA is an equivalent input.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Use distinct, short headers to make the two sequences easy to identify in an alignment.</p></details></section>
-<section class="step" id="step-2.7"><h3>2.7 Align the two proteins</h3><ol><li>Open <a href='https://www.uniprot.org/align'>UniProt Align</a>. Paste both complete FASTA records into the same input box, with each header on its own line. Run the alignment when your facilitator invites your group. Otherwise use the <a href="#group-route">shared result</a>.</li><li>Locate the mismatch. Save the alignment or copy the relevant lines to <code>uniprot_alignment.txt</code>. Record the residue number and the reference → variant amino acids.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>If the service is unavailable, compare precursor residues 207–217: reference <code>DPPKTHMTHHP</code>, variant <code>DPPKTLMTHHP</code>. The sixth residue in the window is H → L at position 212.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>CDS positions 634–636 change CAT to CTT. The precursor has a 24-residue signal peptide, so precursor 212 maps to mature 188.</p></details></section></section>
-<section id="part2"><p class="eyebrow">Part 2 · 13:15–14:00</p><h2>Interpret and map the change</h2><p>Jump to <a href="#step-3.0">Step 3</a> · <a href="#step-4.1">Step 4</a></p><section class="step" id="step-3.0"><h3>3.0 Start a variant list</h3><ol><li>Create <code>step3_variant_list.txt</code>. Enter the precursor position, reference amino acid, variant amino acid and, where known, mature position. Use one line per variant.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>For the core exercise record precursor H212L and mature H188L.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Use precursor numbering with a full FASTA and check the numbering again for a structure.</p></details></section>
-<section class="step" id="step-3.1.1"><h3>3.1.1 Check for a premature stop</h3><ol><li>Paste the synthetic CDS letters into <a href='https://web.expasy.org/translate/'>ExPASy Translate</a>. In Compact, Forward Frame 1, locate the first dash and compare it to the reference.</li><li>Record your result in <code>step3_truncation_check.txt</code>. For an optional second check, use <a href='https://www.ncbi.nlm.nih.gov/orffinder/'>ORFfinder</a> with standard genetic code and ATG-only start. Find the forward ORF starting at base 1.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>The core variant has 365 residues before the terminal stop. ORFfinder returned an error during testing, so use ExPASy if the job fails.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>The additional premature-stop CDS has 219 residues before the first stop. Its 660-base span includes the stop codon.</p></details></section>
-<section class="step" id="step-3.1.2"><h3>3.1.2 Check for a frameshift</h3><ol><li>Compare the reference and synthetic CDS for gaps. For each coding insertion or deletion, record its position and length in <code>step3_truncation_check.txt</code>.</li><li>Decide whether the gap length is divisible by three. For a frameshift candidate, translate from the annotated start and check for a changed downstream translation or early stop.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>The core variant is a substitution. The additional exon 2 frameshift CDS contains a one-base insertion. SFAT returned 30 residues for that CDS.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>The similarly named genomic file is a separate splice-acceptor substitution example. Use the CDS file to practise a coding insertion.</p></details></section>
-<section class="step" id="step-3.1.3"><h3>3.1.3 Inspect splice sites</h3><ol><li>In the SFAT genomic Feature Map, identify where an exon begins or ends. In the genomic sequence, inspect the bases on the intron side of that boundary.</li><li>Compare the usual donor GT immediately after an exon or acceptor AG immediately before the next exon. Record the boundary and change in <code>step3_truncation_check.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>The exon 3 example changes the acceptor AG to AT at positions 1013–1014. SFAT still returned a full-length translation, so inspect the motif directly.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Splice disruption is a hypothesis. If you can map the change to a reference genome coordinate, you can explore it with <a href='https://spliceailookup.broadinstitute.org/'>SpliceAI Lookup</a>.</p></details></section>
-<section class="step" id="step-3.2.1"><h3>3.2.1 Compare the ARD at DNA level</h3><ol><li>For this class I exercise use SFAT coding exons 2 and 3. Copy the exon sequences for reference and variant into <code>step3_ard_check.txt</code> and compare them. Record whether the relative G-group comparison supports identical ARD DNA.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>The relevant CDS interval is 74–619 inclusive. The core change at base 635 is outside it.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>For a class II example, the equivalent workshop comparison uses exon 2. Relative sequence identity and an official group designation are separate observations.</p></details></section>
-<section class="step" id="step-3.2.2"><h3>3.2.2 Compare the ARD at protein level</h3><ol><li>Use your alignment and exon mapping to decide whether any ARD amino acid changed. Add your relative P-group conclusion to <code>step3_ard_check.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>For the core pair, the ARD is identical at both levels. The substitution is in the α3 domain.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>A synonymous ARD difference can change the DNA comparison while preserving the amino-acid comparison. Check expression separately for null alleles.</p></details></section>
-<section class="step" id="step-3.2.3"><h3>3.2.3 Consider the peptide repertoire</h3><ol><li>Record whether the variant is in the peptide-binding domain. In step 4, look at the residue relative to the bound peptide and revisit your interpretation.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>The core change is outside the ARD. Use the structure to see where α3 sits relative to the peptide-binding platform.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Describe a plausible mechanism and an experiment that could test it.</p></details></section>
-<section class="step" id="step-3.3.1"><h3>3.3.1 Run NetSurfP</h3><ol><li>Open <a href='https://services.healthtech.dtu.dk/services/NetSurfP-3.0/'>NetSurfP-3.0</a>. Paste both full protein FASTA records into the submission box. For the group exercise, use the <a href="#group-route">saved predictions</a>. Submit a live job when invited by your facilitator, then open the predictions or export CSV.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Use the protein FASTAs from steps 2.5 and 2.6. Give them different headers so you can identify both results.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>RSA is relative solvent accessibility. NetSurfP predicts it from amino-acid sequence.</p></details></section>
-<section class="step" id="step-3.3.2"><h3>3.3.2 Read the residue-specific result</h3><ol><li>In each result look up precursor position 212. Verify the residue letters H and L. Record both RSA values and your interpretation in <code>step3_surface_check.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>The workshop test returned reference H ≈ 0.331 and variant L ≈ 0.360. Use those as checkpoints or if the service is unavailable.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Compare accessibility in the reference structure, which contains His and interaction partners.</p></details></section>
-<section class="step" id="step-3.3.3"><h3>3.3.3 Check Bw4/Bw6 relevance</h3><ol><li>Using mature numbering, check whether the change falls in residues 77–83. If it does, compare both motifs and record the result in <code>step3_surface_check.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>The core mature residue is 188, outside this motif.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Use allele and locus context when interpreting a 77–83 change.</p></details></section>
-<section class="step" id="step-3.3.4"><h3>3.3.4 Consider antibody recognition</h3><ol><li>Record whether the residue is exposed and whether it might lie in an antibody-accessible region. Optionally check the position in the <a href='https://www.epregistry.com.br/'>HLA Eplet Registry</a>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Record eplet overlap as unknown if you cannot verify it.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Exposure can motivate a binding experiment. An eplet overlap and evidence for an antibody specificity are different observations.</p></details></section>
-<section class="step" id="step-3.3.5"><h3>3.3.5 Consider NK recognition</h3><ol><li>Add a line about whether the change affects the Bw4 motif or a known receptor-facing region. Explain your evidence or uncertainty.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>The core example provides no motif change at 77–83.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>If proposing a receptor effect, specify the receptor and the comparison you would test.</p></details></section>
-<section class="step" id="step-3.3.6"><h3>3.3.6 Consider direct T-cell recognition</h3><ol><li>Record whether the change is in the ARD and on a surface a TCR could approach. Summarise your evidence in <code>step3_surface_check.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Use the bound peptide in the structure to orient yourself. Core residue 188 is in α3.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Separate a direct TCR-contact hypothesis from other effects on the pMHC complex.</p></details></section>
-<section class="step" id="step-4.1"><h3>4.1 Choose a reference structure</h3><ol><li>Open <a href='https://www.rcsb.org/structure/3BO8'>RCSB PDB entry 3BO8</a>. On the entry page identify the HLA-A1 heavy chain, beta-2 microglobulin and the MAGE-A1 peptide. Record the PDB ID and why you chose it in <code>step4_pdb_model.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Use chain A for the HLA heavy chain. This entry contains the reference histidine at mature position 188.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>For another allele, look for the closest suitable structure with the relevant residue resolved. Check sequence identity and construct boundaries.</p></details></section>
-<section class="step" id="step-4.2"><h3>4.2 Open Mol* and identify the chains</h3><ol><li>Click <strong>3D View</strong>. Locate the sequence panel and the Components panel. Identify chain A, beta-2 microglobulin and the peptide. Keep those visible and use the eye controls to hide any additional components if present.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Hover over a chain or residue to read its label. Save the viewer and components in <code>step4_structure_mapping.txt</code>.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Keeping the peptide visible helps you identify the groove.</p></details></section>
-<section class="step" id="step-4.3"><h3>4.3 Map the sequence position</h3><ol><li>Compare the FASTA with the chain sequence. For this pair, subtract the 24-residue signal peptide from precursor 212 to get mature 188. Check that chain A residue 188 is His. Write down both positions.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Look at the actual residue label in Mol*. A chain can have author numbering, missing residues or a trimmed construct.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>For other structures, use a sequence alignment and verify flanking residues before trusting a fixed offset.</p></details></section>
-<section class="step" id="step-4.4"><h3>4.4 Select the residue</h3><ol><li>Turn on <strong>Selection Mode</strong> using the cursor icon. Set the picking level to <strong>Residue</strong>. In the chain A sequence panel click His 188 and check the highlighted position in 3D.</li><li>For several nonadjacent residues, use the selection add/union control and verify each label.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>If the sequence panel starts on a different chain, switch it to chain A first.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>You can also rotate the model and pick a residue in the 3D canvas, then check its label in the sequence panel.</p></details></section>
-<section class="step" id="step-4.5"><h3>4.5 Make the selected position visible</h3><ol><li>With His 188 selected, apply a contrasting colour with the selection theme controls, or create a selection component with a stick representation. Confirm the location remains visible when you move the pointer away.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>If a selection theme is difficult to find, keep the residue selected and use the highlighted view to inspect it.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>A separate selection component lets you toggle the residue without hiding the heavy chain.</p></details></section>
-<section class="step" id="step-4.6"><h3>4.6 Inspect the molecular surface</h3><ol><li>In Components, add or change the HLA heavy-chain representation to a molecular surface. Rotate the structure. Inspect whether the selected residue reaches the surface and where it lies relative to the peptide and beta-2 microglobulin.</li><li>Record exposed, buried or unclear with your reasoning in <code>step4_structure_mapping.txt</code>.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>If the surface hides the selected residue, make it partly transparent or toggle it while keeping the stick component.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Compare the structural view with NetSurfP. Note that the deposited structure represents the reference sequence.</p></details></section>
-<section class="step" id="step-4.7"><h3>4.7 Optional: keep a separate residue component</h3><ol><li>Select the residue again. Use the selection actions to create a component from the selection and choose sticks. Toggle its visibility to check that the selection is correct.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>Use the selection component only for the residues you intend to label.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>A surface view plus coloured sticks makes the mapping easier to explain to another participant.</p></details></section>
-<section class="step" id="step-4.8"><h3>4.8 Export and summarise</h3><ol><li>Frame the structure so that the heavy-chain surface, peptide and selected residue can be seen. Use the camera or screenshot control. Save as <code>step4_HLA-A0101_surface_variants.png</code> and record the filename.</li><li>Write up to five bullets covering coding integrity, ARD and G/P comparison, accessibility, the structure position, and one testable immunological hypothesis.</li></ol><details><summary><span class="badge" aria-hidden="true">?</span>Help</summary><p>State which tools you completed, which fallback you used and any uncertainty in the mapping.</p></details><details><summary><span class="badge" aria-hidden="true">!</span>Explore further</summary><p>Compare your conclusion with another participant who analysed a splice or truncation example.</p></details></section></section>
-<section id="downloads"><p class="eyebrow">Workshop materials</p><h2>Downloads</h2>
+<section class="manual-step" id="manual-1"><span id="part1"></span><h2>Step 1 - From genomic DNA to exons (CDS) to protein</h2><h4>Links (open in browser)</h4><p>ANHIG/IMGTHLA (GitHub): <a href="https://github.com/ANHIG/IMGTHLA">https://github.com/ANHIG/IMGTHLA</a></p>
+<p>SFAT (Sequence Feature Annotation Tool): <a href="https://www.ebi.ac.uk/ipd/imgt/hla/annotation/">https://www.ebi.ac.uk/ipd/imgt/hla/annotation/</a></p>
+<p>ExPASy Translate (optional): <a href="https://web.expasy.org/translate/">https://web.expasy.org/translate/</a></p>
+<h4>What you will produce</h4><p>your_allele_genomic.txt</p>
+<p>your_allele_CDS.txt</p>
+<p>your_allele_protein.txt</p>
+<h3 id="step-1.1">1.1 Download the genomic DNA sequence (FASTA)</h3><p>Goal: start with the full genomic sequence (exons + introns) copied from a FASTA file.</p>
+<h4>What you do</h4><p>Open the ANHIG/IMGTHLA repository in your browser (GitHub).</p>
+<p>Go to the fasta/ folder and open the genomic FASTA file for your locus.</p>
+<p>Genomic files typically follow this naming: X_gen.fasta where X = locus/gene (e.g., A_gen.fasta, DRB1_gen.fasta, MICB_gen.fasta).</p>
+<p>To see the content of the file, press “View raw”. Alternatively, press the Raw button, copy raw file button, or download button on the right.</p>
+<p>Find your allele entry in the file: use Ctrl+F and search for the allele name (e.g., A*01:01:01:01).</p>
+<p>Understand the FASTA layout: one header line starting with '&gt;' (identifier + allele name + sometimes length/metadata), followed by the DNA sequence on the next lines (until the next entry or the end of the file).</p>
+<p>Copy the sequence letters only (A/C/G/T). DO NOT copy the header line that starts with '&gt;'.</p>
+<p>Open Notepad (or similar) as your scratchpad.</p>
+<p>Save what you copied as your_allele_genomic.txt.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: DNA letters only (A/C/G/T) from the FASTA entry.</p>
+<p>DO NOT COPY: the header line starting with '&gt;' (gene/allele metadata).</p>
+<p>PASTE: into Notepad first (scratchpad).</p>
+<p>SAVE: as your_allele_genomic.txt</p>
+</div><h4>What you have now</h4><p>One long genomic DNA sequence (exons + introns) for one allele saved in a local txt file</p>
+<details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>Use a plain-text editor. In TextEdit choose Format → Make Plain Text. Keep the FASTA record together and stop copying at the next header.</p></details><h3 id="step-1.2">1.2 Convert genomic DNA to coding DNA sequences with the Sequence Feature Annotation Tool</h3><p>Goal: The Sequence Feature Annotation Tool (SFAT) identifies exon/intron features and outputs the coding sequence (CDS), which is the exonic sequence with introns removed.</p>
+<h4>Tool to use</h4><p>IPD-IMGT/HLA Sequence Feature Annotation Tool (SFAT).</p>
+<h4>What you do (click-by-click)</h4><p>Open the Sequence Feature Annotation Tool page.</p>
+<p>Paste your genomic DNA letters only (no FASTA header, no spaces).</p>
+<p>Select the locus that matches your sequence (e.g., A, B, DRB1, MICB, etc.).</p>
+<p>Select Level: Genomic (because your input includes both the exons and the introns).</p>
+<p>Run the annotation by pressing the “Annotate Sequence Now” button.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the full content of your_allele_genomic.txt</p>
+<p>PASTE: into SFAT (letters only; no header).</p>
+<p>SELECT: correct locus and Level = Genomic.</p>
+<p>SAVE: copy the CDS output into your_allele_CDS.txt</p>
+<p>WRITE DOWN: exon/intron boundaries and codon_start (if shown).</p>
+</div><h4>What to look for in the results</h4><p>Exon/intron boundaries (where each exon starts/ends in your input).</p>
+<p>A coding sequence (CDS): exonic sequence stitched together (introns removed).</p>
+<p>A codon_start / reading frame hint (important for correct translation).</p>
+<details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>The locus dropdown uses A, B and other gene names. Choose the level that matches your input. If SFAT fails, use the corresponding supplied CDS and protein from Downloads.</p></details><h3 id="step-1.3">1.3 Translate the CDS into a protein sequence</h3><p>Goal: convert the CDS into amino acids (protein) so you can do downstream steps (alignment, surface accessibility, structure).</p>
+<h4>Option A (preferred): take the protein directly from SFAT output</h4><p>In the SFAT results, find the Protein sequence in the “Protein” tab or  at the bottom or in the GenBank/ENA/IMGT/HLA section.</p>
+<p>Copy the one-letter amino-acid sequence into your_allele_protein.txt.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the one-letter amino-acid sequence from the SFAT protein/translation output.</p>
+<p>SAVE: as your_allele_protein.txt</p>
+</div><h4>Option B (manual/universal): translate the CDS with ExPASy Translate</h4><p>Open ExPASy Translate (<a href="https://web.expasy.org/translate/">https://web.expasy.org/translate/</a>).</p>
+<p>Paste the CDS (from your_allele_CDS.txt) — NOT the genomic sequence.</p>
+<p>Choose an output format (default is Compact: M, -, no spaces).</p>
+<p>Press the “TRANSLATE!” button.</p>
+<p>By default ExPASy shows 6 possible frames (3 forward, 3 reverse).</p>
+<p>If SFAT provides codon_start, use it to select the correct forward frame: start=1 (in SFAT) -&gt; frame 1 (in ExPASy); start=2 (in SFAT) -&gt; frame 2 (in ExPASy); start=3 (SFAT)-&gt; frame 3 (in ExPASy).</p>
+<p>Copy the relevant protein sequence into your_allele_protein.txt.</p>
+<p>Optional: ExPASy can download all frames as one text file.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the full content of your_allele_CDS.txt</p>
+<p>PASTE: into ExPASy Translate (not genomic DNA).</p>
+<p>CHOOSE: the correct frame (use SFAT codon_start if available).</p>
+<p>SAVE: as your_allele_protein.txt</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Quick sanity checks (20 seconds)</summary><p>Did you accidentally paste the FASTA header (&gt;...)? SFAT expects sequence letters only.</p>
+<p>Did you translate genomic DNA instead of CDS? That often creates many stop codons (*) because introns break the reading frame.</p>
+<p>Do you have a codon_start from SFAT? Use it; it prevents frame mistakes.</p>
+</details></section><section class="manual-step" id="manual-2"><h2>Step 2 - Analyse a synthetic DNA sequence of a ‘novel allele’</h2><h4>Links (open in browser)</h4><p>SFAT: <a href="https://www.ebi.ac.uk/ipd/imgt/hla/annotation/">https://www.ebi.ac.uk/ipd/imgt/hla/annotation/</a></p>
+<p>Basic Local Alignment Search Tool (BLAST): <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi">https://blast.ncbi.nlm.nih.gov/Blast.cgi</a></p>
+<p>ExPASy Translate (optional): <a href="https://web.expasy.org/translate/">https://web.expasy.org/translate/</a></p>
+<p>NCBI/NIH BLAST (optional): <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi">https://blast.ncbi.nlm.nih.gov/Blast.cgi</a></p>
+<p>ANHIG/IMGTHLA GitHub (protein FASTA files): <a href="https://github.com/ANHIG/IMGTHLA">https://github.com/ANHIG/IMGTHLA</a></p>
+<p>UniProt Align tool: <a href="https://www.uniprot.org/align">https://www.uniprot.org/align</a></p>
+<h4>What you will produce</h4><p>synthetic_input_sequence.txt</p>
+<p>synthetic_CDS.txt</p>
+<p>synthetic_protein.txt</p>
+<p>closest_match_notes.txt</p>
+<p>reference_protein.fasta (closest matched allele, in FASTA format)</p>
+<p>synthetic_protein.fasta (your SFAT-derived protein, in FASTA format)</p>
+<p>uniprot_alignment.txt (copied alignment result + your 1-2 sentence interpretation)</p>
+<h4>BONUS:</h4><p>Did you know you can also query the IPD-IMGT/HLA Database via the website and get the sequences in different formats. Visit <a href="https://www.ebi.ac.uk/ipd/imgt/hla/alleles/">https://www.ebi.ac.uk/ipd/imgt/hla/alleles/</a> and search for an allele. Then see if you can find how to view the sequence in different formats.</p>
+<p>If you are familiar with them, there is also an API to help with this, take a look at <a href="https://www.ebi.ac.uk/ipd/imgt/hla/alleles/help/">https://www.ebi.ac.uk/ipd/imgt/hla/alleles/help/</a> for more info.</p>
+<h3 id="step-2.1">2.1 Clean the synthetic DNA sequence and save it</h3><p>Goal: you start with a provided synthetic DNA sequence. Before analysis, make sure it contains only DNA letters (A/C/G/T) and nothing else.</p>
+<h4>What you do</h4><p>Copy a synthetic DNA sequence from the workshop materials (GitHub).</p>
+<p>Open Notepad (or similar) and paste the sequence.</p>
+<p>Clean the sequence: remove spaces, line numbers, headers, and any other characters.</p>
+<p>Keep only A/C/G/T.</p>
+<p>Save the cleaned sequence as synthetic_input_sequence.txt.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the full synthetic DNA sequence from the workshop materials.</p>
+<p>PASTE: into Notepad (scratchpad).</p>
+<p>CLEAN: remove spaces, line numbers, headers, and any non-ACGT characters.</p>
+<p>SAVE: as synthetic_input_sequence.txt</p>
+</div><h4>What you have now</h4><p>One clean DNA sequence (A/C/G/T only) that you can safely paste into web tools.</p>
+<details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>Choose your assigned neutral case in Downloads. Convert lowercase letters to uppercase before checking for non-DNA characters.</p></details><h3 id="step-2.2">2.2 Convert synthetic DNA to exons/CDS (and often protein) with SFAT</h3><p>Goal: analyse the synthetic DNA with SFAT so you can identify exon/intron features (if present), generate the CDS (exons stitched together), and obtain a correct protein sequence.</p>
+<h4>Tool to use</h4><p>IPD-IMGT/HLA Sequence Feature Annotation Tool (SFAT).</p>
+<h4>What you do (click-by-click)</h4><p>Open the Sequence Feature Annotation Tool page.</p>
+<p>Paste your genomic DNA letters only (no FASTA header, no spaces).</p>
+<p>Select the locus that matches your sequence (e.g., A, B, DRB1, MICB, etc.).</p>
+<p>Select Level: Genomic (because your input includes both the exons and the introns).</p>
+<p>Run the annotation by pressing the “Annotate Sequence Now” button.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the full content of synthetic_input_sequence.txt</p>
+<p>PASTE: into SFAT (letters only; no header).</p>
+<p>SELECT: locus + correct Level (Genomic or CDS).</p>
+<p>SAVE: copy CDS output into synthetic_CDS.txt</p>
+<p>SAVE: if SFAT provides translation output, copy protein into synthetic_protein.txt</p>
+<p>WRITE DOWN: locus selected + level selected + codon_start (if shown) in closest_match_notes.txt</p>
+</div><h4>What to look for in the results</h4><p>Exon/intron boundaries (where each exon starts/ends in your input). Note: splice changes can introduce premature stops and cause null alleles.</p>
+<p>A coding sequence: exonic sequence stitched together (introns removed).</p>
+<p>A codon_start / reading-frame hint (important for correct translation).</p>
+<p>The translated protein sequence.</p>
+<h3 id="step-2.3">2.3 Translate the CDS into protein (if not provided by SFAT)</h3><p>Goal: ensure you end Step 2 with a correct one-letter amino-acid sequence so you can run protein-level comparisons.</p>
+<h4>Option A (preferred): take the protein directly from SFAT output</h4><p>In the SFAT results, find the Protein section.</p>
+<p>Copy the one-letter amino-acid sequence into synthetic_protein.txt.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the one-letter amino-acid sequence from the SFAT translation output.</p>
+<p>SAVE: as synthetic_protein.txt</p>
+</div><h4>Option B (manual/universal): translate the CDS with ExPASy Translate</h4><p>Open ExPASy Translate.</p>
+<p>Paste the CDS (from synthetic_CDS.txt) — not the genomic DNA.</p>
+<p>Choose an output format (compact/continuous sequence).</p>
+<p>ExPASy shows 6 possible frames (3 forward, 3 reverse).</p>
+<p>If SFAT provides codon_start, use it to pick the correct forward frame: start=1 (in SFAT) -&gt; frame 1 (in ExPASy); start=2 (in SFAT) -&gt; frame 2 (in ExPASy); start=3 (SFAT)-&gt; frame 3 (in ExPASy).</p>
+<p>Copy the protein sequence into synthetic_protein.txt.</p>
+<p>Optional: download all frames as a text file.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the full content of synthetic_CDS.txt</p>
+<p>PASTE: into ExPASy Translate.</p>
+<p>CHOOSE: the correct frame (use SFAT codon_start).</p>
+<p>SAVE: as synthetic_protein.txt</p>
+</div><h3 id="step-2.4">2.4 Find the closest known allele (NIH BLAST)</h3><p>Goal: determine which known allele your synthetic sequence most closely resembles, and document why it looks novel relative to that closest match (identity, coverage, mismatches).</p>
+<h4>Preferred tools to use</h4><p>Basic Local Alignment Search Tool: <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi">https://blast.ncbi.nlm.nih.gov/Blast.cgi</a></p>
+<p>Alternative for HLA: There are lots of different BLAST services out there to use, but these may or may not have the same library of sequences to compare against or give the same results. Why not repeat the step above using the service at the EBI,  <a href="https://www.ebi.ac.uk/jdispatcher/sss/ncbiblast?">https://www.ebi.ac.uk/jdispatcher/sss/ncbiblast?</a> How do the results differ, why might this be?</p>
+<p>For DNA sequences: Nucleotide -&gt; Nucleotide BLAST</p>
+<p>For protein sequences: Protein BLAST</p>
+<h4>What you do (Nucleotide similarity)</h4><p>Go to the BLAST website: <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi">https://blast.ncbi.nlm.nih.gov/Blast.cgi</a> (<a href="https://www.ebi.ac.uk/jdispatcher/sss/ncbiblast/nucleotide">https://www.ebi.ac.uk/jdispatcher/sss/ncbiblast/nucleotide</a>)</p>
+<p>Your sequence contains DNA sequences, thus select the option: Nucleotide BLAST nucleotide -&gt; nucleotide</p>
+<p>Enter your Query Sequence in the text box.</p>
+<p>Press the blue BLAST button on the lower left of the page and wait.</p>
+<p>The output contains a list of sequences that are (partially) identical to your sequence, sorted by percent identity.</p>
+<p>The closest matching HLA variant is on the top of that list.</p>
+<p>You can inspect the homology in an alignment by clicking on the description.</p>
+<p>It may make sense to select the one that has been described as “Complete CDS”.</p>
+<p>Identical nucleotides are connected by a “|” between your query sequence and the obtained homologous subject. For mismatches, this symbol is missing.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: sequence from the appropriate file (genomic).</p>
+<p>PASTE: into the matching NIH BLAST page.</p>
+<p>RUN: keep defaults unless instructed otherwise.</p>
+<p>SAVE: in closest_match_notes.txt record the top 3 hits for each run: allele name, % identity, alignment length/coverage, mismatches/gaps.</p>
+<p>WRITE: 1–2 sentences: closest known allele + evidence + novelty evidence (differences at ...).</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>Inspect query coverage, identity, gaps and the alignment together when selecting the closest match. Record the database used.</p></details><h3 id="step-2.5">2.5 Align your synthetic protein with the closest matched allele (UniProt Align)</h3><p>Goal: retrieve the protein sequence of the closest matched allele (the reference) from the ANHIG/IMGTHLA GitHub repository, and save it as a single FASTA entry.</p>
+<h4>What to do</h4><p>Open the ANHIG/IMGTHLA repository in your browser.</p>
+<p>Open the folder: fasta/</p>
+<p>Open the protein file for your locus: X_prot.fasta (where X is the gene/locus, e.g., A_prot.fasta, DRB1_prot.fasta, MICB_prot.fasta). View the raw data file.</p>
+<p>Find your closest matched allele entry in the file (use Ctrl+F).</p>
+<p>Copy the entire FASTA entry: the header line starting with '&gt;' AND the amino-acid sequence lines below it.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: Copy the full FASTA entry for the closest matched allele from X_prot.fasta (including the '&gt;' header).</p>
+<p>PASTE: Paste into Notepad/TextEdit as your scratchpad.</p>
+<p>CHECK: You should see exactly one header line starting with '&gt;' followed by only amino-acid letters (no numbers, no spaces).</p>
+<p>SAVE: Save as reference_protein.fasta</p>
+</div><h4>What you have now</h4><p>• A reference protein sequence for the closest matched allele, stored as FASTA (header + sequence) file.</p>
+<h3 id="step-2.6">2.6 Convert your SFAT protein output into FASTA format</h3><p>Goal: your SFAT protein file often contains only the amino-acid letters. UniProt Align expects FASTA formatting, so you will add a header line and save it as a FASTA entry.</p>
+<h4>What to do</h4><p>Open synthetic_protein.txt (your protein sequence from SFAT).</p>
+<p>Create a new text file in Notepad/TextEdit.</p>
+<p>Add a FASTA header line on the first line, starting with '&gt;' (example: &gt;synthetic_novel_allele).</p>
+<p>Paste your protein sequence on the next lines (letters only; line wrapping is optional).</p>
+<p>Save as synthetic_protein.fasta</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: Copy the amino-acid letters from synthetic_protein.txt</p>
+<p>PASTE: Paste into a new file under a header line like: &gt;synthetic_novel_allele</p>
+<p>CHECK: The file must contain two things only: one '&gt;' header line and amino-acid letters (no '*', no spaces).</p>
+<p>SAVE: Save as synthetic_protein.fasta</p>
+</div><h4>What you have now</h4><p>• A FASTA-formatted protein entry for your synthetic allele.</p>
+<h3 id="step-2.7">2.7 Align the two proteins with the UniProt Align web tool</h3><p>Goal: generate a protein alignment between your synthetic allele protein and the closest matched allele protein, so you can see the exact amino-acid differences in context.</p>
+<h4>What to do (click-by-click)</h4><p>Open the UniProt Align tool in your browser.</p>
+<p>In the sequence input box, paste BOTH FASTA entries, one after the other:</p>
+<p>First: your synthetic protein FASTA (synthetic_protein.fasta)</p>
+<p>Second: the reference protein FASTA (reference_protein.fasta)</p>
+<p>Keep the default settings unless the instructor tells you otherwise.</p>
+<p>Click Run Align.</p>
+<p>In the results, locate the positions where the sequences differ (mismatches, gaps).</p>
+<p>Copy the alignment output (or download if available) and save it for your notes.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: Copy the full FASTA text from synthetic_protein.fasta and reference_protein.fasta</p>
+<p>PASTE: Paste both into the UniProt Align input box (two FASTA entries in one box).</p>
+<p>RUN: Click Run Align.</p>
+<p>SAVE: Copy the alignment result into uniprot_alignment.txt. Add 1–2 sentences: what is the closest match, and which residues differ.</p>
+</div><h4>What to look for in the results</h4><p>Are there gaps? (Often indicates an insertion/deletion relative to the reference).</p>
+<p>Are the differences clustered (e.g., ARD region) or scattered?</p>
+<p>Do you see any '*' stop symbols? If yes, your input may contain a stop codon or a translation issue.</p>
+<details><summary><span class="badge" aria-hidden="true">?</span>Quick sanity checks (worth 20 seconds)</summary><p>SFAT fails or gives nonsense features: you probably pasted spaces/headers or picked the wrong locus/level.</p>
+<p>Translation shows many stop codons (*): you translated genomic DNA instead of CDS, or selected the wrong frame.</p>
+<p>BLAST hit looks short: check coverage/alignment length; you may have pasted only part of the sequence.</p>
+<p>Did you paste FASTA headers for BOTH sequences? Each sequence must start with a line beginning with '&gt;'.</p>
+<p>Did you accidentally paste DNA instead of protein? Protein should not contain A/C/G/T-only patterns and should not contain long stretches of only four letters.</p>
+<p>Are you aligning proteins from the same locus? Aligning A vs B will give nonsense.</p>
+<p>If the alignment looks shifted: re-check for missing residues at the start (signal peptide / leader) and confirm you copied the full entry from X_prot.fasta.</p>
+</details><h4>Output you will reuse in Step 3</h4><p>Use the alignment to update your amino-acid variant list (position + AA change). This becomes the input for surface-exposure and antibody-relevance checks in Step 3.</p>
+<h4>Save the following results:</h4><p>synthetic_input_sequence.txt (DNA)</p>
+<p>synthetic_CDS.txt (CDS)</p>
+<p>synthetic_protein.txt (protein)</p>
+<p>Closest known allele from this step (from IPD-IMGT/HLA BLAST)</p>
+<details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>For a group session follow the facilitator’s submission schedule. Saved results for Case 01 are available under Group guidance.</p></details></section><section class="manual-step" id="manual-3"><span id="part2"></span><h2>Step 3 - Is immune recognition plausible? (surface exposure + ARD + structural view)</h2><h4>Links (open in browser)</h4><p>SFAT (Sequence Feature Annotation Tool): <a href="https://www.ebi.ac.uk/ipd/imgt/hla/annotation/">https://www.ebi.ac.uk/ipd/imgt/hla/annotation/</a></p>
+<p>IPD-IMGT/HLA Alignment tool: <a href="https://www.ebi.ac.uk/ipd/imgt/hla/alignment/">https://www.ebi.ac.uk/ipd/imgt/hla/alignment/</a></p>
+<p>IPD-IMGT/HLA Allele Query tool: <a href="https://www.ebi.ac.uk/ipd/imgt/hla/alleles/">https://www.ebi.ac.uk/ipd/imgt/hla/alleles/</a></p>
+<p>NetSurfP-2.0 (surface accessibility): <a href="https://services.healthtech.dtu.dk/services/NetSurfP-2.0/">https://services.healthtech.dtu.dk/services/NetSurfP-2.0/</a></p>
+<p>NCBI ORFfinder: <a href="https://www.ncbi.nlm.nih.gov/orffinder/">https://www.ncbi.nlm.nih.gov/orffinder/</a></p>
+<p>HLA Eplet Registry (optional): <a href="https://www.epregistry.com.br/">https://www.epregistry.com.br/</a></p>
+<p>SpliceAI Lookup (optional): <a href="https://spliceailookup.broadinstitute.org/">https://spliceailookup.broadinstitute.org/</a></p>
+<p>RCSB PDB: <a href="https://www.rcsb.org/">https://www.rcsb.org/</a></p>
+<p>PyMOL FindSurfaceResidues helper (optional): <a href="https://pymolwiki.org/FindSurfaceResidues">https://pymolwiki.org/FindSurfaceResidues</a></p>
+<h4>What you will produce</h4><p>step3_variant_list.txt</p>
+<p>step3_truncation_check.txt</p>
+<p>step3_ard_check.txt</p>
+<p>step3_surface_check.txt</p>
+<p>Optional: step3_pymol_notes.txt</p>
+<h4>Inputs you need from previous steps</h4><p>synthetic_input_sequence.txt (DNA)</p>
+<p>synthetic_CDS.txt (CDS)</p>
+<p>synthetic_protein.txt (protein)</p>
+<p>Closest known allele from Step 2 (from IPD-IMGT/HLA BLAST)</p>
+<h3 id="step-3.0">3.0 Create your variant list (you will reuse it everywhere)</h3><p>Goal: list each amino-acid difference between your synthetic protein and the closest known allele protein in a clean, consistent format.</p>
+<h4>What you do</h4><p>Open synthetic_protein.txt.</p>
+<p>Compare it to the closest known allele protein (from BLAST/alignment).</p>
+<p>Write down each amino-acid difference in a clean, consistent way.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: your synthetic protein sequence (and the closest allele protein sequence or alignment snippet).</p>
+<p>WRITE (format): one change per line, e.g., 80 I-&gt;T; 116 D-&gt;Y; 156 insertion: +G; 233 deletion: ΔK</p>
+<p>SAVE: as step3_variant_list.txt</p>
+</div><h4>Quick rule</h4><p>If you have only DNA differences: do not guess. First translate (SFAT/ORFfinder/ExPASy), then list AA changes.</p>
+<h3 id="step-3.1">3.1 Is this variation leading to a premature end of the protein?</h3><h3 id="step-3.1.1">3.1.1 Stop codon introduced by the variant</h3><p>Goal: check if the variant introduces an early stop (truncation).</p>
+<h4>What you do</h4><p>Open synthetic_protein.txt.</p>
+<p>Look for an early stop sign (some tools show '*' as stop) or an unexpectedly short protein.</p>
+<p>Cross-check with NCBI ORFfinder (fast sanity check).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: synthetic_CDS.txt (preferred) or synthetic_input_sequence.txt (if CDS not available).</p>
+<p>PASTE: into ORFfinder and run.</p>
+<p>LOOK FOR: the longest ORF; whether it stops much earlier than expected; whether multiple ORFs appear because of early stops.</p>
+<p>SAVE: write a 3–5 line conclusion in step3_truncation_check.txt: 'Stop codon present: yes/no' + evidence (protein has */ORF ends at ...).</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>If ORFfinder is unavailable, translate the CDS with ExPASy in the annotated frame. Compact output uses a dash for a stop. Compare the annotated reading frame as well as the longest ORF.</p></details><h3 id="step-3.1.2">3.1.2 Frameshift (insertion/deletion not divisible by 3)</h3><p>Goal: check whether an indel causes a frameshift and therefore likely truncation.</p>
+<h4>What you do</h4><p>From your coding alignment, identify insertions/deletions in the coding sequence.</p>
+<p>Check the length: 3, 6, 9... bases -&gt; in-frame; 1, 2, 4, 5... bases -&gt; frameshift.</p>
+<p>Confirm with ORFfinder: a frameshift often creates a short, abnormal ORF.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: the exact indel from your alignment (length and position).</p>
+<p>WRITE: in step3_truncation_check.txt add: 'Frameshift: yes/no', 'Indel length: ... bp', 'Expected consequence: early stop likely / not likely'.</p>
+</div><h3 id="step-3.1.3">3.1.3 Alternative splicing / splice site disruption (genomic sequences)</h3><p>This only applies if your synthetic sequence includes introns (genomic input).</p>
+<h4>What you do (simple, manual but effective)</h4><p>Run SFAT on the genomic sequence and record exon boundaries.</p>
+<p>Check whether your variant sits at an exon boundary:</p>
+<p>- Donor site (start of intron): usually GT right after the exon</p>
+<p>- Acceptor site (end of intron): usually AG right before the next exon</p>
+<p>If your variant changes those canonical bases, splicing disruption is plausible.</p>
+<h4>Optional (stronger): SpliceAI Lookup</h4><p>If you can express your change as a variant on a reference genome coordinate, use SpliceAI Lookup and record the delta score.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>WRITE: in step3_truncation_check.txt add: 'Splice-site hit: yes/no', 'Which boundary: exon X donor/acceptor', 'Reason: canonical GT/AG changed / nearby splice motif changed'.</p>
+<p>OPTIONAL: add 'SpliceAI delta score' if used.</p>
+</div><h3 id="step-3.2">3.2 Does this change the Antigen Recognition Domain (ARD; and therefore G/P grouping logic)?</h3><h4>ARD definition used here</h4><p>Class I: peptide-binding domain is encoded by exons 2 and 3.</p>
+<p>Class II: peptide-binding domain is encoded by exon 2.</p>
+<h3 id="step-3.2.1">3.2.1 Does this lead to another G-group characterization?</h3><p>Goal: determine whether the ARD nucleotide sequence differs from the closest allele (relative G-group statement).</p>
+<h4>What you do</h4><p>Using SFAT output, isolate the ARD nucleotide sequence:</p>
+<p>- Class I: exon 2 + exon 3</p>
+<p>- Class II: exon 2</p>
+<p>Compare that ARD nucleotide sequence to the closest allele’s ARD nucleotide sequence (IPD alignment tool can show exon-level alignments).</p>
+<p>If any nucleotide differs in the ARD region, it is not the same G-group as the closest allele (relative statement).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: ARD exon nucleotide sequence(s) from SFAT + closest allele ARD exon sequence(s).</p>
+<p>COMPARE: identical yes/no.</p>
+<p>SAVE: in step3_ard_check.txt write: 'ARD nucleotide change: yes/no' and 'Same G-group as closest allele? yes/no (relative)'.</p>
+</div><h3 id="step-3.2.2">3.2.2 Does this lead to another P-group characterization?</h3><p>Goal: determine whether the ARD protein sequence differs from the closest allele (relative P-group statement).</p>
+<h4>What you do</h4><p>Translate the ARD region (or use your protein alignment) and check whether any AA in the ARD differs.</p>
+<p>Any ARD amino-acid difference vs closest allele implies a different P-group (relative statement).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: your ARD AA changes from step3_variant_list.txt.</p>
+<p>DECIDE: are any within ARD? (Class I: exons 2+3; Class II: exon 2).</p>
+<p>SAVE: in step3_ard_check.txt write: 'ARD protein change: yes/no' and 'Same P-group as closest allele? yes/no (relative)'.</p>
+</div><h3 id="step-3.2.3">3.2.3 Does this alter the peptide repertoire (binding groove)?</h3><p>You do not prove this here — you flag plausibility.</p>
+<h4>What you do (workshop rule)</h4><p>If the change is in ARD, it may affect peptide repertoire.</p>
+<p>Strengthen your conclusion using structure (Step 3.3 + optional PyMOL): if the mutated residue points into the binding groove or sits close to the peptide, plausibility increases.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>WRITE: in step3_ard_check.txt: 'Peptide repertoire impact plausible: low / medium / high'.</p>
+<p>WRITE: reason: 'ARD change yes/no; residue points to groove yes/no'.</p>
+</div><h3 id="step-3.3">3.3 Is this variation surface-accessible (antibody/NK/T cell relevance)?</h3><p>You will depict exposure with two options:</p>
+<p>Prediction from sequence (NetSurfP-2.0).</p>
+<p>Structure view using a PDB reference in PyMOL (optional).</p>
+<h3 id="step-3.3.1">3.3.1 Run the surface accessibility analysis (NetSurfP-2.0)</h3><p>Goal: obtain per-residue exposure (RSA) predictions for your synthetic protein.</p>
+<h4>What you do</h4><p>Open NetSurfP-2.0.</p>
+<p>Paste synthetic_protein.txt.</p>
+<p>Run the job.</p>
+<p>Download/export the per-residue output.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: protein sequence from synthetic_protein.txt</p>
+<p>PASTE: into NetSurfP and run.</p>
+<p>SAVE: export/download results and copy the key lines (your variant positions) into step3_surface_check.txt.</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>The original exercise uses NetSurfP-2.0. NetSurfP-3.0 is an additional route for the same accessibility exercise. Saved Case 01 predictions were generated with version 3.0. Record the version you use.</p></details><h3 id="step-3.3.2">3.3.2 Identify exposure characteristics of the new amino acids</h3><p>Goal: map each AA change to exposure (exposed/buried) using NetSurfP output.</p>
+<h4>What you do</h4><p>For each line in step3_variant_list.txt, look up the same position in the NetSurfP output.</p>
+<p>Record whether it looks exposed or buried (use RSA as your guide).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>SAVE: in step3_surface_check.txt create one block per variant:</p>
+<p>- Position + AA change</p>
+<p>- RSA (from NetSurfP)</p>
+<p>- Call: exposed / partly exposed / buried</p>
+<p>- 1-line interpretation: 'Accessible change yes/no'</p>
+</div><h3 id="step-3.3.3">3.3.3 Could this lead to antibody recognition by Bw4/Bw6?</h3><p>Goal: check whether the variant affects the class I 77–83 motif (Bw4/Bw6 region).</p>
+<h4>What you do</h4><p>Check if any variant position falls within residues 77–83 (class I only).</p>
+<p>If yes: write down the 77–83 motif for your synthetic allele and compare it to the closest allele’s motif.</p>
+<p>If the motif changes, Bw4/Bw6 reactivity can change.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>SAVE: in step3_surface_check.txt write: '77–83 affected: yes/no', 'Motif changed: yes/no', 'Bw4/Bw6 relevance: plausible / unlikely'.</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>Check mature HLA residue numbering before comparing positions 77–83. A full precursor sequence can include a signal peptide.</p></details><h3 id="step-3.3.4">3.3.4 Could this lead to antibody recognition in general?</h3><p>Goal: do a useful screen without overclaiming specific antibody specificities.</p>
+<h4>What you do (workshop-level decision rule)</h4><p>If a residue is surface-accessible (NetSurfP) and different from the closest allele, it can be part of an antibody epitope.</p>
+<p>Optional stronger check: see if the position overlaps a known eplet in the HLA Eplet Registry.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: variant positions that are 'exposed' from NetSurfP mapping.</p>
+<p>OPTIONAL CHECK: look up those positions in the HLA Eplet Registry.</p>
+<p>SAVE: in step3_surface_check.txt add: 'Antibody-relevant variants (exposed): [list]', 'Eplet overlap: yes/no/unknown', 'Overall antibody recognition plausibility: low/medium/high'.</p>
+</div><h3 id="step-3.3.5">3.3.5 Could this lead to altered NK recognition?</h3><p>Goal: flag plausibility of NK receptor effects.</p>
+<h4>What you do</h4><p>If your variant affects residues 77–83 (class I), NK impact via the Bw4 axis becomes more plausible.</p>
+<p>If not, you can still note 'unknown/possible', but do not overclaim.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>SAVE: in step3_surface_check.txt write: 'KIR/Bw4 axis affected: yes/no' and 'NK recognition change plausible: low/medium/high' + 1-line reason.</p>
+</div><h3 id="step-3.3.6">3.3.6 Could this lead to altered direct T cell recognition?</h3><p>Goal: flag plausibility based on ARD involvement and exposure (TCR-facing surface).</p>
+<h4>What you do</h4><p>If your change is in ARD and exposed, direct T cell recognition impact is plausible.</p>
+<p>Strengthen with PyMOL: if residue is on the TCR-facing side, plausibility increases.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>SAVE: in step3_surface_check.txt write: 'Direct T cell recognition change plausible: low/medium/high' and 'Reason: ARD change yes/no; exposed yes/no'.</p>
+</div><h4>Step 3 final deliverable (max 5 bullets)</h4><p>Premature end? yes/no + reason (stop/frameshift/splice).</p>
+<p>ARD affected? yes/no.</p>
+<p>G/P group change relative to closest allele? yes/no (relative statement).</p>
+<p>Accessible polymorphism? yes/no (NetSurfP +/- PyMOL).</p>
+<p>Antibody/NK/T cell plausibility: low/medium/high + 1-line reason (mention Bw4/Bw6 if relevant).</p>
+</section><section class="manual-step" id="manual-4"><h2>Step 4 - Map your changed amino acids onto an HLA structure (web-based, using RCSB Mol*)</h2><p>Example: HLA-A*02:01</p>
+<h4>What you will produce</h4><p>step4_pdb_model.txt (which PDB you used + why)</p>
+<p>step4_structure_mapping.txt (per variant: exposed/buried + notes)</p>
+<p>Optional: a folder step4_screenshots/ (PNG screenshots exported from Mol*)</p>
+<h4>Inputs you need from earlier steps</h4><p>step3_variant_list.txt (your amino-acid changes, positions)</p>
+<p>The closest known allele from Step 2</p>
+<p>For this example, you will use an HLA-A*02:01 PDB entry</p>
+<h4>Links (open in browser)</h4><p>RCSB PDB (search and 3D viewer):<a href="https://www.rcsb.org/">https://www.rcsb.org/</a> Mol* getting started (RCSB documentation):<a href="https://www.rcsb.org/docs/3d-viewers/mol*/getting-started">https://www.rcsb.org/docs/3d-viewers/mol*/getting-started</a></p>
+<h3 id="step-4.1">4.1 Find a proper HLA-A*02:01 PDB model (RCSB)</h3><h4>Goal</h4><p>Pick a structure that is usable for surface mapping. You want at least:</p>
+<p>HLA heavy chain (HLA-A*02:01)</p>
+<p>beta2-microglobulin</p>
+<p>a bound peptide (preferred, because it orients the groove)</p>
+<h4>What to do</h4><p>1. Open RCSB PDB (browser).</p>
+<p>2. Search for: HLA-A*02:01</p>
+<p>3. Open a candidate structure page and verify it is HLA-A*02:01.</p>
+<p>4. Check that the structure contains beta2-microglobulin and a bound peptide.</p>
+<p>5. Prefer X-ray or cryo-EM structures (defined coordinates).</p>
+<p>6. Pick one PDB entry as your reference model.</p>
+<h4>Examples of PDB entries that work for HLA-A*02:01 (examples only)</h4><p>7M8S (HLA-A*02:01 with peptide; useful for groove orientation)</p>
+<p>5F9J (HLA-A*02:01 with peptide)</p>
+<p>If you need an antibody/Fab present (optional), choose a pMHC structure that includes a Fab chain</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: PDB ID, title (1 line), and which components are present (heavy chain / beta2m / peptide / extras).</p>
+<p>SAVE: Create step4_pdb_model.txt with: Chosen PDB, Reason, Notes (extras present yes/no; method/resolution optional).</p>
+</div><details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>The manual uses HLA-A*02:01 as its structure example. If your analysed allele differs, align sequences and record the mapping to this example structure.</p></details><h3 id="step-4.2">4.2 Open the structure in Mol* and clean the view</h3><h4>Goal</h4><p>Get a clear picture: HLA heavy chain surface plus your residues highlighted.</p>
+<h4>What to do</h4><p>1. On the RCSB PDB page, open the 3D View (Mol*).</p>
+<p>2. Locate the Sequence panel and the Components/Controls panel.</p>
+<p>3. Keep visible: HLA heavy chain, beta2-microglobulin, and peptide.</p>
+<p>4. Hide: any extra chains (Fab/TCR/other) if present.</p>
+<h4>Important</h4><p>Mol* works by selecting parts of the structure and then applying actions to that selection (color, transparency, representations, or making a separate component).</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>WRITE: In step4_structure_mapping.txt add: PDB used, Viewer (Mol*), and which objects you kept visible.</p>
+</div><h3 id="step-4.3">4.3 Prepare the residue positions you need to map</h3><h4>Goal</h4><p>Have a clean list of residue numbers you must highlight.</p>
+<h4>What to do</h4><p>1. Open step3_variant_list.txt.</p>
+<p>2. Extract only the residue numbers (positions).</p>
+<p>3. Write them as a comma-separated list.</p>
+<div class="copy-box"><h4>Copy / Paste / Save</h4><p>COPY: Residue positions from step3_variant_list.txt.</p>
+<p>WRITE: In step4_structure_mapping.txt add a line: Variant positions to map: 80, 116, 156, ...</p>
+<p>RULE: If PDB residue numbering does not match your sequence numbering, document the mismatch (see sanity checks).</p>
+</div><h3 id="step-4.4">4.4 Select the changed residues in Mol*</h3><h4>Goal</h4><p>Create a selection that contains all your variant residues.</p>
+<h3 id="step-4.4.1">4.4.1 Turn on Selection Mode and set Picking Level to Residue</h3><p>1. Click the cursor icon to enable Selection Mode.</p>
+<p>2. Set Picking Level to Residue (so you select whole amino acids, not single atoms).</p>
+<p>3. Click a residue once to confirm it becomes highlighted.</p>
+<p>CHECK: When you click a residue, it highlights in the 3D view and in the sequence panel.</p>
+<details><summary><span class="badge" aria-hidden="true">?</span>Practical help</summary><p>Viewer controls can vary with the Mol* version. Check both the selected residue label and its highlighted position in the sequence panel.</p></details><h3 id="step-4.4.2">4.4.2 Select residues from the Sequence panel</h3><p>1. In Selection Mode, click the residue in the sequence panel at the correct position.</p>
+<p>2. To select a range, hold Shift while clicking along the sequence.</p>
+<p>3. To select multiple separate residues, use Add/Union selection and click each residue one by one until all are included.</p>
+<p>GOAL: You end with one selection that contains all variant residues.</p>
+<p>TIP: Use Add/Union selection to accumulate non-adjacent residues.</p>
+<h3 id="step-4.4.3">4.4.3 Select residues by clicking in the 3D canvas</h3><p>1. Rotate the structure until the region is visible.</p>
+<p>2. Click the residue on the 3D model.</p>
+<p>3. Use Add/Union selection for multiple residues (same as above).</p>
+<h3 id="step-4.5">4.5 Color your selected residues so they stay visible</h3><h4>Goal</h4><p>Make the mutated residues stand out.</p>
+<h4>What to do</h4><p>1. With your residues selected, click Apply Theme to Selection.</p>
+<p>2. Choose a strong color and apply it.</p>
+<p>3. Confirm that the selection remains visible after you click elsewhere.</p>
+<p>WRITE: In step4_structure_mapping.txt add: Color applied to variants: yes/no; How: Apply Theme to Selection (Mol*).</p>
+<h3 id="step-4.6">4.6 Show the HLA heavy chain as a surface (exposed vs buried)</h3><h4>Goal</h4><p>Decide if each polymorphism is accessible to antibody binding.</p>
+<h4>What to do</h4><p>1. Ensure the HLA heavy chain is visible.</p>
+<p>2. Change the representation to include a molecular surface for the heavy chain component.</p>
+<p>3. Optional: set the surface slightly transparent so you can still see colored sticks underneath.</p>
+<p>DECIDE (for each residue): Exposed (visible on surface), Buried (inside), or Unclear (ambiguous).</p>
+<p>SAVE: In step4_structure_mapping.txt create one block per variant: Position, Change, Surface call, Notes (1 line).</p>
+<h3 id="step-4.7">4.7 Optional: make a separate component for the variant residues (clean pictures)</h3><h4>Goal</h4><p>Surface plus colored sticks is the clearest way to present results.</p>
+<h4>What to do</h4><p>1. Select the variant residues.</p>
+<p>2. Use Create Component of Selection with Representation.</p>
+<p>3. Choose a representation like sticks.</p>
+<p>4. Use the eye icon to show/hide the component.</p>
+<h3 id="step-4.8">4.8 Export a screenshot</h3><h4>What to do</h4><p>1. Set the view: surface visible, residues colored, peptide visible if present.</p>
+<p>2. Use the camera/screenshot option and download the image.</p>
+<p>SAVE: Recommended filenames: step4_HLA-A0201_surface_variants.png; optional: step4_HLA-A0201_zoom_variant80.png</p>
+<p>WRITE: In step4_structure_mapping.txt add: Screenshots saved yes/no; file names.</p>
+<details><summary><span class="badge" aria-hidden="true">?</span>Quick sanity checks (do these before you conclude)</summary><p>Residue numbers do not exist in the PDB sequence panel: you may have a numbering offset or a trimmed construct. Pick a different PDB entry or document the offset in step4_pdb_model.txt.</p>
+<p>Extra chains block the view: hide them using the Components panel (eye icon), or keep only the pMHC components.</p>
+<p>Selected residues disappear after clicking elsewhere: apply the theme immediately or create a separate component from the selection.</p>
+</details></section><section id="downloads"><p class="eyebrow">Workshop materials</p><h2>Downloads</h2>
 <p><a href="downloads/summer-school-2026/participant-fasta-bundle.zip" download>Download all workshop FASTA files (ZIP)</a> · <a href="downloads/summer-school-2026/workshop-notes.txt" download>Notes template</a></p>
 <h3>Reference</h3><p><strong>A*01:01:01:01 reference</strong><br><a href="downloads/summer-school-2026/HLA-A01-01-01-01_Original_Genomic.fasta" download>Genomic DNA</a> · <a href="downloads/summer-school-2026/HLA-A01-01-01-01_Original_CDS.fasta" download>Reference CDS</a> · <a href="downloads/summer-school-2026/HLA-A01-01-01-01_Original_Protein.fasta" download>Reference protein</a></p><h3>Practice cases</h3><p>Analyse each case before opening its detailed answer.</p><div class="case"><strong>Case 01</strong><p><a href="downloads/summer-school-2026/case-01-genomic.fasta" download>Genomic DNA</a> · <a href="downloads/summer-school-2026/case-01-cds.fasta" download>CDS</a> · <a href="downloads/summer-school-2026/case-01-protein.fasta" download>Protein</a></p><details><summary><span class="badge" aria-hidden="true">!</span>Detailed answer</summary><p><strong>Exon 4 substitution</strong></p><p>Genomic position 1885 A→T maps to CDS position 635. The codon CAT changes to CTT, giving H212L in the precursor and H188L in mature numbering. The protein remains 365 residues long. The change is outside the ARD, in the α3 region. NetSurfP predicted RSA of about 0.331 for the reference histidine and 0.360 for the variant leucine. In PDB 3BO8, inspect chain A His 188.</p></details></div><div class="case"><strong>Case 02</strong><p>Two independent inputs are provided. Analyse each separately.</p><p><a href="downloads/summer-school-2026/case-02-genomic.fasta" download>Genomic DNA</a> · <a href="downloads/summer-school-2026/case-02-cds.fasta" download>CDS</a></p><details><summary><span class="badge" aria-hidden="true">!</span>Detailed answer</summary><p><strong>Exon 2 frameshift exercise</strong></p><p>The genomic input contains G→A at position 503, changing the acceptor AG to AA immediately before exon 2. The supplied CDS is an independent example with a one-base insertion in exon 2. SFAT translated that CDS to 30 residues. Analyse the two records separately and record the sequence level used.</p></details></div><div class="case"><strong>Case 03</strong><p><a href="downloads/summer-school-2026/case-03-genomic.fasta" download>Genomic DNA</a></p><details><summary><span class="badge" aria-hidden="true">!</span>Detailed answer</summary><p><strong>Exon 3 splice-site exercise</strong></p><p>The substitution at genomic position 1014 changes the acceptor AG to AT immediately before exon 3. This supports possible splice disruption. SFAT returned a full-length coding sequence in the workshop test, so the translation alone does not resolve the splice consequence.</p></details></div><div class="case"><strong>Case 04</strong><p><a href="downloads/summer-school-2026/case-04-genomic.fasta" download>Genomic DNA</a> · <a href="downloads/summer-school-2026/case-04-cds.fasta" download>CDS</a> · <a href="downloads/summer-school-2026/case-04-protein.fasta" download>Protein</a></p><details><summary><span class="badge" aria-hidden="true">!</span>Detailed answer</summary><p><strong>A*01:04:01:01N premature stop</strong></p><p>The supplied A*01:04:01:01N example contains an early in-frame stop. Translation of the CDS reaches the first stop at codon 220, after 219 amino acids. The 660-base span includes that stop codon. Compare this with the 365-amino-acid reference. Check how the supplied protein represents the terminal stop.</p></details></div><div class="case"><strong>Case 05</strong><p><a href="downloads/summer-school-2026/case-05-genomic.fasta" download>Genomic DNA</a> · <a href="downloads/summer-school-2026/case-05-cds.fasta" download>CDS</a> · <a href="downloads/summer-school-2026/case-05-protein.fasta" download>Protein</a></p><details><summary><span class="badge" aria-hidden="true">!</span>Detailed answer</summary><p><strong>A*01:01:01:02N null allele</strong></p><p>This case represents A*01:01:01:02N. Compare the genomic and coding inputs separately and record how they relate to the supplied short protein. The null designation concerns expression. Compare exons 2 and 3 to assess ARD identity, and consult the current IPD record for the documented expression and group assignments. A full-length supplied CDS alone cannot establish expression.</p></details></div><div class="case"><strong>Case 06</strong><p><a href="downloads/summer-school-2026/case-06-genomic.fasta" download>Genomic DNA</a> · <a href="downloads/summer-school-2026/case-06-protein.fasta" download>Protein</a></p><details><summary><span class="badge" aria-hidden="true">!</span>Detailed answer</summary><p><strong>A*01:02:01:01 ARD comparison</strong></p><p>This case represents A*01:02:01:01. Derive the CDS from the genomic input with SFAT, then compare coding exons 2 and 3 and the aligned protein with A*01:01:01:01. Record each nucleotide and amino-acid difference before drawing relative G- and P-group conclusions. The original file labelled CDS contained protein, so only genomic DNA and protein are provided here.</p></details></div></section>
 </main>

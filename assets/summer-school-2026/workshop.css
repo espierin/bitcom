@@ -45,3 +45,9 @@ details p { padding: 0 .75rem .75rem; }
 details + details summary { color: var(--efi-coral-dark); }
 footer { padding: 1.25rem; background: var(--efi-surface); text-align: center; }
 @media (max-width: 520px) { .banner { min-height: 115px; padding-block: .65rem; } .top { font-size: .69rem; } }
+
+.manual-step h3 { margin-top: 2rem; scroll-margin-top: 1rem; }
+.manual-step h4 { margin: 1.15rem 0 .35rem; }
+.manual-step p { margin: .45rem 0; overflow-wrap: anywhere; }
+.copy-box { padding: .8rem 1.1rem; background: var(--efi-surface); border-left: 4px solid var(--efi-blue); margin: 1rem 0; }
+.copy-box h4 { margin-top: 0; }
