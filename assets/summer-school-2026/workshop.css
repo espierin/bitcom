@@ -129,9 +129,32 @@ a[aria-disabled=true]::after {content:' 🔒';font-size:.8em;}
 .screenshot-viewport img {display:block;width:auto;height:auto;max-width:100%;max-height:calc(94dvh - 170px);object-fit:contain;margin:auto;}
 .screenshot-viewport.actual-size img {max-width:none;max-height:none;margin:0;}
 .screenshot-hint {font-size:.85rem;margin:.4rem 1rem;max-width:none;}
+.screenshot-full-stage {position:relative;width:fit-content;max-width:100%;margin:auto;}
+.actual-size .screenshot-full-stage {width:max-content;max-width:none;margin:0;}
+button.screenshot-spot {position:absolute;z-index:1;transform:translate(-50%,-50%);display:grid;place-items:center;padding:0;width:28px;height:28px;min-height:28px;border:2px solid white;border-radius:50%;background:var(--efi-blue);color:white;font-size:.82rem;font-weight:750;line-height:1;box-shadow:0 0 0 1px var(--efi-blue),0 2px 5px #0005;}
+button.screenshot-spot:hover,button.screenshot-spot[aria-expanded="true"] {background:var(--efi-coral-dark);}
+.screenshot-magnifier {z-index:2;}
+.screenshot-reading {margin:.65rem 0 0;border:1px solid var(--efi-line);border-radius:4px;background:var(--efi-surface);}
+.screenshot-reading summary {padding:.5rem .75rem;cursor:pointer;}
+.screenshot-reading ol {margin:.2rem .8rem .75rem;padding-left:1.5rem;}
+.screenshot-reading li {margin:.3rem 0;}
+button.show-where-button {display:inline-flex;align-items:center;gap:.3em;padding:.12rem .5rem;min-height:28px;border:1px solid var(--efi-blue);border-radius:4px;background:white;color:var(--efi-blue);font-size:.8rem;line-height:1.2;vertical-align:middle;white-space:nowrap;}
+.show-where-button::before {content:"";width:.85em;height:.6em;border:1px solid currentColor;border-radius:2px;}
+button.show-where-button:hover,button.show-where-button[aria-expanded="true"] {background:var(--efi-blue);color:white;}
+.screenshot-pointer-note {position:fixed;z-index:25;width:min(23rem,calc(100vw - 1rem));box-sizing:border-box;max-height:calc(100dvh - 1rem);overflow:auto;padding:.75rem .9rem;border:1px solid var(--efi-blue);border-radius:6px;background:white;color:var(--efi-ink);box-shadow:0 4px 18px #10284440;font-size:.88rem;}
+.screenshot-pointer-note[hidden],.screenshot-pointer-note [hidden] {display:none!important;}
+.screenshot-pointer-note p {margin:.3rem 0;line-height:1.45;}
+.screenshot-pointer-note pre {margin:.45rem 0 0;padding:.55rem;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--efi-surface);font-size:.8rem;}
+.pointer-figure {position:relative;margin-top:.5rem;}
+.pointer-figure img {display:block;width:100%;height:auto;border:1px solid var(--efi-line);}
+.pointer-pin {position:absolute;width:17px;height:17px;border-radius:50%;transform:translate(-50%,-50%);border:3px solid #b42533;box-shadow:0 0 0 2px white;pointer-events:none;}
+button.screenshot-spot:focus-visible,button.show-where-button:focus-visible {outline:3px solid var(--efi-coral-dark);outline-offset:3px;}
+.task-workbook {padding:.55rem .8rem;border-left:3px solid var(--efi-blue);background:var(--efi-surface);}
+.workbook-jump {text-underline-offset:.18em;}
+@media (pointer:coarse){button.screenshot-spot {width:32px;height:32px;min-height:32px;}button.show-where-button {min-height:38px;}}
 @media(max-width:600px){.screenshot-toolbar {flex-wrap:wrap;}.screenshot-toolbar h2 {flex-basis:100%;}.screenshot-viewport img {max-height:calc(94dvh - 230px);}}
 summary:focus-visible, .screen-example a:focus-visible { outline: 3px solid var(--efi-blue); outline-offset: 3px; }
-@media print { .screen-example { display: none; } }
+@media print { .screen-example,.show-where-button,.screenshot-pointer-note { display: none!important; } }
 .support-content { padding: .25rem 1rem 1rem; }
 .support-content p { padding: 0; margin: .6rem 0; }
 .support-content h4 { margin: .8rem 0 .3rem; }
@@ -141,6 +164,9 @@ button, .action-link { display:inline-block; padding:.7rem 1rem; background:var(
 .workbook-actions,.start-actions {display:flex;flex-wrap:wrap;gap:.7rem;}
 .workbook-sections {position:sticky;top:0;z-index:5;background:white;border-bottom:2px solid var(--efi-blue);padding:.6rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;}
 #workbook-form fieldset {scroll-margin-top:8rem;}
+#workbook-form textarea {scroll-margin-top:9rem;}
+#workbook-form textarea:target {outline:2px solid var(--efi-blue);outline-offset:3px;}
+#workbook-actions {scroll-margin-top:2rem;}
 .field-guidance {color:var(--efi-ink);background:var(--efi-surface);padding:.7rem;}
 .workbook-hint {font-size:.9rem;color:#4e5b66;margin:.2rem 0 .45rem;}
 fieldset {border:1px solid var(--efi-line);padding:1.2rem;margin:1.5rem 0;min-width:0;}
