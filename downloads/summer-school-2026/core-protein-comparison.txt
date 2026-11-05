@@ -1,0 +1,37 @@
+Core protein comparison
+Direct position-by-position comparison of two collinear 365-residue workshop sequences.
+
+Positions 1–60
+Reference MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF
+Variant   MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF
+          ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+Positions 61–120
+Reference DSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQ
+Variant   DSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQ
+          ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+Positions 121–180
+Reference IMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQR
+Variant   IMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQR
+          ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+Positions 181–240
+Reference RVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLT
+Variant   RVYLEGRCVDGLRRYLENGKETLQRTDPPKTLMTHHPISDHEATLRCWALGFYPAEITLT
+          |||||||||||||||||||||||||||||||*||||||||||||||||||||||||||||
+
+Positions 241–300
+Reference WQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEL
+Variant   WQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEL
+          ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+Positions 301–360
+Reference SSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSL
+Variant   SSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSL
+          ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+Positions 361–365
+Reference TACKV
+Variant   TACKV
+          |||||
