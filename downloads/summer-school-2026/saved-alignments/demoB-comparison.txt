@@ -1,0 +1,35 @@
+HLA-B demonstration
+SMS2 Pairwise Align Protein, BLOSUM62, gap opening 12, gap extension 2
+Reference: HLA-B demonstration reference (362 residues)
+Compared input: 362 residues. Separate practice pair for an unresolved or unmatched case. The second input is an artificial demonstration sequence.
+Ranges count residues in each input from 1, excluding gaps. | means identical and * marks a substitution.
+Alignment gaps are representations of correspondence, not individual biological events.
+Alignment score: 1916
+
+Reference  MLVMAPRTVLLLLSAALALTETWAGSHSMRYFYTSVSRPGRGEPRFISVGYVDDTQFVRF  1–60
+           *|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   ALVMAPRTVLLLLSAALALTETWAGSHSMRYFYTSVSRPGRGEPRFISVGYVDDTQFVRF  1–60
+
+Reference  DSDAASPREEPRAPWIEQEGPEYWDRNTQIYKAQAQTDRESLRNLRGYYNQSEAGSHTLQ  61–120
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   DSDAASPREEPRAPWIEQEGPEYWDRNTQIYKAQAQTDRESLRNLRGYYNQSEAGSHTLQ  61–120
+
+Reference  SMYGCDVGPDGRLLRGHDQYAYDGKDYIALNEDLRSWTAADTAAQITQRKWEAAREAEQR  121–180
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   SMYGCDVGPDGRLLRGHDQYAYDGKDYIALNEDLRSWTAADTAAQITQRKWEAAREAEQR  121–180
+
+Reference  RAYLEGECVEWLRRYLENGKDKLERADPPKTHVTHHPISDHEATLRCWALGFYPAEITLT  181–240
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   RAYLEGECVEWLRRYLENGKDKLERADPPKTHVTHHPISDHEATLRCWALGFYPAEITLT  181–240
+
+Reference  WQRDGEDQTQDTELVETRPAGDRTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEP  241–300
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   WQRDGEDQTQDTELVETRPAGDRTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEP  241–300
+
+Reference  SSQSTVPIVGIVAGLAVLAVVVIGAVVAAVMCRRKSSGGKGGSYSQAACSDSAQGSDVSL  301–360
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   SSQSTVPIVGIVAGLAVLAVVVIGAVVAAVMCRRKSSGGKGGSYSQAACSDSAQGSDVSL  301–360
+
+Reference  TA  361–362
+           ||
+Compared   TA  361–362

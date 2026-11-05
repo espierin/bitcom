@@ -1,0 +1,112 @@
+{
+  "method": "SMS2 Pairwise Align Protein, BLOSUM62, gap opening 12, gap extension 2",
+  "script": "https://www.bioinformatics.org/sms2/scripts/pairwise_affine_align.js",
+  "scriptSha256": "1c12c44d2866cd0f63d1268cf7f0f4588b8e9e41845e2537182242c896391af7",
+  "records": [
+    {
+      "id": "case01",
+      "label": "Case 01",
+      "reference": "A*01:01:01:01 workshop reference",
+      "preparation": "Use the supplied Case 01 protein and the workshop A*01:01:01:01 reference.",
+      "lengths": [
+        365,
+        365
+      ],
+      "sequenceSha256": [
+        "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+        "102c1c49133efd66dd5604034d101fa269cf65246effa70202680739c2a67eac"
+      ],
+      "score": 1932
+    },
+    {
+      "id": "case02cds",
+      "label": "Case 02 — independent CDS",
+      "reference": "A*01:01:01:01 workshop reference",
+      "preparation": "Use the verified translation of the independent CDS before its first stop. This pair does not apply to the genomic input.",
+      "lengths": [
+        365,
+        30
+      ],
+      "sequenceSha256": [
+        "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+        "c937cf354d78889f36805717deeb2683f98cdff56f2787930da487d776f0abf2"
+      ],
+      "score": -533
+    },
+    {
+      "id": "case04",
+      "label": "Case 04",
+      "reference": "A*01:01:01:01 workshop reference",
+      "preparation": "Use the CDS-verified amino-acid segment before the stop. The terminal marker in the original protein file is excluded.",
+      "lengths": [
+        365,
+        219
+      ],
+      "sequenceSha256": [
+        "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+        "ff6de431a9494594f2ae42e9a4e8ccc210f988bd3dcb87736afdf208b89c4bb9"
+      ],
+      "score": 812
+    },
+    {
+      "id": "case05protein",
+      "label": "Case 05 — supplied short protein",
+      "reference": "A*01:01:01:01 workshop reference",
+      "preparation": "The alignment covers the known amino-acid prefix only. The original terminal X remains unresolved and is outside this alignment. Use the unmodified short sequence when verifying its exact NetSurfP archive.",
+      "lengths": [
+        365,
+        199
+      ],
+      "sequenceSha256": [
+        "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+        "2f81b32fd1b6e391cd0b1f0ff47f1b88e176250548cd936388936637db892869"
+      ],
+      "score": 286
+    },
+    {
+      "id": "case05cds",
+      "label": "Case 05 — supplied CDS",
+      "reference": "A*01:01:01:01 workshop reference",
+      "preparation": "Use the independent CDS translation. Treat the short protein file as a separate record.",
+      "lengths": [
+        365,
+        365
+      ],
+      "sequenceSha256": [
+        "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+        "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3"
+      ],
+      "score": 1943
+    },
+    {
+      "id": "case06",
+      "label": "Case 06",
+      "reference": "A*01:01:01:01 workshop reference",
+      "preparation": "Use the supplied Case 06 protein and the workshop A*01:01:01:01 reference.",
+      "lengths": [
+        365,
+        365
+      ],
+      "sequenceSha256": [
+        "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3",
+        "17b4b5fa63a07c4ddd61833482863161f687926900d1bb514d7706cca6a64620"
+      ],
+      "score": 1929
+    },
+    {
+      "id": "demoB",
+      "label": "HLA-B demonstration",
+      "reference": "HLA-B demonstration reference",
+      "preparation": "Separate practice pair for an unresolved or unmatched case. The second input is an artificial demonstration sequence.",
+      "lengths": [
+        362,
+        362
+      ],
+      "sequenceSha256": [
+        "5de81f208e7148a6c5163dc26042423d3e3fdd21b2eb3c95625b3a80f58583fb",
+        "5fb53bb8e5bf744f58f21b0145c033bed4c02d8fe9d030f2a186ea23b3c5ea12"
+      ],
+      "score": 1916
+    }
+  ]
+}

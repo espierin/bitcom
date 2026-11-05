@@ -1,0 +1,35 @@
+Case 05 — supplied CDS
+SMS2 Pairwise Align Protein, BLOSUM62, gap opening 12, gap extension 2
+Reference: A*01:01:01:01 workshop reference (365 residues)
+Compared input: 365 residues. Use the independent CDS translation. Treat the short protein file as a separate record.
+Ranges count residues in each input from 1, excluding gaps. | means identical and * marks a substitution.
+Alignment gaps are representations of correspondence, not individual biological events.
+Alignment score: 1943
+
+Reference  MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF  1–60
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF  1–60
+
+Reference  DSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQ  61–120
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   DSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQ  61–120
+
+Reference  IMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQR  121–180
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   IMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQR  121–180
+
+Reference  RVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLT  181–240
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   RVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLT  181–240
+
+Reference  WQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEL  241–300
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   WQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEL  241–300
+
+Reference  SSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSL  301–360
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   SSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSL  301–360
+
+Reference  TACKV  361–365
+           |||||
+Compared   TACKV  361–365

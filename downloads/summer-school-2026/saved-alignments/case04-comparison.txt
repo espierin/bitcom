@@ -1,0 +1,35 @@
+Case 04
+SMS2 Pairwise Align Protein, BLOSUM62, gap opening 12, gap extension 2
+Reference: A*01:01:01:01 workshop reference (365 residues)
+Compared input: 219 residues. Use the CDS-verified amino-acid segment before the stop. The terminal marker in the original protein file is excluded.
+Ranges count residues in each input from 1, excluding gaps. | means identical and * marks a substitution.
+Alignment gaps are representations of correspondence, not individual biological events.
+Alignment score: 812
+
+Reference  MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF  1–60
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF  1–60
+
+Reference  DSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQ  61–120
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   DSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQ  61–120
+
+Reference  IMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQR  121–180
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   IMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQR  121–180
+
+Reference  RVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLT  181–240
+           |||||||||||||||||||||||||||||
+Compared   RVYLEGRCVDGLRRYLENGKETLQRTDPP-------------------------------  181–209
+
+Reference  WQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEL  241–300
+                    |||                   **|***
+Compared   ---------QDT-------------------YDPPPH-----------------------  210–218
+
+Reference  SSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSL  301–360
+
+Compared   ------------------------------------------------------------  gap
+
+Reference  TACKV  361–365
+               *
+Compared   ----L  219–219

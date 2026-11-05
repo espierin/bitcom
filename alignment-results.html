@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Follow the EFI International Summer School 2026 hands-on workshop in HLA sequence analysis.">
+<title>Saved protein comparisons | EFI BITCom</title>
+<link rel="stylesheet" href="assets/summer-school-2026/workshop.css?v=20261105-review">
+<link rel="stylesheet" href="assets/summer-school-2026/efi-links.css?v=2">
+<script src="assets/summer-school-2026/progress-data.js?v=3" defer></script>
+<script src="assets/summer-school-2026/progress.js?v=3" defer></script>
+<script src="assets/summer-school-2026/workbook-window.js?v=1" defer></script>
+<script src="assets/summer-school-2026/screenshots.js?v=1" defer></script>
+<script src="assets/summer-school-2026/progress-gate.js?v=2" defer></script></head>
+<body>
+<a class="skip" href="#main">Skip to workshop</a>
+<header>
+<div class="top"><a href="https://efi-web.org/" rel="noopener noreferrer" target="_blank">European Federation for Immunogenetics</a><span>Bioinformatics &amp; IT Committee</span></div>
+<div class="banner">
+<div><p class="eyebrow">International Summer School 2026 · Crete</p><h1>Hands-on HLA Sequence Analysis</h1><p>From genomic DNA to structure</p></div>
+<img src="assets/summer-school-2026/efi-logo-white.svg" alt="EFI" width="90" height="87">
+</div>
+</header>
+<main id="main"><nav aria-label="Workshop navigation"><a href="index.html">Overview</a><a href="register.html">Register</a><a href="introduction.html">Introduction</a><a href="step-1.html">Step 1</a><a href="step-2.html">Step 2</a><a href="step-3.html">Step 3</a><a href="step-4.html">Step 4</a><a href="workbook.html" target="EFI_BITCom_Workbook" rel="noopener" title="Open workbook in a separate window">My workbook</a><a href="netsurfp-viewer.html">NetSurfP results</a><a href="downloads.html">Downloads</a><a href="group-guidance.html">Group guidance</a></nav><section><h2>Saved protein comparisons</h2>
+<p>Use this route for task 2.7 if SMS2 is slow, its result window is blocked, or the service is unreachable. The saved files require no alignment job.</p>
+<ol><li>Open your case and download the exact input pair. Compare both proteins with yours, including lengths and all residues. The HLA-A comparisons use the supplied A*01:01:01:01 workshop reference. If you chose a different BLAST hit, keep that finding and label this saved result as a comparison with the workshop reference.</li>
+<li>Download the readable comparison and open it in a plain-text editor. Read the letters in the same column. A vertical bar shows identity, an asterisk marks a substitution, and a hyphen marks a gap. Count letters in each row separately using its residue range.</li>
+<li>Record the positions and letters in your variant list. Keep the method, reference and input names with your result. Continue to the NetSurfP archive using the verified protein and its own residue positions.</li></ol>
+<p><strong>Case 02 genomic and Case 03:</strong> record that the variant protein is unresolved. Use the HLA-B demonstration below for alignment practice and the separately labelled HLA-B prediction for the RSA exercise. Those results belong to the demonstration.</p>
+<p>All pairs use SMS2 Pairwise Align Protein, BLOSUM62, gap opening 12, gap extension 2. <a href="downloads/summer-school-2026/saved-alignments/manifest.json" download>Download provenance and sequence checksums</a>.</p>
+<details class="case" id="case01"><summary>Case 01</summary>
+<div class="support-content"><p><strong>Reference:</strong> A*01:01:01:01 workshop reference. Use the supplied Case 01 protein and the workshop A*01:01:01:01 reference.</p>
+<ul><li><a href="downloads/summer-school-2026/saved-alignments/case01-inputs.fasta" download>Download the two exact protein inputs</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case01-comparison.txt" download>Download the readable comparison with residue ranges</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case01-aligned.fasta" download>Download aligned FASTA</a></li></ul></div></details>
+<details class="case" id="case02cds"><summary>Case 02 — independent CDS</summary>
+<div class="support-content"><p><strong>Reference:</strong> A*01:01:01:01 workshop reference. Use the verified translation of the independent CDS before its first stop. This pair does not apply to the genomic input.</p>
+<ul><li><a href="downloads/summer-school-2026/saved-alignments/case02cds-inputs.fasta" download>Download the two exact protein inputs</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case02cds-comparison.txt" download>Download the readable comparison with residue ranges</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case02cds-aligned.fasta" download>Download aligned FASTA</a></li></ul></div></details>
+<details class="case" id="case04"><summary>Case 04</summary>
+<div class="support-content"><p><strong>Reference:</strong> A*01:01:01:01 workshop reference. Use the CDS-verified amino-acid segment before the stop. The terminal marker in the original protein file is excluded.</p>
+<ul><li><a href="downloads/summer-school-2026/saved-alignments/case04-inputs.fasta" download>Download the two exact protein inputs</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case04-comparison.txt" download>Download the readable comparison with residue ranges</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case04-aligned.fasta" download>Download aligned FASTA</a></li></ul></div></details>
+<details class="case" id="case05protein"><summary>Case 05 — supplied short protein</summary>
+<div class="support-content"><p><strong>Reference:</strong> A*01:01:01:01 workshop reference. The alignment covers the known amino-acid prefix only. The original terminal X remains unresolved and is outside this alignment. Use the unmodified short sequence when verifying its exact NetSurfP archive.</p>
+<ul><li><a href="downloads/summer-school-2026/saved-alignments/case05protein-inputs.fasta" download>Download the two exact protein inputs</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case05protein-comparison.txt" download>Download the readable comparison with residue ranges</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case05protein-aligned.fasta" download>Download aligned FASTA</a></li></ul></div></details>
+<details class="case" id="case05cds"><summary>Case 05 — supplied CDS</summary>
+<div class="support-content"><p><strong>Reference:</strong> A*01:01:01:01 workshop reference. Use the independent CDS translation. Treat the short protein file as a separate record.</p>
+<ul><li><a href="downloads/summer-school-2026/saved-alignments/case05cds-inputs.fasta" download>Download the two exact protein inputs</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case05cds-comparison.txt" download>Download the readable comparison with residue ranges</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case05cds-aligned.fasta" download>Download aligned FASTA</a></li></ul></div></details>
+<details class="case" id="case06"><summary>Case 06</summary>
+<div class="support-content"><p><strong>Reference:</strong> A*01:01:01:01 workshop reference. Use the supplied Case 06 protein and the workshop A*01:01:01:01 reference.</p>
+<ul><li><a href="downloads/summer-school-2026/saved-alignments/case06-inputs.fasta" download>Download the two exact protein inputs</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case06-comparison.txt" download>Download the readable comparison with residue ranges</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/case06-aligned.fasta" download>Download aligned FASTA</a></li></ul></div></details>
+<details class="case" id="demoB"><summary>HLA-B demonstration</summary>
+<div class="support-content"><p><strong>Reference:</strong> HLA-B demonstration reference. Separate practice pair for an unresolved or unmatched case. The second input is an artificial demonstration sequence.</p>
+<ul><li><a href="downloads/summer-school-2026/saved-alignments/demoB-inputs.fasta" download>Download the two exact protein inputs</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/demoB-comparison.txt" download>Download the readable comparison with residue ranges</a></li>
+<li><a href="downloads/summer-school-2026/saved-alignments/demoB-aligned.fasta" download>Download aligned FASTA</a></li></ul></div></details>
+<p><a href="netsurfp-viewer.html#saved-results">Open saved NetSurfP results</a> · <a href="step-2.html#step-2.7">Return to task 2.7</a></p>
+</section></main>
+<footer>European Federation for Immunogenetics · Bioinformatics &amp; IT Committee</footer>
+</body></html>

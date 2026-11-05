@@ -66,18 +66,32 @@ manifest = {'tool': 'NetSurfP', 'version': '3.0', 'method': 'ESM1b', 'run_date':
             'inputs': ordered}
 (base / 'manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8', newline='\n')
 payload['manifest.json'] = manifest
-(base / 'README.txt').write_text('EFI BITCom NetSurfP-3.0 workshop archive\nCalculated 5 November 2026. Job: '+manifest['job_id']+'\n\nExtract the entire ZIP, then open index.html. It runs without internet or a local server.\nThe data and plots are read locally; external tool/workshop links require internet.\nFull original exports: raw-batch.json / .csv / .zip. Per-input JSON retains all output fields.\nExact prepared FASTA inputs, hashes, preparation and source records are in manifest.json.\nPositions are 1-based in each input. Match sequences exactly before interpretation.\nNo predicted variant is invented for unresolved genomic splice cases.\nThis archive has no automatic expiry; keep a local backup.\n', encoding='utf-8')
+(base / 'README.txt').write_text('EFI BITCom offline workshop package\nNetSurfP-3.0 calculated 5 November 2026. Job: '+manifest['job_id']+'\n\nExtract the entire ZIP. Open alignment-results.html for saved protein comparisons and index.html for the NetSurfP viewer.\nThe data and plots are read locally. External tool and workshop links require internet.\nThe participant FASTA bundle is in downloads/summer-school-2026/.\nFull original exports: raw-batch.json / .csv / .zip. Per-input JSON retains all output fields.\nExact inputs, hashes and preparation notes accompany both archives.\nPositions are 1-based in each input. Match sequences exactly before interpretation.\nGenomic splice cases without a resolved protein can use the separately labelled practice routes.\nThis archive has no automatic expiry. Keep a local backup.\n', encoding='utf-8', newline='\n')
 
 html = (root / 'netsurfp-viewer.html').read_text(encoding='utf-8')
 html = re.sub(r'<script\b[^>]*>.*?</script>', '', html, flags=re.S)
 html = html.replace('</head>', '<script src="offline-data.js" defer></script><script src="assets/summer-school-2026/netsurfp-core.js" defer></script><script src="assets/summer-school-2026/netsurfp-timer.js" defer></script><script src="assets/summer-school-2026/netsurfp-viewer.js" defer></script></head>')
-# Preserve internal section links and archive downloads; other workshop pages are online links.
-html = re.sub(r'href="((?!downloads/|assets/)[a-z0-9-]+\.html[^\"]*)"', lambda m: 'href="https://espierin.github.io/bitcom/'+m[1]+'"', html)
-html = html.replace('href="downloads/summer-school-2026/netsurfp/offline-results.zip"', 'href="downloads/summer-school-2026/netsurfp/README.txt"').replace('Download offline viewer and full results (ZIP)', 'Read offline archive instructions')
+def offline_links(page):
+    page = page.replace('href="netsurfp-viewer.html', 'href="index.html')
+    # Other workshop pages are online. The two offline tools stay linked locally.
+    return re.sub(r'href="((?!index\.html|alignment-results\.html)[a-z0-9-]+\.html[^"]*)"',
+                  lambda m: 'href="https://espierin.github.io/bitcom/'+m[1]+'"', page)
+
+# The original Overview link still points to the online workshop.
+html = offline_links(html.replace('href="index.html">Overview', 'href="https://espierin.github.io/bitcom/">Overview'))
+html = html.replace('href="downloads/summer-school-2026/netsurfp/offline-results.zip"', 'href="downloads/summer-school-2026/netsurfp/README.txt"').replace('Download offline alignment and NetSurfP package (ZIP)', 'Read offline archive instructions')
 with zipfile.ZipFile(base / 'offline-results.zip', 'w', zipfile.ZIP_DEFLATED) as z:
     z.writestr('index.html', html)
     z.writestr('offline-data.js', 'window.NetSurfPOffline='+json.dumps(payload).replace('<', '\\u003c')+';')
     z.writestr('README.txt', (base / 'README.txt').read_text())
+    alignment = (root / 'alignment-results.html').read_text(encoding='utf-8')
+    alignment = re.sub(r'<script\b[^>]*>.*?</script>', '', alignment, flags=re.S)
+    alignment = alignment.replace('href="index.html">Overview', 'href="https://espierin.github.io/bitcom/">Overview')
+    z.writestr('alignment-results.html', offline_links(alignment))
+    for p in (base.parent / 'saved-alignments').iterdir():
+        if p.is_file(): z.write(p, p.relative_to(root))
+    p = base.parent / 'participant-fasta-bundle.zip'
+    z.write(p, p.relative_to(root))
     for p in base.iterdir():
         if p.is_file() and p.name != 'offline-results.zip': z.write(p, p.relative_to(root))
     for name in ['workshop.css', 'efi-links.css', 'efi-logo-white.svg', 'hla-banner.png', 'netsurfp-core.js', 'netsurfp-timer.js', 'netsurfp-viewer.js']:

@@ -1,0 +1,35 @@
+Case 02 — independent CDS
+SMS2 Pairwise Align Protein, BLOSUM62, gap opening 12, gap extension 2
+Reference: A*01:01:01:01 workshop reference (365 residues)
+Compared input: 30 residues. Use the verified translation of the independent CDS before its first stop. This pair does not apply to the genomic input.
+Ranges count residues in each input from 1, excluding gaps. | means identical and * marks a substitution.
+Alignment gaps are representations of correspondence, not individual biological events.
+Alignment score: -533
+
+Reference  MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF  1–60
+           ||||||||||||||||||||||||||||||
+Compared   MAVMAPRTLLLLLSGALALTQTWAGSHSMR------------------------------  1–30
+
+Reference  DSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQ  61–120
+
+Compared   ------------------------------------------------------------  gap
+
+Reference  IMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQR  121–180
+
+Compared   ------------------------------------------------------------  gap
+
+Reference  RVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLT  181–240
+
+Compared   ------------------------------------------------------------  gap
+
+Reference  WQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEL  241–300
+
+Compared   ------------------------------------------------------------  gap
+
+Reference  SSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSL  301–360
+
+Compared   ------------------------------------------------------------  gap
+
+Reference  TACKV  361–365
+
+Compared   -----  gap

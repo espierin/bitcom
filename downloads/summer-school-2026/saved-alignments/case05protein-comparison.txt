@@ -1,0 +1,35 @@
+Case 05 — supplied short protein
+SMS2 Pairwise Align Protein, BLOSUM62, gap opening 12, gap extension 2
+Reference: A*01:01:01:01 workshop reference (365 residues)
+Compared input: 199 residues. The alignment covers the known amino-acid prefix only. The original terminal X remains unresolved and is outside this alignment. Use the unmodified short sequence when verifying its exact NetSurfP archive.
+Ranges count residues in each input from 1, excluding gaps. | means identical and * marks a substitution.
+Alignment gaps are representations of correspondence, not individual biological events.
+Alignment score: 286
+
+Reference  MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF  1–60
+           ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   MAVMAPRTLLLLLSGALALTQTWAGSHSMRYFFTSVSRPGRGEPRFIAVGYVDDTQFVRF  1–60
+
+Reference  DSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDGSHTIQ  61–120
+           |||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Compared   DSDAASQKMEPRAPWIEQEGPEYWDQETRNMKAHSQTDRANLGTLRGYYNQSEDG-----  61–115
+
+Reference  IMYGCDVGPDGRFLRGYRQDAYDGKDYIALNEDLRSWTAADMAAQITKRKWEAVHAAEQR  121–180
+                |*||**|                                              *|
+Compared   -----DPGPGRR----------------------------------------------SR  116–124
+
+Reference  RVYLEGRCVDGLRRYLENGKETLQRTDPPKTHMTHHPISDHEATLRCWALGFYPAEITLT  181–240
+           *****||*    |*****|*|
+Compared   PLIPHGRA----RSPTVSGSE---------------------------------------  125–141
+
+Reference  WQRDGEDQTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHEGLPKPLTLRWEL  241–300
+                                          **|*****|**|*****|    ***|***
+Compared   -------------------------------IHPEAAGLRDPCPGRGPG----AFTRFHF  142–166
+
+Reference  SSQPTIPIVGIIAGLVLLGAVITGAVVAAVMWRRKSSDRKGGSYTQAASSDSAQGSDVSL  301–360
+           ***|*||          *|            |     ***||*********|**||***
+Compared   QFRPKIP----------PG------------W-----SGRGGARGTGLTAGSGPGSHTI-  167–198
+
+Reference  TACKV  361–365
+               *
+Compared   ----Q  199–199
