@@ -94,6 +94,7 @@
     const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='EFI-BITCom-registration.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
   });
   email.value=''; // Deliberately request the participant's address at each start.
+  form.hidden=!config?.enabled;
   if(!config?.enabled) {
     button.disabled=true;email.disabled=true;remember.disabled=true;
     tell('Email registration is not open yet. You can already use the workshop; no email address is collected by this page while registration is closed.');

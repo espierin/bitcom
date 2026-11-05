@@ -1,17 +1,25 @@
 (() => {
   'use strict';
   const $=id=>document.getElementById(id),base='downloads/summer-school-2026/netsurfp/';
-  const core=window.NetSurfPCore;let manifest,selected,data,reference,verified=false,generation=0,lookupGeneration=0;
+  const core=window.NetSurfPCore;let manifest,selected,data,reference,verified=false,generation=0,lookupGeneration=0,fileGeneration=0;
   const cache=new Map();
   async function json(file){if(window.NetSurfPOffline?.[file])return window.NetSurfPOffline[file];if(cache.has(file))return cache.get(file);const r=await fetch(base+file);if(!r.ok)throw Error('Saved data could not be loaded. Download the offline bundle or try again.');const d=await r.json();cache.set(file,d);return d;}
-  function invalidate(){lookupGeneration++;verified=false;$('ns-lookup').disabled=true;$('ns-results').hidden=true;$('ns-verify-status').textContent='';}
+  function invalidate(){
+    lookupGeneration++;
+    verified=false;
+    $('ns-lookup').disabled=true;
+    $('ns-results').hidden=true;
+    $('ns-verify-status').textContent='';
+    $('ns-lookup-status').textContent='';
+  }
   function link(id,file){$(id).href=base+file;}
   async function choose(){
     const version=++generation;invalidate();data=null;selected=manifest.inputs.find(x=>x.id===$('ns-case').value);
     $('ns-position').value='';$('ns-reference-position').value='';$('ns-sequence').value='';$('ns-file').value='';$('ns-answer').open=false;
     $('ns-dataset').hidden=true;$('ns-entry').hidden=true;
+    $('ns-answer-text').textContent='Select a case to see its detailed answer.';
     if(!selected){$('ns-case-status').textContent='Select your assigned case and the exact input you analysed.';return;}
-    $('ns-case-status').textContent=selected.notice||'';
+    $('ns-case-status').textContent=selected.notice||'Loading the selected dataset…';
     $('ns-answer-text').textContent=selected.answer||'Use the original case answer on Downloads after recording your interpretation.';
     if(!selected.result_file){$('ns-case-status').textContent=selected.notice;return;}
     try{
@@ -25,13 +33,25 @@
       link('ns-input-download',selected.input_file);link('ns-json-download',selected.result_file);link('ns-csv-download',selected.csv_file);
       $('ns-position').max=data.seq.length;
       $('ns-dataset').hidden=false;$('ns-entry').hidden=false;
-    }catch(e){$('ns-case-status').textContent=e.message;}
+      $('ns-case-status').textContent=selected.notice||'Dataset ready. Verify your protein below.';
+    }catch(e){if(version===generation)$('ns-case-status').textContent=e.message;}
   }
   $('ns-case').addEventListener('change',choose);
-  $('ns-sequence').addEventListener('input',invalidate);
+  $('ns-sequence').addEventListener('input',()=>{fileGeneration++;invalidate();});
   $('ns-file').addEventListener('change',async e=>{
-    const f=e.target.files[0];if(!f)return;const v=generation;invalidate();
-    try{if(f.size>100000)throw Error('Choose a single protein file smaller than 100 kB.');const text=await f.text();if(v!==generation)return;$('ns-sequence').value=text;$('ns-verify-status').textContent='File loaded locally. Click Verify sequence.';}catch(e){$('ns-verify-status').textContent=e.message;}
+    const f=e.target.files[0];if(!f)return;
+    const v=generation, fileVersion=++fileGeneration;
+    invalidate();
+    $('ns-sequence').value='';
+    try {
+      if(f.size>100000)throw Error('Choose a single protein file smaller than 100 kB.');
+      const content=await f.text();
+      if(v!==generation||fileVersion!==fileGeneration)return;
+      $('ns-sequence').value=content;
+      $('ns-verify-status').textContent='File loaded locally. Click Verify sequence.';
+    } catch(e) {
+      if(v===generation&&fileVersion===fileGeneration)$('ns-verify-status').textContent=e.message;
+    }
   });
   $('ns-verify').addEventListener('click',()=>{
     invalidate();try{
@@ -66,7 +86,7 @@
       $('ns-observation').value=rows.map(([label,r])=>`${label}: input position ${r.position}; amino acid ${r.aa}; RSA ${r.rsa.toFixed(4)}; ASA ${r.asa.toFixed(2)} Å²`).join('\n')+`\nNetSurfP-${manifest.version}; precomputed ${manifest.run_date}; input SHA-256 ${chosen.sequence_sha256}\nMy exposure interpretation and evidence: \nNumbering / mapping notes: `;
       $('ns-results').hidden=false;
       $('ns-lookup-status').textContent='Values loaded. Make your own exposure interpretation before opening the explanation.';
-    }catch(e){$('ns-lookup-status').textContent=e.message;}
+    }catch(e){if(version===generation&&lookupVersion===lookupGeneration)$('ns-lookup-status').textContent=e.message;}
   });
   // Never leave stale values visible after a position edit.
   for(const id of ['ns-position','ns-reference-position'])$(id).addEventListener('input',()=>{lookupGeneration++;$('ns-results').hidden=true;$('ns-lookup-status').textContent='';});

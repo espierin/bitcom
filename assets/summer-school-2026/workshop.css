@@ -69,9 +69,15 @@ footer { padding: 1.25rem; background: var(--efi-surface); text-align: center; }
 .progress-note { font-size:.9rem; }
 .task-complete { display:flex; align-items:center; gap:.7rem; min-height:44px; padding:.5rem; margin:.5rem 0; border:1px solid var(--efi-line); }
 .task-complete input { width:1.2rem; height:1.2rem; flex-shrink:0; }
-.task-complete {margin-top:1.5rem;border-left:4px solid var(--efi-blue);background:var(--efi-surface);}
+.task-complete {margin-top:1.5rem;border-left:4px solid var(--efi-blue);background:var(--efi-surface);cursor:pointer;}
+.task-complete:has(input:checked) {border-left-color:#25704a;background:#eef7f1;}
+.task-index-status {font-size:.82rem;color:#245d42;white-space:nowrap;margin-inline-start:.4rem;}
+.chapter-status {margin-top:1.8rem;padding:.7rem 1rem;border-left:4px solid var(--efi-blue);background:var(--efi-surface);}
+.support-content ol {padding-inline-start:1.6rem;margin:.5rem 0 1rem;}
+.support-content li + li {margin-top:.55rem;}
+.support-content h4 {color:var(--efi-blue);}
 .progress-gate {border:2px solid var(--efi-coral-dark);padding:1.2rem;margin:1.5rem 0;}
-a[aria-disabled=true] {opacity:.65;cursor:not-allowed;}
+a[aria-disabled=true] {color:#4e5b66;cursor:not-allowed;}
 a[aria-disabled=true]::after {content:' 🔒';font-size:.8em;}
 #saved-results label {display:block;font-weight:650;margin:1rem 0 .4rem;}
 #saved-results select,#saved-results input[type=number] {font:inherit;padding:.6rem;border:1px solid #6b7b87;border-radius:4px;max-width:100%;}
@@ -81,6 +87,7 @@ a[aria-disabled=true]::after {content:' 🔒';font-size:.8em;}
 #saved-results button:disabled {opacity:.55;cursor:not-allowed;}
 #ns-case-status,#ns-verify-status,#ns-lookup-status {padding:.6rem;border-left:3px solid var(--efi-blue);}
 #ns-sha {overflow-wrap:anywhere;font-size:.85rem;}
+#ns-answer-text {white-space:pre-line;}
 .ns-table-wrap {overflow:auto;}
 .ns-table {border-collapse:collapse;width:100%;margin:1rem 0;text-align:left;}
 .ns-table th,.ns-table td {border:1px solid var(--efi-line);padding:.65rem;}
@@ -135,6 +142,7 @@ button, .action-link { display:inline-block; padding:.7rem 1rem; background:var(
 .workbook-sections {position:sticky;top:0;z-index:5;background:white;border-bottom:2px solid var(--efi-blue);padding:.6rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;}
 #workbook-form fieldset {scroll-margin-top:8rem;}
 .field-guidance {color:var(--efi-ink);background:var(--efi-surface);padding:.7rem;}
+.workbook-hint {font-size:.9rem;color:#4e5b66;margin:.2rem 0 .45rem;}
 fieldset {border:1px solid var(--efi-line);padding:1.2rem;margin:1.5rem 0;min-width:0;}
 legend {color:var(--efi-blue);font-size:1.3rem;font-weight:700;padding:0 .4rem;}
 #workbook-form label {display:block;font-weight:600;margin:1rem 0 .4rem;}

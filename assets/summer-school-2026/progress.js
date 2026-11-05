@@ -48,6 +48,24 @@
     note.textContent=unavailable?'Browser storage could not be read or written. Download a backup before leaving.':
       'Saved on this device in this browser. No login or email is needed. For another device, download a JSON backup and restore it there. Shared-browser users share this local record.';
     document.querySelectorAll('[data-complete-step]').forEach(input=>{input.checked=memory.completed.includes(input.dataset.completeStep);});
+    document.querySelectorAll('.page-contents a[href^="#step-"]').forEach(link=>{
+      const id=link.getAttribute('href').slice(1);
+      let status=link.querySelector('.task-index-status');
+      if(!status){
+        status=document.createElement('span');
+        status.className='task-index-status';
+        link.append(status);
+      }
+      status.textContent=memory.completed.includes(id)?' ✓ Complete':'';
+    });
+    const chapterStatus=document.querySelector('[data-chapter-status]');
+    if(chapterStatus?.dataset?.chapterStatus){
+      const chapter=steps.filter(step=>step.page===chapterStatus.dataset.chapterStatus);
+      const remaining=chapter.filter(step=>!memory.completed.includes(step.id));
+      chapterStatus.textContent=remaining.length
+        ? `${chapter.length-remaining.length} of ${chapter.length} tasks complete. Next unchecked task: ${remaining[0].id.slice(5)}.`
+        : `All ${chapter.length} tasks on this page are complete.`;
+    }
   }
   snapshot();render();
   const headings=[...document.querySelectorAll('h3[id^="step-"]')].filter(h=>byId.has(h.id));

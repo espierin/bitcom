@@ -2,17 +2,18 @@ const form = document.getElementById('workbook-form');
 const fields = [...form.querySelectorAll('textarea')];
 const key = 'efi-bitcom-workbook-v1';
 const status = document.getElementById('save-status');
+let unsaved = false;
 function snapshot() { return Object.fromEntries(fields.map(f => [f.name, f.value])); }
 function show(data) { for (const f of fields) f.value = typeof data[f.name] === 'string' ? data[f.name] : ''; }
 function save() {
-  try { localStorage.setItem(key, JSON.stringify(snapshot())); status.textContent = 'Saved in this browser at ' + new Date().toLocaleTimeString(); }
-  catch { status.textContent = 'Browser storage is unavailable. Download your answers before closing this page.'; }
+  try { localStorage.setItem(key, JSON.stringify(snapshot())); unsaved = false; status.textContent = 'Saved in this browser at ' + new Date().toLocaleTimeString(); }
+  catch { unsaved = true; status.textContent = 'Browser storage is unavailable. Download your answers before closing this page.'; }
 }
 try { const data = JSON.parse(localStorage.getItem(key) || '{}'); if (data && typeof data === 'object') show(data); status.textContent = 'Ready. Your answers are saved here as you type. Keep the workbook open in one tab.'; }
 catch { status.textContent = 'Could not read browser storage. Download a backup before closing this page.'; }
 form.addEventListener('input', event => {
   try {
-    const latest = JSON.parse(localStorage.getItem(key) || '{}');
+    const latest = unsaved ? null : JSON.parse(localStorage.getItem(key) || '{}');
     if (latest && typeof latest === 'object') {
       for (const field of fields) {
         if (field !== event.target && typeof latest[field.name] === 'string') field.value = latest[field.name];
@@ -21,7 +22,15 @@ form.addEventListener('input', event => {
   } catch {}
   save();
 });
-window.addEventListener('storage', e => { if (e.key === key) status.textContent = 'The workbook changed in another tab. Download this tab’s answers before reloading to see the other version.'; });
+window.addEventListener('storage', e => {
+  if (e.key !== key || unsaved) return;
+  try {
+    show(JSON.parse(e.newValue || '{}') || {});
+    status.textContent = 'Workbook updated from another window in this browser.';
+  } catch {
+    status.textContent = 'Could not read the update from another window. Download your current answers before reloading.';
+  }
+});
 function download(name, text, type) {
   const url = URL.createObjectURL(new Blob([text], {type}));
   const a = document.createElement('a'); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 10000);

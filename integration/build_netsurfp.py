@@ -14,7 +14,13 @@ raw = json.loads((base / 'raw-batch.json').read_text())
 assert len(raw) == len(items) == 8
 by_id = {item['id'].split('_', 1)[1]: item for item in raw}
 answers = BeautifulSoup((root / 'downloads.html').read_text(encoding='utf-8'), 'html.parser').select('.case details')
-case_answers = {str(i+1).zfill(2): a.get_text(' ', strip=True).replace('! Detailed answer ', '') for i, a in enumerate(answers)}
+case_answers = {
+    str(i + 1).zfill(2): '\n\n'.join(block.get_text(' ', strip=True)
+                                   for block in answer.select('h4, p')
+                                   if not block.select_one('a'))
+    for i, answer in enumerate(answers)
+}
+assert len(case_answers) == 6
 payload = {}
 for item in items:
     result = by_id[item['id']]
@@ -58,7 +64,7 @@ manifest = {'tool': 'NetSurfP', 'version': '3.0', 'method': 'ESM1b', 'run_date':
             'raw_sha256': {ext: sha((base / ('raw-batch.' + ext)).read_bytes()) for ext in ['json', 'csv', 'zip']},
             'numbering': '1-based in exact submitted protein; no implicit mature-protein offset',
             'inputs': ordered}
-(base / 'manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
+(base / 'manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8', newline='\n')
 payload['manifest.json'] = manifest
 (base / 'README.txt').write_text('EFI BITCom NetSurfP-3.0 workshop archive\nCalculated 5 November 2026. Job: '+manifest['job_id']+'\n\nExtract the entire ZIP, then open index.html. It runs without internet or a local server.\nThe data and plots are read locally; external tool/workshop links require internet.\nFull original exports: raw-batch.json / .csv / .zip. Per-input JSON retains all output fields.\nExact prepared FASTA inputs, hashes, preparation and source records are in manifest.json.\nPositions are 1-based in each input. Match sequences exactly before interpretation.\nNo predicted variant is invented for unresolved genomic splice cases.\nThis archive has no automatic expiry; keep a local backup.\n', encoding='utf-8')
 
@@ -67,7 +73,7 @@ html = re.sub(r'<script\b[^>]*>.*?</script>', '', html, flags=re.S)
 html = html.replace('</head>', '<script src="offline-data.js" defer></script><script src="assets/summer-school-2026/netsurfp-core.js" defer></script><script src="assets/summer-school-2026/netsurfp-timer.js" defer></script><script src="assets/summer-school-2026/netsurfp-viewer.js" defer></script></head>')
 # Preserve internal section links and archive downloads; other workshop pages are online links.
 html = re.sub(r'href="((?!downloads/|assets/)[a-z0-9-]+\.html[^\"]*)"', lambda m: 'href="https://espierin.github.io/bitcom/'+m[1]+'"', html)
-html = html.replace('href="downloads/summer-school-2026/netsurfp/offline-results.zip"', 'href="downloads/summer-school-2026/netsurfp/README.txt"').replace('Download all inputs, results and provenance (ZIP)', 'Read offline archive instructions')
+html = html.replace('href="downloads/summer-school-2026/netsurfp/offline-results.zip"', 'href="downloads/summer-school-2026/netsurfp/README.txt"').replace('Download offline viewer and full results (ZIP)', 'Read offline archive instructions')
 with zipfile.ZipFile(base / 'offline-results.zip', 'w', zipfile.ZIP_DEFLATED) as z:
     z.writestr('index.html', html)
     z.writestr('offline-data.js', 'window.NetSurfPOffline='+json.dumps(payload).replace('<', '\\u003c')+';')

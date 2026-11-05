@@ -10,9 +10,10 @@
   function explain(missing){panel.hidden=false;message.textContent=`${missing.length} earlier tasks still need to be completed.`;back.href=missing[0].page+'#'+missing[0].id;back.textContent='Go to '+missing[0].title;}
   function render(){
     progress.snapshot();const missing=progress.missingBefore(page);
-    document.querySelectorAll('.manual-step,.page-turn').forEach(el=>{el.hidden=missing.length>0;});
+    document.querySelectorAll('.manual-step,.page-turn,.chapter-status').forEach(el=>{el.hidden=missing.length>0;});
     if(missing.length)explain(missing);else panel.hidden=true;
     document.querySelectorAll('a[href]').forEach(a=>{
+      if(a.getAttribute('href').startsWith('#'))return;
       const url=new URL(a.href,location.href);if(url.origin!==location.origin)return;
       const target=url.pathname.split('/').pop();if(!/^step-[1-4]\.html$/.test(target))return;
       const locked=progress.missingBefore(target).length>0;

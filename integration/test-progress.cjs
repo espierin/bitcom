@@ -19,3 +19,15 @@ test('failed storage still allows current progress and notes to be exported',asy
 test('reports include scratchpad and progress',async()=>{const a=setup();a.fields[1].value='Notebook';a.progress.restore({completed:['step-1.1'],last:'step-1.2'});a.get('export-text').click();const report=await a.blobs[0].text();assert.match(report,/Notebook/);assert.match(report,/Completed tasks: 1 \/ 37/)});
 
 test('later pages unlock only when every preceding task is complete',()=>{const a=setup();assert.equal(a.progress.missingBefore('step-1.html').length,0);assert.equal(a.progress.missingBefore('step-2.html').length,3);a.progress.restore({completed:['step-1.1','step-1.2'],last:'step-1.2'});assert.equal(a.progress.missingBefore('step-2.html').length,1);a.progress.restore({completed:['step-1.1','step-1.2','step-1.3'],last:'step-1.3'});assert.equal(a.progress.missingBefore('step-2.html').length,0);assert.ok(a.progress.missingBefore('step-3.html').length>0);assert.equal(a.progress.missingBefore('workbook.html').length,0);a.progress.restore({completed:['step-1.1'],last:'step-1.1'});assert.equal(a.progress.missingBefore('step-2.html').length,2)});
+
+test('editing another field after a storage failure preserves the unsaved answer', async () => {
+  const saved = new Map([['efi-bitcom-workbook-v1', JSON.stringify({case:'Old case',scratch_notes:'Old notes'})]]);
+  const workbook = setup(saved, true);
+  workbook.fields[0].value = 'Updated case';
+  workbook.get('workbook-form').input({target:workbook.fields[0]});
+  workbook.fields[1].value = 'Updated notes';
+  workbook.save();
+  workbook.export();
+  const backup = JSON.parse(await workbook.blobs[0].text());
+  assert.deepEqual(backup.answers, {case:'Updated case',scratch_notes:'Updated notes'});
+});
