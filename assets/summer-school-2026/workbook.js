@@ -1,11 +1,13 @@
 const form = document.getElementById('workbook-form');
 const fields = [...form.querySelectorAll('textarea')];
-const key = 'efi-bitcom-workbook-v1';
+const workbookCloud = window.WorkshopCloud;
+const key = workbookCloud?.storageKey('workbook') || 'efi-bitcom-workbook-v1';
 const status = document.getElementById('save-status');
 let unsaved = false;
 function snapshot() { return Object.fromEntries(fields.map(f => [f.name, f.value])); }
 function show(data) { for (const f of fields) f.value = typeof data[f.name] === 'string' ? data[f.name] : ''; }
 function save() {
+  workbookCloud?.queue('workbook',snapshot());
   try { localStorage.setItem(key, JSON.stringify(snapshot())); unsaved = false; status.textContent = 'Saved in this browser at ' + new Date().toLocaleTimeString(); }
   catch { unsaved = true; status.textContent = 'Browser storage is unavailable. Download your answers before closing this page.'; }
 }

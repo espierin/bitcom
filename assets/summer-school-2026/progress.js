@@ -1,7 +1,8 @@
 (() => {
   'use strict';
   const steps = window.BITCOM_STEPS;
-  const key = 'efi-bitcom-progress-v1';
+  const cloud = window.WorkshopCloud;
+  const key = cloud?.storageKey('progress') || 'efi-bitcom-progress-v1';
   const byId = new Map(steps.map(s => [s.id, s]));
   let memory = {completed: [], last: null, updatedAt: null};
   let unavailable = false;
@@ -23,11 +24,12 @@
     catch { unavailable=true; }
     return structuredClone(memory);
   }
-  function store(value) {
+  function store(value, sync = true) {
     memory=validate(value);
     try { localStorage.setItem(key,JSON.stringify(memory));unavailable=false;unsaved=false; }
     catch { unavailable=true;unsaved=true; }
     render();
+    if (sync) cloud?.queue('progress',memory);
     if(window.dispatchEvent)window.dispatchEvent(new Event('bitcom-progress'));
   }
   const box=document.createElement('section');box.className='progress-panel';box.setAttribute('aria-label','Your saved progress');
@@ -38,6 +40,7 @@
   const links=document.createElement('div');links.className='workbook-actions';links.append(resume,backup);
   const note=document.createElement('p');note.className='progress-note';
   box.append(heading,count,links,note);
+  cloud?.attach(box);
   document.querySelector('nav[aria-label="Workshop navigation"]').after(box);
   function render() {
     count.textContent=`${memory.completed.length} of ${steps.length} tasks marked complete. Your reading position is saved separately.`;
@@ -46,7 +49,8 @@
     resume.href=step.page+'#'+step.id;
     resume.textContent=memory.last?'Continue: '+step.title:'Begin Step 1';
     note.textContent=unavailable?'Browser storage could not be read or written. Download a backup before leaving.':
-      'Saved on this device in this browser. No login or email is needed. For another device, download a JSON backup and restore it there. Shared-browser users share this local record.';
+      cloud?.session() ? 'Signed-in work is saved on this browser and synced to the server. Check the server status before closing.' :
+      'Guest mode. This browser keeps a local copy. Before ending the session, download a JSON backup to keep or transfer your progress.';
     document.querySelectorAll('[data-complete-step]').forEach(input=>{input.checked=memory.completed.includes(input.dataset.completeStep);});
     document.querySelectorAll('.page-contents a[href^="#step-"]').forEach(link=>{
       const id=link.getAttribute('href').slice(1);
@@ -102,7 +106,7 @@
   if(headings.length&&!missingBefore(byId.get(headings[0].id).page).length) {
     const anchor=location.hash.slice(1);
     const current=headings.find(h=>h.id===anchor)||headings.find(h=>h.id===memory.last)||headings[0];
-    store({...snapshot(),last:current.id,updatedAt:new Date().toISOString()});
+    store({...snapshot(),last:current.id,updatedAt:new Date().toISOString()},false);
   }
   window.WorkshopProgress={snapshot,validate,restore:store,steps,missingBefore};
 })();

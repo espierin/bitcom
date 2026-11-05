@@ -1,56 +1,85 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
-const vm=require('node:vm');
-const fs=require('node:fs');
+const {readFileSync}=require('node:fs');
 const path=require('node:path');
-const source=fs.readFileSync(path.join(__dirname,'../assets/summer-school-2026/registration.js'),'utf8');
-function setup({enabled=true,hash='',responses=[]}={}) {
- const events={},elements={},calls=[],changes=[],blobs=[];
- const get=id=>elements[id]??=( {value:'',checked:false,hidden:id==='registration-success',disabled:false,textContent:'',
-  addEventListener:(type,fn)=>events[id+':'+type]=fn,reportValidity:()=>true,focus(){},querySelector:()=>({focus(){}})} );
- const storage=()=>{const map=new Map();return {getItem:k=>map.get(k)||null,setItem:(k,v)=>map.set(k,v),removeItem:k=>map.delete(k),map};};
- const localStorage=storage(),sessionStorage=storage();
- const context={window:{BITCOM_REGISTRATION:{enabled,api:'https://test.invalid'},localStorage,sessionStorage},
-  localStorage,sessionStorage,document:{getElementById:get,createElement:()=>({click(){}})},
-  location:{hash,pathname:'/register.html'},history:{replaceState:(_,__,url)=>changes.push(url)},
-  URLSearchParams,AbortSignal,Date,JSON,Blob,setTimeout:()=>0,
-  URL:{createObjectURL:blob=>{blobs.push(blob);return 'blob:test';},revokeObjectURL(){}},
-  fetch:async(url,options)=>{calls.push({url,body:JSON.parse(options.body)});const r=responses.shift()||{status:200,data:{accepted:true}};
-   return {ok:r.status<400,status:r.status,json:async()=>r.data};}};
- vm.runInNewContext(source,context);
- return {elements,get,calls,changes,localStorage,sessionStorage,blobs,
-  submit:()=>events['registration-form:submit']({preventDefault(){}}),click:id=>events[id+':click']()};
+const vm=require('node:vm');
+
+const source=name=>readFileSync(path.join(__dirname,'../assets/summer-school-2026',name),'utf8');
+const receipt={receipt:'r'.repeat(43),scope:'account-a',expires:Date.now()/1000+3600};
+function setup({enabled=true,hash='',map=new Map(),server={}}={}) {
+  const elements=new Map(),calls=[],events={};
+  const get=id=>{
+    if(!elements.has(id))elements.set(id,{
+      value:'',hidden:true,checked:false,dataset:{},reportValidity:()=>true,
+      addEventListener(type,handler){this[type]=handler;},
+      querySelector(){return {focus(){}};},focus(){},
+    });
+    return elements.get(id);
+  };
+  let cleared=false;
+  const context={
+    window:{BITCOM_REGISTRATION:{enabled,api:'https://workshop.invalid'},addEventListener:(type,f)=>events[type]=f,dispatchEvent(){}},
+    document:{getElementById:get,querySelectorAll:()=>[],addEventListener(){}},
+    navigator:{}, StorageEvent:class {},
+    localStorage:{getItem:key=>map.get(key),setItem:(key,value)=>map.set(key,value),removeItem:key=>map.delete(key)},
+    location:{hash,pathname:'/bitcom/register.html'},history:{replaceState(){cleared=true;}},
+    URLSearchParams,AbortSignal,clearTimeout(){},setTimeout(){},
+    fetch:async (url,request)=>{
+      const route=new URL(url).pathname;
+      const body=JSON.parse(request.body);
+      calls.push([route,body]);
+      let status=200,data={};
+      if(route==='/confirm')data=receipt;
+      if(route==='/load')data=server;
+      if(route==='/save'){
+        if((server[body.kind]?.revision||0)!==body.revision){status=409;data={detail:'newer_server_copy'};}
+        else{data={revision:body.revision+1};server[body.kind]={revision:data.revision,data:body.data};}
+      }
+      return {ok:status===200,status,json:async()=>data};
+    },
+  };
+  vm.createContext(context);
+  vm.runInContext(source('cloud-work.js'),context);
+  vm.runInContext(source('registration.js'),context);
+  return {get,calls,map,server,cloud:context.window.WorkshopCloud,cleared:()=>cleared,
+    submit:async()=>{get('registration-email').value='person@example.org';await get('registration-form').submit({preventDefault(){}});}};
 }
-const key='efi-bitcom-registration-receipt-v1';
-test('disabled registration does not collect or transmit',async()=>{
- const app=setup({enabled:false});app.get('registration-email').value='person@example.org';await app.submit();
- assert.equal(app.calls.length,0);assert.equal(app.get('registration-email').disabled,true);
+test('disabled and guest pages never send account requests on load',async()=>{
+  const disabled=setup({enabled:false});await disabled.submit();
+  assert.equal(disabled.calls.length,0);assert.equal(disabled.get('registration-form').hidden,true);
+  assert.equal(setup().calls.length,0);
 });
-test('email requested is not misrepresented as confirmed',async()=>{
- const app=setup();app.get('registration-email').value='person@example.org';await app.submit();
- assert.match(app.calls[0].url,/\/request$/);assert.equal(app.get('registration-success').hidden,true);
+test('sending a link does not sign the participant in',async()=>{
+  const a=setup();await a.submit();
+  assert.equal(a.calls[0][0],'/request');
+  assert.equal(a.cloud.session(),null);
+  assert.equal(a.get('registration-success').hidden,true);
 });
-test('confirmation clears URL and stores only workshop receipt; export omits secrets',async()=>{
- const app=setup({hash:'#token_hash=one-time-secret',responses:[{status:200,data:{email:'person@example.org',
- workshop:'efi-bitcom-2026-session-1',confirmed_at:'2026-11-05T10:00:00Z',registered_at:'2026-11-05T10:01:00Z',receipt:'opaque-workshop-only',expires:Date.now()/1000+1000}}]});
- assert.deepEqual(app.changes,['/register.html']);assert.equal(app.calls.length,0);
- app.get('registration-email').value='person@example.org';await app.submit();
- assert.equal(app.get('registration-success').hidden,false);
- assert.equal(app.sessionStorage.getItem(key).includes('one-time-secret'),false);
- assert.equal(app.localStorage.getItem(key),null);
- app.click('download-registration');const exported=await app.blobs[0].text();
- assert.equal(exported.includes('receipt'),false);assert.equal(exported.includes('secret'),false);
+test('confirm strips the URL secret and restores server work under the account key',async()=>{
+  const a=setup({hash:'#bitcom_token=secret',server:{workbook:{revision:2,data:{scratch_notes:'Server note'}}}});
+  assert.equal(a.cleared(),true);
+  await a.submit();
+  assert.equal(a.calls[0][1].token,'secret');
+  assert.equal(a.get('registration-success').hidden,false);
+  assert.equal(JSON.parse(a.map.get(a.cloud.storageKey('workbook'))).scratch_notes,'Server note');
+  assert.ok(![...a.map.values()].some(v=>v.includes('secret')));
 });
-test('failed identity verification never saves browser confirmation',async()=>{
- const app=setup({hash:'#token_hash=bad',responses:[{status:400,data:{detail:'confirmation_invalid_or_expired'}}]});
- app.get('registration-email').value='person@example.org';await app.submit();
- assert.equal(app.get('registration-success').hidden,true);assert.equal(app.sessionStorage.getItem(key),null);
+test('guest work is copied only by choice and only into empty server sections',async()=>{
+  const map=new Map([['efi-bitcom-workbook-v1',JSON.stringify({scratch_notes:'Guest note'})]]);
+  const a=setup({hash:'#bitcom_token=secret',map});a.get('copy-guest-work').checked=true;
+  await a.submit();
+  assert.equal(a.server.workbook.data.scratch_notes,'Guest note');
+  assert.equal(JSON.parse(map.get('efi-bitcom-workbook-v1')).scratch_notes,'Guest note');
+  const b=setup({hash:'#bitcom_token=secret',map,server:{workbook:{revision:5,data:{scratch_notes:'Existing'}}}});
+  b.get('copy-guest-work').checked=true;await b.submit();
+  assert.equal(b.server.workbook.data.scratch_notes,'Existing');
 });
-test('remembered receipt requires email and server verification',async()=>{
- const app=setup({responses:[{status:401,data:{detail:'confirmation_required'}},{status:200,data:{accepted:true}}]});
- app.localStorage.setItem(key,JSON.stringify({receipt:'existing-receipt',expires:Date.now()/1000+1000}));
- assert.equal(app.get('registration-email').value,'');assert.equal(app.calls.length,0);
- app.get('registration-email').value='different@example.org';await app.submit();
- assert.match(app.calls[0].url,/\/resume$/);assert.match(app.calls[1].url,/\/request$/);
- assert.equal(app.get('registration-success').hidden,true);assert.equal(app.localStorage.getItem(key),null);
+test('server conflict retains pending local data and preserves newer server work',async()=>{
+  const server={workbook:{revision:1,data:{scratch_notes:'First'}}};
+  const a=setup({hash:'#bitcom_token=secret',server});await a.submit();
+  server.workbook={revision:2,data:{scratch_notes:'Newer on another device'}};
+  a.cloud.queue('workbook',{scratch_notes:'Local edits'});
+  assert.equal(await a.cloud.connect(receipt,false),false);
+  assert.equal(server.workbook.data.scratch_notes,'Newer on another device');
+  assert.equal(JSON.parse(a.map.get(a.cloud.storageKey('workbook')+':sync')).pending.scratch_notes,'Local edits');
 });

@@ -4,24 +4,27 @@ Copy into ept_api, initialise(engine) during startup, then install(app).
 Enable only after completing SETUP.txt. Supabase Data API stays disabled.
 """
 import hashlib
+import json
 import os
 import re
 import secrets
+import smtplib
+import ssl
 import time
 from datetime import datetime, timezone
-from uuid import UUID
+from email.message import EmailMessage
+from uuid import uuid4
 
-import httpx
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field, field_validator
-from sqlalchemy import Column, Float, MetaData, String, Table, delete, insert, select, text, update
+from sqlalchemy import Column, Float, Integer, MetaData, String, Table, Text, delete, insert, select, text, update
 from sqlalchemy.exc import IntegrityError
 
 CALLBACK = 'https://espierin.github.io/bitcom/register.html'
 WORKSHOP = 'efi-bitcom-2026-session-1'
 metadata = MetaData()
 registrations = Table('bitcom_registrations', metadata,
-    Column('user_id', String(36), primary_key=True), Column('email', String(254), nullable=False),
+    Column('user_id', String(36), primary_key=True), Column('email', String(254), nullable=False, unique=True),
     Column('workshop', String(80), nullable=False), Column('confirmed_at', String(80), nullable=False),
     Column('registered_at', Float, nullable=False), Column('last_seen', Float, nullable=False))
 receipts = Table('bitcom_registration_receipts', metadata,
@@ -30,6 +33,12 @@ receipts = Table('bitcom_registration_receipts', metadata,
 limits = Table('bitcom_registration_limits', metadata,
     Column('key', String(80), primary_key=True), Column('until', Float, nullable=False),
     Column('count', Float, nullable=False))
+links = Table('bitcom_registration_links', metadata,
+    Column('email', String(254), primary_key=True), Column('token_hash', String(64), nullable=False),
+    Column('expires', Float, nullable=False))
+work = Table('bitcom_saved_work', metadata,
+    Column('user_id', String(36), primary_key=True), Column('kind', String(12), primary_key=True),
+    Column('revision', Integer, nullable=False), Column('data', Text, nullable=False))
 
 def initialise(engine):
     with engine.begin() as c:
@@ -37,7 +46,7 @@ def initialise(engine):
         if engine.dialect.name == 'postgresql':
             for table in metadata.sorted_tables:
                 c.execute(text(f'ALTER TABLE "{table.name}" ENABLE ROW LEVEL SECURITY'))
-                c.execute(text(f'REVOKE ALL ON TABLE "{table.name}" FROM anon, authenticated'))
+                c.execute(text(f'REVOKE ALL ON TABLE "{table.name}" FROM PUBLIC, anon, authenticated'))
 
 def digest(value):
     return hashlib.sha256(value.encode()).hexdigest()
@@ -54,8 +63,7 @@ class Email(BaseModel):
     _email = field_validator('email')(normalise)
 
 class Confirm(Email):
-    token_hash: str = Field(default='', max_length=512)
-    access_token: str = Field(default='', max_length=8192)
+    token: str = Field(min_length=32, max_length=128)
     remember: bool = False
 
 class Resume(Email):
@@ -65,13 +73,60 @@ class Revoke(BaseModel):
     model_config = ConfigDict(extra='forbid')
     receipt: str = Field(min_length=32, max_length=128)
 
+class Save(Revoke):
+    kind: str = Field(pattern=r'^(progress|workbook)$')
+    revision: int = Field(ge=0)
+    data: dict
+
+def send_link(settings, address, token):
+    message = EmailMessage()
+    message['From'] = settings.smtp_sender
+    message['To'] = address
+    message['Subject'] = 'Your EFI BITCom workshop sign-in link'
+    message.set_content(
+        'Open the link and confirm your address to sign in to the EFI BITCom workshop.\n'
+        'The link can be used once within 20 minutes.\n\n'
+        f'{CALLBACK}#bitcom_token={token}\n\n'
+        'If you did not request this link, you can ignore this email.\n'
+    )
+    context = ssl.create_default_context()
+    with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=10) as smtp:
+        smtp.starttls(context=context)
+        if settings.smtp_user:
+            smtp.login(settings.smtp_user, settings.smtp_password)
+        smtp.send_message(message)
+
+def validate_work(kind, value):
+    if kind == 'workbook':
+        if len(value) > 30 or any(not re.fullmatch(r'[a-z][a-z0-9_]{0,59}', key)
+                                  or not isinstance(note, str) or len(note) > 30000
+                                  for key, note in value.items()):
+            raise HTTPException(422, 'invalid_workbook')
+    else:
+        def task_id(v):
+            return isinstance(v, str) and re.fullmatch(r'step-[1-4](\.\d+){1,2}', v)
+        completed = value.get('completed')
+        last = value.get('last')
+        updated = value.get('updatedAt')
+        if (set(value) - {'completed', 'last', 'updatedAt'} or
+            not isinstance(completed, list) or len(completed) > 37 or
+            not all(task_id(task) for task in completed) or
+            (last is not None and not task_id(last)) or
+            (updated is not None and (not isinstance(updated, str) or len(updated) > 40))):
+            raise HTTPException(422, 'invalid_progress')
+    encoded = json.dumps(value, ensure_ascii=False)
+    if len(encoded.encode()) > 850000:
+        raise HTTPException(413, 'work_too_large')
+    return encoded
+
 def install(app):
     router = APIRouter(prefix='/api/bitcom/registration')
 
     def available():
         s = app.state.settings
         return (os.getenv('BITCOM_REGISTRATION_ENABLED') == 'true'
-                and s.supabase_url.startswith('https://') and bool(s.supabase_public_key))
+                and bool(getattr(app.state, 'bitcom_ready', False))
+                and bool(s.smtp_host and s.smtp_sender))
 
     def ready():
         if not available():
@@ -81,7 +136,10 @@ def install(app):
         now = time.time()
         try:
             with app.state.engine.begin() as c:
-                c.execute(delete(limits).where(limits.c.until < now))
+                # Serialize the first request in a new window on Postgres.
+                if app.state.engine.dialect.name == 'postgresql':
+                    c.execute(text('SELECT pg_advisory_xact_lock(hashtext(:key)::bigint)'), {'key':key})
+                c.execute(delete(limits).where(limits.c.key == key, limits.c.until < now))
                 row = c.execute(select(limits).where(limits.c.key == key).with_for_update()).mappings().first()
                 if row:
                     if row['count'] >= maximum:
@@ -92,29 +150,20 @@ def install(app):
         except IntegrityError:
             raise HTTPException(429, 'try_later', headers={'Retry-After': '60'})
 
-    def identity(method, path, *, payload=None, token=None, params=None):
-        s = app.state.settings
-        headers = {'apikey': s.supabase_public_key}
-        if token:
-            headers['Authorization'] = 'Bearer '+token
-        try:
-            r = httpx.request(method, s.supabase_url.rstrip('/')+'/auth/v1'+path,
-                              json=payload, params=params, headers=headers, timeout=20)
-        except httpx.HTTPError:
-            raise HTTPException(503, 'email_service_unavailable')
-        if r.status_code == 429:
-            raise HTTPException(429, 'try_later', headers={'Retry-After':'60'})
-        if not r.is_success:
-            raise HTTPException(400 if path != '/otp' else 503,
-                                'confirmation_invalid_or_expired' if path != '/otp' else 'email_service_unavailable')
-        try:
-            return r.json()
-        except ValueError:
-            raise HTTPException(503, 'email_service_unavailable')
-
     def summary(row):
         return {'email':row['email'], 'workshop':row['workshop'], 'confirmed_at':row['confirmed_at'],
+                'scope':row['user_id'],
                 'registered_at':datetime.fromtimestamp(row['registered_at'], timezone.utc).isoformat()}
+
+    def participant(connection, receipt):
+        row = connection.execute(
+            select(registrations).join(receipts, registrations.c.user_id == receipts.c.user_id)
+            .where(receipts.c.token_hash == digest(receipt), receipts.c.expires > time.time())
+            .with_for_update(of=registrations)
+        ).mappings().first()
+        if row is None:
+            raise HTTPException(401, 'confirmation_required')
+        return row
 
     @router.get('/status')
     def status():
@@ -126,39 +175,42 @@ def install(app):
         # Shared classroom networks do not get an artificial ten-person IP cap.
         rate('send-global', 120, 3600)
         rate('send-'+digest(body.email), 1, 60)
-        identity('POST', '/otp', payload={'email':body.email, 'create_user':True},
-                 params={'redirect_to':CALLBACK})
+        token = secrets.token_urlsafe(32)
+        hashed = digest(token)
+        now = time.time()
+        with app.state.engine.begin() as c:
+            c.execute(delete(links).where((links.c.email == body.email) | (links.c.expires < now)))
+            c.execute(insert(links).values(email=body.email, token_hash=hashed, expires=now+1200))
+            c.execute(delete(limits).where(limits.c.until < now))
+        try:
+            send_link(app.state.settings, body.email, token)
+        except (smtplib.SMTPException, OSError, ValueError):
+            with app.state.engine.begin() as c:
+                c.execute(delete(links).where(links.c.email == body.email, links.c.token_hash == hashed))
+            raise HTTPException(503, 'email_service_unavailable')
         return {'accepted':True}
 
     @router.post('/confirm')
     def confirm(body: Confirm):
         ready()
         rate('verify-global', 240, 3600)
-        if bool(body.token_hash) == bool(body.access_token):
-            raise HTTPException(400, 'confirmation_invalid_or_expired')
-        if body.token_hash:
-            user = identity('POST','/verify',payload={'token_hash':body.token_hash,'type':'email'}).get('user',{})
-        else:
-            user = identity('GET','/user',token=body.access_token)
-        try:
-            user_id = str(UUID(user['id']))
-            email = normalise(user['email'])
-            confirmed = user['email_confirmed_at']
-            if not confirmed or email != body.email:
-                raise ValueError()
-        except (KeyError, ValueError, TypeError):
-            raise HTTPException(400, 'email_does_not_match_confirmation')
         now = time.time()
         token = secrets.token_urlsafe(32)
         duration = 30*86400 if body.remember else 12*3600
         with app.state.engine.begin() as c:
-            row = c.execute(select(registrations).where(registrations.c.user_id==user_id)).mappings().first()
+            consumed = c.execute(delete(links).where(links.c.email == body.email,
+                links.c.token_hash == digest(body.token), links.c.expires > now))
+            if consumed.rowcount != 1:
+                raise HTTPException(400, 'confirmation_invalid_or_expired')
+            row = c.execute(select(registrations).where(registrations.c.email == body.email)).mappings().first()
             if row:
+                user_id = row['user_id']
                 c.execute(update(registrations).where(registrations.c.user_id==user_id)
-                          .values(email=email, confirmed_at=confirmed, last_seen=now))
+                          .values(last_seen=now))
             else:
-                c.execute(insert(registrations).values(user_id=user_id,email=email,workshop=WORKSHOP,
-                          confirmed_at=confirmed,registered_at=now,last_seen=now))
+                user_id = str(uuid4())
+                c.execute(insert(registrations).values(user_id=user_id,email=body.email,workshop=WORKSHOP,
+                          confirmed_at=datetime.now(timezone.utc).isoformat(),registered_at=now,last_seen=now))
             c.execute(delete(receipts).where(receipts.c.expires < now))
             c.execute(insert(receipts).values(token_hash=digest(token),user_id=user_id,expires=now+duration))
             row = c.execute(select(registrations).where(registrations.c.user_id==user_id)).mappings().one()
@@ -176,6 +228,32 @@ def install(app):
                 raise HTTPException(401, 'confirmation_required')
             c.execute(update(registrations).where(registrations.c.user_id==row['user_id']).values(last_seen=now))
         return summary(row)
+
+    @router.post('/load')
+    def load(body: Revoke):
+        ready()
+        with app.state.engine.begin() as c:
+            owner = participant(c, body.receipt)
+            rows = c.execute(select(work).where(work.c.user_id == owner['user_id'])).mappings()
+            return {row['kind']: {'revision':row['revision'], 'data':json.loads(row['data'])} for row in rows}
+
+    @router.post('/save')
+    def save(body: Save):
+        ready()
+        encoded = validate_work(body.kind, body.data)
+        with app.state.engine.begin() as c:
+            owner = participant(c, body.receipt)
+            query = (work.c.user_id == owner['user_id'], work.c.kind == body.kind)
+            revision = c.execute(select(work.c.revision).where(*query)).scalar_one_or_none()
+            if body.revision != (revision or 0):
+                raise HTTPException(409, 'newer_server_copy')
+            next_revision = body.revision+1
+            if revision is None:
+                c.execute(insert(work).values(user_id=owner['user_id'], kind=body.kind,
+                          revision=next_revision, data=encoded))
+            else:
+                c.execute(update(work).where(*query).values(revision=next_revision, data=encoded))
+            return {'revision':next_revision}
 
     @router.post('/forget')
     def forget(body: Revoke):
