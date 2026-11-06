@@ -36,6 +36,13 @@
     if (step) byId('registration-resume').href = step.page+'#'+step.id;
     success.querySelector('a').focus();
   }
+  function showExpiredSignIn() {
+    success.hidden = true;
+    form.hidden = false;
+    byId('confirm-options').hidden = true;
+    button.textContent = 'Send sign-in link';
+    tell('Your sign-in expired. Request a fresh link with the same email address.');
+  }
 
   form.addEventListener('submit',async event=>{
     event.preventDefault();
@@ -51,6 +58,10 @@
         });
         token=null;
         const saved=await cloud.connect(data,byId('copy-guest-work').checked);
+        if (!cloud.authenticated()) {
+          showExpiredSignIn();
+          return;
+        }
         signedIn();
         if (!saved) tell('Signed in. Server sync needs attention. Keep a JSON backup of your browser copy.');
       } else {
@@ -92,10 +103,8 @@
   window.addEventListener('hashchange',()=>{
     if (config?.enabled && takeLink()) showConfirmation();
   });
-  window.addEventListener('bitcom-profile',()=>{
+  window.addEventListener('bitcom-auth',()=>{
     if (success.hidden || cloud.authenticated()) return;
-    success.hidden=true;
-    form.hidden=false;
-    tell('Your previous sign-in has expired. Request a fresh link with the same address.');
+    showExpiredSignIn();
   });
 })();

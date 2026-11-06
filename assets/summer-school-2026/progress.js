@@ -3,7 +3,7 @@
   const steps = window.BITCOM_STEPS;
   const cloud = window.WorkshopCloud;
   const readOnly = cloud?.readOnly?.() || false;
-  const key = cloud?.storageKey('progress') || 'efi-bitcom-progress-v1';
+  const storageKey = () => cloud?.storageKey('progress') || 'efi-bitcom-progress-v1';
   const byId = new Map(steps.map(s => [s.id, s]));
   let memory = {completed: [], last: null, updatedAt: null};
   let unavailable = false;
@@ -21,14 +21,14 @@
   }
   function snapshot() {
     if(unsaved)return structuredClone(memory);
-    try { const raw=localStorage.getItem(key); memory=raw?validate(JSON.parse(raw)):{completed:[],last:null,updatedAt:null}; }
+    try { const raw=localStorage.getItem(storageKey()); memory=raw?validate(JSON.parse(raw)):{completed:[],last:null,updatedAt:null}; }
     catch { unavailable=true; }
     return structuredClone(memory);
   }
   function store(value, sync = true) {
     if (readOnly) return;
     memory=validate(value);
-    try { localStorage.setItem(key,JSON.stringify(memory));unavailable=false;unsaved=false; }
+    try { localStorage.setItem(storageKey(),JSON.stringify(memory));unavailable=false;unsaved=false; }
     catch { unavailable=true;unsaved=true; }
     render();
     if (sync) cloud?.queue('progress',memory);
@@ -44,7 +44,9 @@
   const note=document.createElement('p');note.className='progress-note';
   box.append(heading,count,links,note);
   cloud?.attach(box);
-  document.querySelector('nav[aria-label="Workshop navigation"]').after(box);
+  const mount = document.querySelector('[data-progress-mount]');
+  if (mount) mount.append(box);
+  else document.querySelector('nav[aria-label="Workshop navigation"]').after(box);
   function render() {
     count.textContent=`${memory.completed.length} of ${steps.length} tasks marked complete. Your reading position is saved separately.`;
     const savedStep=byId.get(memory.last)||steps[0];
@@ -120,7 +122,10 @@
     const current=headings.find(h=>h.id===location.hash.slice(1));
     if(current&&!missingBefore(byId.get(current.id).page).length)store({...snapshot(),last:current.id,updatedAt:new Date().toISOString()});
   });
-  window.addEventListener('storage',event=>{if(event.key===key){snapshot();render();}});
+  function refresh() { snapshot();render(); }
+  window.addEventListener('storage',event=>{if(event.key===storageKey()) refresh();});
+  window.addEventListener('bitcom-auth',refresh);
+  window.addEventListener('bitcom-profile',refresh);
   if(headings.length&&!missingBefore(byId.get(headings[0].id).page).length) {
     const anchor=location.hash.slice(1);
     const current=headings.find(h=>h.id===anchor)||headings.find(h=>h.id===memory.last)||headings[0];

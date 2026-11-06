@@ -127,6 +127,7 @@
     document.getElementById('profile-sign-out').addEventListener('click',cloud.signOut);
   }
   window.addEventListener('bitcom-profile',render);
+  window.addEventListener('bitcom-auth',render);
   window.addEventListener('bitcom-progress',render);
   window.addEventListener('storage',event=>{
     if (event.key===cloud.storageKey('progress')) render();

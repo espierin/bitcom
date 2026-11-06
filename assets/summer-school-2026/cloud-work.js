@@ -49,6 +49,14 @@
     window.dispatchEvent(new StorageEvent('storage',{key,newValue:JSON.stringify(data)}));
   }
   const authenticated = () => Boolean(session && session.receipt !== rejectedReceipt && session.expires > Date.now()/1000);
+  function announceAuth() {
+    window.dispatchEvent(new Event('bitcom-auth'));
+  }
+  function rejectReceipt(error, receipt) {
+    if (error.status !== 401 || session?.receipt !== receipt) return;
+    rejectedReceipt = receipt;
+    announceAuth();
+  }
   const runBody = () => ({receipt:session.receipt, ...(runId ? {run_id:runId} : {})});
   const withSaveLock = action => navigator.locks
     ? navigator.locks.request('efi-bitcom-sync:'+session.scope,action)
@@ -99,11 +107,9 @@
       tell(historyRun ? 'Viewing the saved copy of this earlier workbook.' : 'Signed in. Your workshop work is linked to your email.');
       return true;
     })().catch(error=>{
-      if (error.status===401 && session?.receipt===receipt) {
-        rejectedReceipt=receipt;
-        window.dispatchEvent(new Event('bitcom-profile'));
-      }
+      rejectReceipt(error,receipt);
       tell(error.status===401 ? 'Sign in again to sync. Download a backup before closing.'
+        : error.status===409 ? 'A newer server copy exists. Download a backup, then use “Load server copy” to continue.'
         : error.status===404 && historyRun ? 'This workbook is not available for this account.'
         : 'Server unavailable. Use your browser copy and download a backup before closing.');
       return false;
@@ -140,12 +146,14 @@
     if (historyRun) return Promise.resolve(true);
     if (flushing) return flushing;
     if (!authenticated()) return Promise.resolve(false);
+    const receipt = session.receipt;
     const saveWhenReady = async () => {
       if (loading && !(await loading)) return false;
       return savePending();
     };
     const saving = withSaveLock(saveWhenReady);
     flushing = saving.catch(error=>{
+      rejectReceipt(error,receipt);
       tell(error.status===409 ? 'A newer server copy exists. Download a backup, then use “Load server copy” to continue.'
         : error.status===401 ? 'Sign in again to sync. Download a backup before closing.'
         : 'Server save failed. Your browser copy is available. Download a backup before closing.');
@@ -175,6 +183,7 @@
     profile=read(profileKey());
     runId=profile?.active?.id || null;
     put(sessionKey,session);
+    announceAuth();
     scheduleRetry();
     if (!(await load(true))) return false;
     if (copyGuest && !runId) {
@@ -212,6 +221,7 @@
     if (!window.confirm('Replace the signed-in copy on this browser with the server copy? Download a JSON backup first if you want to keep your local changes.')) return;
     if (flushing) await flushing;
     clearTimeout(timer);
+    const receipt = session.receipt;
     try {
       const remote = await request('/load',runBody());
       if (remote.progress) window.WorkshopProgress?.validate(remote.progress.data);
@@ -221,10 +231,12 @@
         put(metaKey(kind),{revision:remote[kind]?.revision || 0});
       }
       location.reload();
-    } catch { tell('Server copy could not be loaded. Your browser copy is still available.'); }
+    } catch (error) {
+      rejectReceipt(error,receipt);
+      tell('Server copy could not be loaded. Your browser copy is still available.');
+    }
   }
   function attach(panel) {
-    if (!session) return;
     const message = document.createElement('p');
     message.dataset.cloudStatus = '';
     message.setAttribute('role','status');
@@ -239,6 +251,12 @@
       actions.append(button);
     }
     panel.append(message,actions);
+    function showSyncControls() {
+      message.hidden = !authenticated();
+      actions.hidden = !authenticated() || historyRun;
+    }
+    window.addEventListener('bitcom-auth',showSyncControls);
+    showSyncControls();
   }
   async function startNext() {
     if (!(await flush())) throw Error('save_pending');

@@ -20,7 +20,7 @@ function setup({enabled=true,hash='',map=new Map(),server={},saveUnavailable=()=
   const context={
     window:{BITCOM_REGISTRATION:{enabled,api:'https://workshop.invalid'},addEventListener:(type,f)=>events[type]=f,dispatchEvent(){}},
     document:{getElementById:get,querySelectorAll:()=>[],addEventListener(){}},
-    navigator:{}, StorageEvent:class {},
+    navigator:{}, Event, StorageEvent:class {},
     localStorage:{getItem:key=>map.get(key),setItem:(key,value)=>map.set(key,value),removeItem:key=>map.delete(key)},
     location:{hash,pathname:'/bitcom/register.html'},history:{replaceState(){cleared=true;}},
     URLSearchParams,AbortSignal,
