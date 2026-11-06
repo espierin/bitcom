@@ -75,12 +75,13 @@
       if (session?.receipt !== receipt) return false;
       if (account?.active) {
         const selected = historyRun || account.active.id;
-        rememberProfile(account);
         if (selected !== runId && !allowSwitch) {
+          rememberProfile(account);
           location.reload();
           return false;
         }
         runId = selected;
+        rememberProfile(account);
       }
       const remote = await request('/load',runBody());
       if (session?.receipt !== receipt) return false;
