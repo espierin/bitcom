@@ -25,6 +25,15 @@ from sqlalchemy.exc import IntegrityError
 
 CALLBACK = 'https://espierin.github.io/bitcom/register.html'
 WORKSHOP = 'efi-bitcom-2026-session-1'
+CASE_NUMBERS = tuple(f'{n:02}' for n in range(1, 7))
+TASKS = {
+    f'step-{task}' for task in (
+        '1.1 1.2 1.3 2.1 2.2 2.3 2.4 2.5 2.6 2.7 '
+        '3.0 3.1 3.1.1 3.1.2 3.1.3 3.2 3.2.1 3.2.2 3.2.3 '
+        '3.3 3.3.1 3.3.2 3.3.3 3.3.4 3.3.5 3.3.6 '
+        '4.1 4.2 4.3 4.4 4.4.1 4.4.2 4.4.3 4.5 4.6 4.7 4.8'
+    ).split()
+}
 metadata = MetaData()
 registrations = Table('bitcom_registrations', metadata,
     Column('user_id', String(36), primary_key=True), Column('email', String(254), nullable=False, unique=True),
@@ -42,6 +51,14 @@ links = Table('bitcom_registration_links', metadata,
 work = Table('bitcom_saved_work', metadata,
     Column('user_id', String(36), primary_key=True), Column('kind', String(12), primary_key=True),
     Column('revision', Integer, nullable=False), Column('data', Text, nullable=False))
+runs = Table('bitcom_case_runs', metadata,
+    Column('user_id', String(36), primary_key=True), Column('id', String(36), primary_key=True),
+    Column('case_number', String(2)), Column('started_at', Float, nullable=False),
+    Column('archived_at', Float))
+run_work = Table('bitcom_case_work', metadata,
+    Column('user_id', String(36), primary_key=True), Column('run_id', String(36), primary_key=True),
+    Column('kind', String(12), primary_key=True), Column('revision', Integer, nullable=False),
+    Column('data', Text, nullable=False))
 
 def initialise(engine):
     with engine.begin() as c:
@@ -76,7 +93,10 @@ class Revoke(BaseModel):
     model_config = ConfigDict(extra='forbid')
     receipt: str = Field(min_length=32, max_length=128)
 
-class Save(Revoke):
+class RunRequest(Revoke):
+    run_id: str | None = Field(default=None, pattern=r'^[a-f0-9-]{36}$')
+
+class Save(RunRequest):
     kind: str = Field(pattern=r'^(progress|workbook)$')
     revision: int = Field(ge=0)
     data: dict
@@ -116,7 +136,7 @@ def validate_work(kind, value):
             raise HTTPException(422, 'invalid_workbook')
     else:
         def task_id(v):
-            return isinstance(v, str) and re.fullmatch(r'step-[1-4](\.\d+){1,2}', v)
+            return isinstance(v, str) and v in TASKS
         completed = value.get('completed')
         last = value.get('last')
         updated = value.get('updatedAt')
@@ -177,9 +197,70 @@ def install(app):
             raise HTTPException(401, 'confirmation_required')
         return row
 
+    def account_runs(connection, user_id):
+        return connection.execute(select(runs).where(runs.c.user_id == user_id)
+                                  .order_by(runs.c.started_at.desc())).mappings().all()
+
+    def create_run(connection, user_id, case_number, archived=False):
+        run_id = str(uuid4())
+        now = time.time()
+        connection.execute(insert(runs).values(user_id=user_id, id=run_id,
+            case_number=case_number, started_at=now, archived_at=now if archived else None))
+        return run_id
+
+    def ensure_runs(connection, user_id):
+        if account_runs(connection, user_id):
+            return
+        legacy = connection.execute(select(work).where(work.c.user_id == user_id)).mappings().all()
+        previous_case = None
+        notes = next((json.loads(row['data']) for row in legacy if row['kind'] == 'workbook'), {})
+        # Only adopt an old assignment when the participant recorded the exact input.
+        filenames = set(re.findall(r'\bcase-(0[1-6])-genomic\.fasta\b',
+            ' '.join(notes.get(field, '') for field in ('case', 'context', 'synthetic')), re.I))
+        if len(filenames) == 1:
+            previous_case = filenames.pop()
+        if legacy:
+            previous = create_run(connection, user_id, previous_case, archived=previous_case is None)
+            for row in legacy:
+                connection.execute(insert(run_work).values(user_id=user_id, run_id=previous,
+                    kind=row['kind'], revision=row['revision'], data=row['data']))
+        if previous_case is None:
+            create_run(connection, user_id, secrets.choice(CASE_NUMBERS))
+
+    def profile_data(connection, owner):
+        user_id = owner['user_id']
+        progress_rows = connection.execute(select(run_work.c.run_id, run_work.c.data)
+            .where(run_work.c.user_id == user_id, run_work.c.kind == 'progress'))
+        progress = {run_id: json.loads(data) for run_id, data in progress_rows}
+        records = []
+        for row in account_runs(connection, user_id):
+            saved = progress.get(row['id'], {})
+            complete = set(saved.get('completed', ())) == TASKS
+            records.append({'id':row['id'], 'case':row['case_number'],
+                            'started_at':row['started_at'], 'active':row['archived_at'] is None,
+                            'completed':len(set(saved.get('completed', ())) & TASKS),
+                            'last':saved.get('last'), 'complete':complete})
+        active = next(record for record in records if record['active'])
+        used = {record['case'] for record in records}
+        return {'email':owner['email'], 'active':active, 'runs':records, 'total':len(TASKS),
+                'remaining':len(set(CASE_NUMBERS) - used)}
+
+    def work_query(connection, user_id, run_id, writable=False):
+        if run_id is None:
+            if writable and account_runs(connection, user_id):
+                raise HTTPException(409, 'refresh_required')
+            return work, (work.c.user_id == user_id,)
+        row = connection.execute(select(runs.c.archived_at)
+            .where(runs.c.user_id == user_id, runs.c.id == run_id)).first()
+        if row is None:
+            raise HTTPException(404, 'workbook_not_found')
+        if writable and row.archived_at is not None:
+            raise HTTPException(409, 'case_archived')
+        return run_work, (run_work.c.user_id == user_id, run_work.c.run_id == run_id)
+
     @router.get('/status')
     def status():
-        return {'enabled':available(), 'workshop':WORKSHOP}
+        return {'enabled':available(), 'workshop':WORKSHOP, 'case_runs':True}
 
     @router.post('/request')
     def request_link(body: Email):
@@ -241,12 +322,39 @@ def install(app):
             c.execute(update(registrations).where(registrations.c.user_id==row['user_id']).values(last_seen=now))
         return summary(row)
 
-    @router.post('/load')
-    def load(body: Revoke):
+    @router.post('/profile')
+    def profile(body: Revoke):
         ready()
         with app.state.engine.begin() as c:
             owner = participant(c, body.receipt)
-            rows = c.execute(select(work).where(work.c.user_id == owner['user_id'])).mappings()
+            ensure_runs(c, owner['user_id'])
+            return profile_data(c, owner)
+
+    @router.post('/new-run')
+    def new_run(body: RunRequest):
+        ready()
+        with app.state.engine.begin() as c:
+            owner = participant(c, body.receipt)
+            ensure_runs(c, owner['user_id'])
+            current = profile_data(c, owner)
+            active = current['active']
+            if active['id'] != body.run_id or not active['complete']:
+                raise HTTPException(409, 'finish_active_case')
+            available_cases = sorted(set(CASE_NUMBERS) - {record['case'] for record in current['runs']})
+            if not available_cases:
+                raise HTTPException(409, 'no_cases_remaining')
+            c.execute(update(runs).where(runs.c.user_id == owner['user_id'], runs.c.id == active['id'])
+                      .values(archived_at=time.time()))
+            create_run(c, owner['user_id'], secrets.choice(available_cases))
+            return profile_data(c, owner)
+
+    @router.post('/load')
+    def load(body: RunRequest):
+        ready()
+        with app.state.engine.begin() as c:
+            owner = participant(c, body.receipt)
+            table, query = work_query(c, owner['user_id'], body.run_id)
+            rows = c.execute(select(table).where(*query)).mappings()
             return {row['kind']: {'revision':row['revision'], 'data':json.loads(row['data'])} for row in rows}
 
     @router.post('/save')
@@ -255,16 +363,20 @@ def install(app):
         encoded = validate_work(body.kind, body.data)
         with app.state.engine.begin() as c:
             owner = participant(c, body.receipt)
-            query = (work.c.user_id == owner['user_id'], work.c.kind == body.kind)
-            revision = c.execute(select(work.c.revision).where(*query)).scalar_one_or_none()
+            table, scope = work_query(c, owner['user_id'], body.run_id, writable=True)
+            query = (*scope, table.c.kind == body.kind)
+            revision = c.execute(select(table.c.revision).where(*query)).scalar_one_or_none()
             if body.revision != (revision or 0):
                 raise HTTPException(409, 'newer_server_copy')
             next_revision = body.revision+1
             if revision is None:
-                c.execute(insert(work).values(user_id=owner['user_id'], kind=body.kind,
-                          revision=next_revision, data=encoded))
+                values = {'user_id':owner['user_id'], 'kind':body.kind,
+                          'revision':next_revision, 'data':encoded}
+                if body.run_id is not None:
+                    values['run_id'] = body.run_id
+                c.execute(insert(table).values(**values))
             else:
-                c.execute(update(work).where(*query).values(revision=next_revision, data=encoded))
+                c.execute(update(table).where(*query).values(revision=next_revision, data=encoded))
             return {'revision':next_revision}
 
     @router.post('/forget')

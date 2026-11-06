@@ -4,43 +4,43 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Follow the EFI International Summer School 2026 hands-on workshop in HLA sequence analysis.">
-<title>Registration | EFI BITCom workshop</title>
-<link rel="stylesheet" href="assets/summer-school-2026/workshop.css?v=20261105-screens">
+<title>Sign in | EFI BITCom workshop</title>
+<link rel="stylesheet" href="assets/summer-school-2026/workshop.css?v=20261106-account">
 <link rel="stylesheet" href="assets/summer-school-2026/efi-links.css?v=2">
 <meta name="referrer" content="no-referrer">
 <script src="assets/summer-school-2026/progress-data.js?v=3" defer></script>
 <script src="assets/summer-school-2026/registration-config.js?v=3" defer></script>
-<script src="assets/summer-school-2026/cloud-work.js?v=2" defer></script>
-<script src="assets/summer-school-2026/progress.js?v=5" defer></script>
-<script src="assets/summer-school-2026/workbook-window.js?v=2" defer></script>
-<script src="assets/summer-school-2026/progress-gate.js?v=2" defer></script></head>
+<script src="assets/summer-school-2026/cloud-work.js?v=3" defer></script>
+<script src="assets/summer-school-2026/progress.js?v=6" defer></script>
+<script src="assets/summer-school-2026/workbook-window.js?v=4" defer></script>
+<script src="assets/summer-school-2026/progress-gate.js?v=3" defer></script><script src="assets/summer-school-2026/case-account.js?v=1" defer></script></head>
 <body>
 <a class="skip" href="#main">Skip to workshop</a>
 <header>
 <div class="top"><a href="https://efi-web.org/" rel="noopener noreferrer" target="_blank">European Federation for Immunogenetics</a><span>Bioinformatics &amp; IT Committee</span></div>
 <div class="banner">
 <div><p class="eyebrow">International Summer School 2026 · Crete</p><h1>Hands-on HLA Sequence Analysis</h1><p>From genomic DNA to structure</p></div>
-<img src="assets/summer-school-2026/efi-logo-white.svg" alt="EFI" width="90" height="87">
+<div class="banner-brand"><a class="banner-account" data-account-link href="register.html">Sign in</a><img src="assets/summer-school-2026/efi-logo-white.svg" alt="EFI" width="90" height="87"></div>
 </div>
 </header>
-<main id="main"><nav aria-label="Workshop navigation"><a href="index.html">Overview</a><a href="register.html" aria-current="page">Sign in</a><a href="introduction.html">Introduction</a><a href="step-1.html">Step 1</a><a href="step-2.html">Step 2</a><a href="step-3.html">Step 3</a><a href="step-4.html">Step 4</a><a href="workbook.html" target="EFI_BITCom_Workbook" rel="noopener" title="Open workbook in a separate window">My workbook</a><a href="downloads.html">Downloads</a></nav><section class="registration">
+<main id="main"><nav aria-label="Workshop navigation"><a href="index.html">Overview</a><a href="introduction.html">Introduction</a><a href="step-1.html">Step 1</a><a href="step-2.html">Step 2</a><a href="step-3.html">Step 3</a><a href="step-4.html">Step 4</a><a href="workbook.html" target="EFI_BITCom_Workbook" rel="noopener" title="Open workbook in a separate window">My workbook</a><a href="downloads.html">Downloads</a></nav><section class="registration">
 <p class="eyebrow">EFI BITCom workshop</p><h2>Sign in by email</h2>
-<p>Sign-in is optional. Confirm your email to save your task progress, workbook and scratchpad on the server. Use the same address to continue on another device.</p>
-<p><a class="action-link" href="introduction.html">Continue to the workshop</a></p>
+<p>Use your email for a one-time sign-in link. The first time you sign in, you get a FASTA case. Use the same address on any device to return to your case, progress and workbook.</p>
+<p><a class="action-link" href="introduction.html">Continue as a guest</a></p>
 <p>As a guest, keep your own copy. Open <a href="workbook.html#workbook-actions" target="EFI_BITCom_Workbook" rel="noopener">My workbook</a> and download a JSON backup before ending the session. Restore it later to continue.</p>
 <form id="registration-form" method="post" hidden>
 <label for="registration-email">Your email address</label>
 <input id="registration-email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.org">
 <div id="confirm-options" hidden>
 <label class="registration-remember"><input id="remember-registration" type="checkbox"> Keep me signed in for 30 days on this device</label>
-<label class="registration-remember"><input id="copy-guest-work" type="checkbox"> Copy this browser’s guest work into empty sections of my server record</label>
+<input id="copy-guest-work" type="checkbox" hidden>
 <button id="request-new-link" type="button">Use a new link instead</button>
 </div>
 <button id="registration-submit" type="submit">Send sign-in link</button></form>
 <p id="registration-status" role="status">Loading sign-in…</p>
 <div id="registration-success" hidden><h3>Signed in</h3><div class="workbook-actions">
-<a class="action-link" href="introduction.html">Continue with my saved work →</a>
-<button id="forget-registration" type="button">Sign out</button></div></div>
+<a class="action-link" id="registration-resume" href="index.html">Continue with my saved work →</a>
+<a href="profile.html">Open My profile</a><button id="forget-registration" type="button">Sign out</button></div></div>
 <details><summary><span class="badge" aria-hidden="true">?</span>How does the email link work?</summary><div class="support-content">
 <ol><li>Enter your own address and select Send sign-in link. Check your inbox and spam folder.</li>
 <li>Open the most recent link within 20 minutes. Enter the same address again and select Confirm sign-in.</li>
@@ -49,6 +49,6 @@
 <details><summary><span class="badge" aria-hidden="true">!</span>What is stored?</summary><div class="support-content">
 <p>EFI BITCom stores your confirmed address and signed-in workshop work privately. The server copy includes task completion, reading position, answers and scratchpad. Sequence downloads and screenshots remain separate.</p>
 <p>The confirmation link works once. Browser sign-in expires after 12 hours, or after 30 days if you choose to stay signed in. Signing out clears this browser’s signed-in copy and leaves the server copy available for your next sign-in. Contact the facilitator about access or removal.</p></div></details>
-<noscript><p>Enable JavaScript to sign in or use the workshop as a guest.</p></noscript></section><script src="assets/summer-school-2026/registration.js?v=3" defer></script></main><footer>European Federation for Immunogenetics · <a href="01-bitcom-at-efi.html">Bioinformatics &amp; IT Committee</a></footer>
+<noscript><p>Enable JavaScript to sign in or use the workshop as a guest.</p></noscript></section><script src="assets/summer-school-2026/registration.js?v=5" defer></script></main><footer>European Federation for Immunogenetics · <a href="01-bitcom-at-efi.html">Bioinformatics &amp; IT Committee</a></footer>
 <script src="assets/summer-school-2026/legacy-links.js"></script></body>
 </html>

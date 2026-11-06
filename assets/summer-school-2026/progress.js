@@ -2,6 +2,7 @@
   'use strict';
   const steps = window.BITCOM_STEPS;
   const cloud = window.WorkshopCloud;
+  const readOnly = cloud?.readOnly?.() || false;
   const key = cloud?.storageKey('progress') || 'efi-bitcom-progress-v1';
   const byId = new Map(steps.map(s => [s.id, s]));
   let memory = {completed: [], last: null, updatedAt: null};
@@ -25,6 +26,7 @@
     return structuredClone(memory);
   }
   function store(value, sync = true) {
+    if (readOnly) return;
     memory=validate(value);
     try { localStorage.setItem(key,JSON.stringify(memory));unavailable=false;unsaved=false; }
     catch { unavailable=true;unsaved=true; }
@@ -37,7 +39,7 @@
   const count=document.createElement('p');
   const resume=document.createElement('a');resume.className='action-link';
   const nextTask=document.createElement('a');
-  const backup=document.createElement('a');backup.href='workbook.html#workbook-actions';backup.textContent='Save or restore a backup';
+  const backup=document.createElement('a');backup.href='workbook.html#workbook-actions';backup.textContent=readOnly?'Download a backup':'Save or restore a backup';
   const links=document.createElement('div');links.className='workbook-actions';links.append(resume,nextTask,backup);
   const note=document.createElement('p');note.className='progress-note';
   box.append(heading,count,links,note);
@@ -56,7 +58,9 @@
       nextTask.textContent='First unchecked task: '+firstUnchecked.id.slice(5);
     }
     note.textContent=unavailable?'Browser storage could not be read or written. Download a backup before leaving.':
-      cloud?.session() ? 'Signed-in work is saved on this browser and synced to the server. Check the server status before closing.' :
+      readOnly ? 'This is the saved progress for an earlier case.' :
+      cloud?.authenticated?.() ? 'Signed-in work is saved on this browser and synced to the server. Check the server status before closing.' :
+      cloud?.session() ? 'Sign in again with the same email to sync this case.' :
       'Guest mode. This browser keeps a local copy. Before ending the session, download a JSON backup to keep or transfer your progress.';
     document.querySelectorAll('[data-complete-step]').forEach(input=>{input.checked=memory.completed.includes(input.dataset.completeStep);});
     document.querySelectorAll('.page-contents a[href^="#step-"]').forEach(link=>{
@@ -89,6 +93,7 @@
   for(const h of headings) {
     const label=document.createElement('label');label.className='task-complete';
     const input=document.createElement('input');input.type='checkbox';input.dataset.completeStep=h.id;
+    input.disabled=readOnly;
     input.checked=memory.completed.includes(h.id);
     label.append(input,document.createTextNode('I have completed task '+h.id.slice(5)));
     const next=headings[headings.indexOf(h)+1];

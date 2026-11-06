@@ -23,7 +23,13 @@ Access and storage
   the participant's explicit choice. Server work is scoped to that account.
 - A separate revision on progress and workbook prevents stale writes from
   replacing newer work. The browser retains pending work for JSON export.
-- PostgreSQL row-level security is enabled for all five BITCom tables. Public,
+- After confirmation, /profile assigns an unused genomic FASTA case. /load and
+  /save scope work to that case. /new-run requires all 37 tasks to be saved as
+  complete and leaves the preceding workbook available for reading and export.
+- Existing work that names one exact genomic FASTA is carried into that case.
+  Other previous work remains available in the profile under Previous workshop
+  work. The original saved-work rows remain available to the migration.
+- PostgreSQL row-level security is enabled for all BITCom tables. Public,
   anon and authenticated grants are removed. The server holds the database
   connection. The API never exposes a participant list or Supabase credentials.
 - The sign-out action revokes the browser receipt and clears signed-in cache.

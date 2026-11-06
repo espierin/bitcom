@@ -8,16 +8,32 @@
   const button = byId('registration-submit');
   const status = byId('registration-status');
   const success = byId('registration-success');
-  const hash = new URLSearchParams(location.hash.slice(1));
-  let token = hash.get('bitcom_token');
-  if (token !== null) history.replaceState(null,'',location.pathname);
+  let token = null;
   let busy = false;
 
   const tell = text => { status.textContent = text; };
+  function takeLink() {
+    const incoming = new URLSearchParams(location.hash.slice(1)).get('bitcom_token');
+    if (!incoming) return false;
+    token = incoming;
+    history.replaceState(null,'',location.pathname);
+    return true;
+  }
+  function showConfirmation() {
+    success.hidden = true;
+    form.hidden = false;
+    button.textContent = 'Confirm sign-in';
+    byId('confirm-options').hidden = false;
+    tell('Enter the email address that received this link, then confirm.');
+  }
+  takeLink();
   function signedIn() {
     form.hidden = true;
     success.hidden = false;
     tell('You are signed in to the workshop.');
+    const active = cloud.profile()?.active;
+    const step = window.BITCOM_STEPS?.find(task=>task.id===active?.last);
+    if (step) byId('registration-resume').href = step.page+'#'+step.id;
     success.querySelector('a').focus();
   }
 
@@ -62,18 +78,24 @@
     email.focus();
   });
   byId('forget-registration').addEventListener('click',cloud.signOut);
-  email.value='';
+  email.value=cloud.profile()?.email || '';
   if (!config?.enabled) {
     tell('Email sign-in is currently closed. Continue as a guest and download a JSON backup before closing.');
   } else if (token) {
-    form.hidden=false;
-    button.textContent='Confirm sign-in';
-    byId('confirm-options').hidden=false;
-    tell('Enter the email address that received this link, then confirm.');
-  } else if (cloud.session()) {
+    showConfirmation();
+  } else if (cloud.authenticated()) {
     signedIn();
   } else {
     form.hidden=false;
     tell('Enter your email to receive a one-time sign-in link, or continue as a guest.');
   }
+  window.addEventListener('hashchange',()=>{
+    if (config?.enabled && takeLink()) showConfirmation();
+  });
+  window.addEventListener('bitcom-profile',()=>{
+    if (success.hidden || cloud.authenticated()) return;
+    success.hidden=true;
+    form.hidden=false;
+    tell('Your previous sign-in has expired. Request a fresh link with the same address.');
+  });
 })();

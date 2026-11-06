@@ -128,3 +128,39 @@ class RegistrationTests(unittest.TestCase):
         for i in range(40):
             self.link(f'participant{i}@example.org')
         self.assertEqual(self.mail.call_count,40)
+
+    def test_case_history_requires_completion_and_keeps_workbooks_separate(self):
+        first = self.account()
+        auth = {'receipt':first['receipt']}
+        profile = self.post('profile',auth).json()
+        run = {**auth,'run_id':profile['active']['id']}
+        self.assertIn(profile['active']['case'],module.CASE_NUMBERS)
+        self.assertEqual(self.post('new-run',run).status_code,409)
+        self.assertEqual(self.post('save',{**run,'kind':'workbook','revision':0,
+            'data':{'scratch_notes':'Old case'}}).status_code,200)
+        self.assertEqual(self.post('save',{**run,'kind':'progress','revision':0,
+            'data':{'completed':sorted(module.TASKS),'last':'step-4.8'}}).status_code,200)
+        changed = self.post('new-run',run).json()
+        self.assertNotEqual(changed['active']['case'],profile['active']['case'])
+        self.assertEqual(self.post('load',{**auth,'run_id':changed['active']['id']}).json(),{})
+        self.assertEqual(self.post('new-run',run).status_code,409)
+        self.assertEqual(self.post('save',{**run,'kind':'workbook','revision':1,'data':{}}).status_code,409)
+        self.assertEqual(self.post('load',run).json()['workbook']['data']['scratch_notes'],'Old case')
+        other = self.account('other@example.org')
+        self.assertEqual(self.post('load',{**run,'receipt':other['receipt']}).status_code,404)
+        with self.engine.begin() as c:
+            c.execute(update(module.limits).values(until=0))
+        again = self.account()
+        self.assertEqual(self.post('profile',{'receipt':again['receipt']}).json(),changed)
+
+    def test_migration_keeps_known_cases_active_and_preserves_unlabelled_work(self):
+        for address,notes,known in [
+            ('known@example.org',{'case':'case-03-genomic.fasta'},'03'),
+            ('unknown@example.org',{'scratch_notes':'Original notes'},None),
+        ]:
+            auth = {'receipt':self.account(address)['receipt']}
+            self.assertEqual(self.post('save',{**auth,'kind':'workbook','revision':0,'data':notes}).status_code,200)
+            profile = self.post('profile',auth).json()
+            saved_run = profile['active'] if known else next(run for run in profile['runs'] if not run['active'])
+            self.assertEqual(saved_run['case'],known)
+            self.assertEqual(self.post('load',{**auth,'run_id':saved_run['id']}).json()['workbook']['data'],notes)

@@ -21,6 +21,9 @@ header { background: #073760; color: white; }
 .banner img { width: clamp(58px, 9vw, 90px); height: auto; }
 .banner p { margin: .25rem 0 0; }
 .banner h1 { margin: .3rem 0; color: white; font-size: clamp(1.55rem, 3.2vw, 2.5rem); line-height: 1.05; }
+.banner-brand {display:grid;justify-items:end;gap:.4rem;flex:none;}
+.banner a.banner-account {color:white;background:#042c52;padding:.3rem .7rem;border:1px solid #ffffffb3;border-radius:4px;text-decoration:none;font-size:.88rem;font-weight:700;}
+.banner a.banner-account:hover {background:#064a89;text-decoration:underline;}
 main { max-width: 1160px; margin: auto; padding: 0 1.25rem 3rem; }
 nav { display: flex; flex-wrap: wrap; gap: 0 1.25rem; border-bottom: 1px solid var(--efi-line); margin-bottom: 1.75rem; }
 nav a { display: inline-flex; align-items: center; min-height: 48px; font-weight: 650; text-decoration: none; }
@@ -226,6 +229,20 @@ button.show-where-button:hover,button.show-where-button[aria-expanded="true"] {b
 button.screenshot-spot:focus-visible,button.show-where-button:focus-visible {outline:3px solid var(--efi-coral-dark);outline-offset:3px;}
 .task-workbook {padding:.55rem .8rem;border-left:3px solid var(--efi-blue);background:var(--efi-surface);}
 .workbook-jump {text-underline-offset:.18em;}
+.workbook-link::before, a[href^="workbook.html"]::before, .workbook-instruction::before {
+  content:"";display:inline-block;width:1.05em;height:1.05em;margin-right:.35em;
+  vertical-align:-.15em;background:currentColor;mask:center / contain no-repeat var(--link-icon);
+}
+.workbook-link, a[href^="workbook.html"] {--link-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='3' width='15' height='18' rx='2'/%3E%3Cpath d='M3 8h4m-4 4h4m-4 4h4m3-7h6m-6 4h6'/%3E%3C/svg%3E");}
+.workbook-instruction {--link-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5h11M9 12h11M9 19h11M3 5h1m-1 7h1m-1 7h1'/%3E%3C/svg%3E");}
+#workbook-popup-blocked, .case-status {background:var(--efi-surface);border-left:4px solid var(--efi-blue);padding:.8rem 1rem;margin:1rem 0;}
+.case-status > span {display:block;overflow-wrap:anywhere;}
+.case-status > p {margin:.4rem 0 0;}
+.case-status > a {display:block;}
+.case-actions {display:flex;align-items:center;flex-wrap:wrap;gap:.4rem 1rem;}
+.case-profile-list {display:grid;gap:.8rem;margin:1rem 0;}
+.case-profile-card {border:1px solid var(--efi-line);border-radius:4px;padding:.9rem 1rem;}
+.case-profile-card p {margin:.3rem 0;overflow-wrap:anywhere;}
 @media (pointer:coarse){button.screenshot-spot {width:32px;height:32px;min-height:32px;}button.show-where-button {min-height:38px;}}
 @media(max-width:600px){.screenshot-toolbar {flex-wrap:wrap;}.screenshot-toolbar h2 {flex-basis:100%;}.screenshot-viewport img {max-height:calc(94dvh - 230px);}}
 summary:focus-visible, .screen-example a:focus-visible { outline: 3px solid var(--efi-blue); outline-offset: 3px; }

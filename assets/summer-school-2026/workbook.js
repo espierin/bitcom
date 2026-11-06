@@ -1,17 +1,23 @@
 const form = document.getElementById('workbook-form');
 const fields = [...form.querySelectorAll('textarea')];
 const workbookCloud = window.WorkshopCloud;
+const workbookReadOnly = workbookCloud?.readOnly?.() || false;
+if (workbookReadOnly) {
+  for (const field of fields) field.readOnly = true;
+  document.getElementById('import-json').closest('label').hidden = true;
+}
 const key = workbookCloud?.storageKey('workbook') || 'efi-bitcom-workbook-v1';
 const status = document.getElementById('save-status');
 let unsaved = false;
 function snapshot() { return Object.fromEntries(fields.map(f => [f.name, f.value])); }
 function show(data) { for (const f of fields) f.value = typeof data[f.name] === 'string' ? data[f.name] : ''; }
 function save() {
+  if (workbookReadOnly) return;
   workbookCloud?.queue('workbook',snapshot());
   try { localStorage.setItem(key, JSON.stringify(snapshot())); unsaved = false; status.textContent = 'Saved in this browser at ' + new Date().toLocaleTimeString(); }
   catch { unsaved = true; status.textContent = 'Browser storage is unavailable. Download your answers before closing this page.'; }
 }
-try { const data = JSON.parse(localStorage.getItem(key) || '{}'); if (data && typeof data === 'object') show(data); status.textContent = 'Ready. Your answers are saved here as you type. Keep the workbook open in one tab.'; }
+try { const data = JSON.parse(localStorage.getItem(key) || '{}'); if (data && typeof data === 'object') show(data); status.textContent = workbookReadOnly ? 'Earlier workbook. You can copy or download your answers.' : 'Ready. Your answers are saved as you type.'; }
 catch { status.textContent = 'Could not read browser storage. Download a backup before closing this page.'; }
 for (const field of fields.filter(field => field.dataset.copyable !== undefined)) {
   const actions = document.createElement('div');
@@ -67,9 +73,17 @@ function download(name, text, type) {
   const url = URL.createObjectURL(new Blob([text], {type}));
   const a = document.createElement('a'); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
-document.getElementById('export-json').addEventListener('click', () => download('EFI-BITCom-workbook.json', JSON.stringify({format:'efi-bitcom-workbook',version:1,answers:snapshot(),progress:window.WorkshopProgress.snapshot(),exportedAt:new Date().toISOString()},null,2), 'application/json'));
+document.getElementById('export-json').addEventListener('click', () => {
+  const run = workbookCloud?.run?.();
+  const backup = {format:'efi-bitcom-workbook',version:1,answers:snapshot(),
+    progress:window.WorkshopProgress.snapshot(),exportedAt:new Date().toISOString()};
+  if (run) backup.case = {number:run.case,runId:run.id};
+  download(run?.case ? 'EFI-BITCom-case-'+run.case+'.json' : 'EFI-BITCom-workbook.json',JSON.stringify(backup,null,2),'application/json');
+});
 function report() {
  const lines = ['EFI BITCom workshop', 'Participant workbook', ''];
+ const run=workbookCloud?.run?.();
+ if(run?.case) lines.push('Assigned input: case-'+run.case+'-genomic.fasta','');
  const progress=window.WorkshopProgress.snapshot();
  lines.push('Completed tasks: '+progress.completed.length+' / '+window.WorkshopProgress.steps.length);
  const last=window.WorkshopProgress.steps.find(s=>s.id===progress.last);
@@ -80,11 +94,14 @@ function report() {
 }
 document.getElementById('export-text').addEventListener('click', () => download('EFI-BITCom-workbook.txt', report(), 'text/plain;charset=utf-8'));
 document.getElementById('import-json').addEventListener('change', async e => {
+ if(workbookReadOnly)return;
  const file=e.target.files[0]; if(!file)return; const message=document.getElementById('import-status');
  try {
   if(file.size>2000000)throw Error('File exceeds 2 MB.');
   const data=JSON.parse(await file.text());
   if(data.format!=='efi-bitcom-workbook'||data.version!==1||!data.answers||Array.isArray(data.answers)||typeof data.answers!=='object')throw Error('Select a workbook JSON backup.');
+  const run=workbookCloud?.run?.();
+  if(run && data.case && data.case.runId!==run.id)throw Error('This backup belongs to a different case workbook.');
   const answers={};
   for(const f of fields){const value=data.answers[f.name]??'';if(typeof value!=='string'||value.length>30000)throw Error('Invalid answer in backup.');answers[f.name]=value;}
   const progress=data.progress===undefined?null:window.WorkshopProgress.validate(data.progress);

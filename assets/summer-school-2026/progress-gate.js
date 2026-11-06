@@ -1,5 +1,6 @@
 (() => {
   const progress=window.WorkshopProgress;if(!progress)return;
+  if(window.WorkshopCloud?.readOnly?.())return;
   const page=location.pathname.split('/').pop();
   const panel=document.createElement('section');panel.className='progress-gate';panel.hidden=true;
   const title=document.createElement('h2');title.textContent='Finish the earlier tasks first';

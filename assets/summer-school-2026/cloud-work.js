@@ -5,8 +5,14 @@
   const keys = { progress: 'efi-bitcom-progress-v1', workbook: 'efi-bitcom-workbook-v1' };
   const kinds = Object.keys(keys);
   let session = config?.enabled ? read(sessionKey) : null;
-  if (!session?.receipt || !session.scope || session.expires <= Date.now()/1000) session = null;
-  let timer, retryTimer, loading, flushing;
+  if (!session?.receipt || !session.scope) session = null;
+  const requestedRun = new URLSearchParams(location.search).get('run');
+  const historyRun = /\/(?:workbook|step-[1-4])\.html$/.test(location.pathname) &&
+    /^[a-f0-9-]{36}$/.test(requestedRun) ? requestedRun : null;
+  const profileKey = () => 'efi-bitcom-profile:' + session.scope;
+  let profile = session ? read(profileKey()) : null;
+  let runId = historyRun || profile?.active?.id || null;
+  let timer, retryTimer, loading, flushing, rejectedReceipt;
   let status = session ? 'Checking your server copy…' : '';
   const conflicts = new Set();
 
@@ -18,7 +24,8 @@
     localStorage.setItem(key, JSON.stringify(value));
   }
   function storageKey(kind) {
-    return session ? keys[kind]+':'+session.scope : keys[kind];
+    if (session) return [keys[kind],session.scope,runId].filter(Boolean).join(':');
+    return historyRun ? keys[kind]+':unavailable:'+historyRun : keys[kind];
   }
   function metaKey(kind) { return storageKey(kind)+':sync'; }
   function meta(kind) { return read(metaKey(kind), { revision:0 }); }
@@ -41,11 +48,41 @@
   function notify(key, data) {
     window.dispatchEvent(new StorageEvent('storage',{key,newValue:JSON.stringify(data)}));
   }
-  function load() {
-    if (!session) return Promise.resolve(false);
+  const authenticated = () => Boolean(session && session.receipt !== rejectedReceipt && session.expires > Date.now()/1000);
+  const runBody = () => ({receipt:session.receipt, ...(runId ? {run_id:runId} : {})});
+  const withSaveLock = action => navigator.locks
+    ? navigator.locks.request('efi-bitcom-sync:'+session.scope,action)
+    : action();
+  function rememberProfile(value) {
+    profile = value;
+    put(profileKey(),value);
+    window.dispatchEvent(new Event('bitcom-profile'));
+  }
+  function load(allowSwitch = false) {
+    if (!authenticated()) {
+      if (session) tell('Your sign-in expired. Sign in again with the same email to sync this work.');
+      return Promise.resolve(false);
+    }
     if (loading) return loading;
     const receipt = session.receipt;
-    loading = request('/load',{receipt}).then(remote=>{
+    loading = (async () => {
+      // Finish any old browser saves before the server archives the previous workbook.
+      if (!runId && hasPendingWork() && !flushing) await withSaveLock(savePending);
+      const account = await request('/profile',{receipt}).catch(error=>{
+        if (error.status !== 404) throw error;
+        return null;
+      });
+      if (session?.receipt !== receipt) return false;
+      if (account?.active) {
+        const selected = historyRun || account.active.id;
+        rememberProfile(account);
+        if (selected !== runId && !allowSwitch) {
+          location.reload();
+          return false;
+        }
+        runId = selected;
+      }
+      const remote = await request('/load',runBody());
       if (session?.receipt !== receipt) return false;
       for (const kind of kinds) {
         if (meta(kind).pending !== undefined) continue;
@@ -58,24 +95,28 @@
         }
         put(metaKey(kind),{revision:saved?.revision || 0});
       }
-      tell('Signed in. Your workshop work is linked to your email.');
+      tell(historyRun ? 'Viewing the saved copy of this earlier workbook.' : 'Signed in. Your workshop work is linked to your email.');
       return true;
-    }).catch(error=>{
+    })().catch(error=>{
+      if (error.status===401 && session?.receipt===receipt) {
+        rejectedReceipt=receipt;
+        window.dispatchEvent(new Event('bitcom-profile'));
+      }
       tell(error.status===401 ? 'Sign in again to sync. Download a backup before closing.'
+        : error.status===404 && historyRun ? 'This workbook is not available for this account.'
         : 'Server unavailable. Use your browser copy and download a backup before closing.');
       return false;
     }).finally(()=>{loading=null;});
     return loading;
   }
   async function savePending() {
-    if (loading) await loading;
     while (hasPendingWork()) {
       for (const kind of kinds) {
         const current = meta(kind);
         if (conflicts.has(kind) || current.pending === undefined) continue;
         const pending = current.pending;
         const {revision} = await request('/save',{
-          receipt:session.receipt,kind,revision:current.revision,data:pending,
+          ...runBody(),kind,revision:current.revision,data:pending,
         }).catch(error=>{
           if (error.status===409) conflicts.add(kind);
           throw error;
@@ -95,10 +136,14 @@
   function flush() {
     clearTimeout(timer);
     if (!session) return Promise.resolve(false);
+    if (historyRun) return Promise.resolve(true);
     if (flushing) return flushing;
-    const saving = navigator.locks
-      ? navigator.locks.request('efi-bitcom-sync:'+session.scope,savePending)
-      : savePending();
+    if (!authenticated()) return Promise.resolve(false);
+    const saveWhenReady = async () => {
+      if (loading && !(await loading)) return false;
+      return savePending();
+    };
+    const saving = withSaveLock(saveWhenReady);
     flushing = saving.catch(error=>{
       tell(error.status===409 ? 'A newer server copy exists. Download a backup, then use “Load server copy” to continue.'
         : error.status===401 ? 'Sign in again to sync. Download a backup before closing.'
@@ -108,25 +153,30 @@
     return flushing;
   }
   function queue(kind,data) {
-    if (!session) return;
+    if (!session || historyRun) return;
     try { put(metaKey(kind),{...meta(kind),pending:data}); }
     catch { tell('Browser storage is unavailable. Download a backup before closing.'); return; }
-    tell('Changes pending. Wait for “Saved on the server” before closing.');
+    tell(authenticated() ? 'Changes pending. Wait for “Saved on the server” before closing.'
+      : 'Saved in this browser. Sign in again with the same email to sync.');
+    if (!authenticated()) return;
     clearTimeout(timer);
     timer=setTimeout(flush,850);
   }
   function retryPending() {
-    if (session?.expires > Date.now()/1000 && hasPendingWork()) return flush();
+    if (authenticated() && hasPendingWork()) return flush();
   }
   function scheduleRetry() {
     if (retryTimer===undefined) retryTimer=setInterval(retryPending,10*60*1000);
   }
   async function connect(confirmed, copyGuest) {
+    if (loading) await loading;
     session={receipt:confirmed.receipt,scope:confirmed.scope,expires:confirmed.expires};
+    profile=read(profileKey());
+    runId=profile?.active?.id || null;
     put(sessionKey,session);
     scheduleRetry();
-    if (!(await load())) return false;
-    if (copyGuest) {
+    if (!(await load(true))) return false;
+    if (copyGuest && !runId) {
       for (const kind of kinds) {
         const guest = read(keys[kind]);
         if (guest && meta(kind).revision===0 && meta(kind).pending===undefined) {
@@ -143,12 +193,17 @@
       tell('Download your backup first. Sign out from the registration page after keeping a copy.');
       if (!window.confirm('Server saving is incomplete. Sign out anyway and clear this browser’s signed-in copy?')) return;
     }
-    try { await request('/forget',{receipt:session.receipt}); }
+    try { if (authenticated()) await request('/forget',{receipt:session.receipt}); }
     catch { tell('Server sign-out could not be verified. Try again or close this browser.'); return; }
     for (const kind of kinds) {
-      localStorage.removeItem(storageKey(kind));
-      localStorage.removeItem(metaKey(kind));
+      const base = keys[kind]+':'+session.scope;
+      for (const id of [null,runId,...(profile?.runs || []).map(record=>record.id)]) {
+        const scoped = id ? base+':'+id : base;
+        localStorage.removeItem(scoped);
+        localStorage.removeItem(scoped+':sync');
+      }
     }
+    localStorage.removeItem(profileKey());
     localStorage.removeItem(sessionKey);
     location.reload();
   }
@@ -157,7 +212,7 @@
     if (flushing) await flushing;
     clearTimeout(timer);
     try {
-      const remote = await request('/load',{receipt:session.receipt});
+      const remote = await request('/load',runBody());
       if (remote.progress) window.WorkshopProgress?.validate(remote.progress.data);
       for (const kind of kinds) {
         if (remote[kind]) put(storageKey(kind),remote[kind].data);
@@ -175,7 +230,7 @@
     message.textContent=status;
     const actions = document.createElement('div');
     actions.className='workbook-actions';
-    for (const [title, handler] of [['Save on server now',flush],['Load server copy',useServerCopy],['Sign out',signOut]]) {
+    for (const [title, handler] of historyRun ? [] : [['Save on server now',flush],['Load server copy',useServerCopy]]) {
       const button=document.createElement('button');
       button.type='button';
       button.textContent=title;
@@ -184,7 +239,15 @@
     }
     panel.append(message,actions);
   }
-  window.WorkshopCloud={storageKey,queue,attach,request,connect,session:()=>session,signOut};
+  async function startNext() {
+    if (!(await flush())) throw Error('save_pending');
+    const account = await request('/new-run',runBody());
+    rememberProfile(account);
+    return account;
+  }
+  window.WorkshopCloud={storageKey,queue,attach,request,connect,session:()=>session,authenticated,signOut,
+    profile:()=>profile,run:()=>profile?.runs.find(record=>record.id===runId),readOnly:()=>Boolean(historyRun),
+    refresh:load,startNext};
   if (session) {
     scheduleRetry();
     load().then(ok=>{if(ok) retryPending();});
@@ -192,6 +255,18 @@
   window.addEventListener('online',retryPending);
   document.addEventListener('visibilitychange',()=>{if(document.hidden) retryPending();});
   window.addEventListener('storage',event=>{
-    if (event.key===sessionKey && (read(sessionKey)?.scope || null)!==(session?.scope || null)) location.reload();
+    if (event.key===sessionKey && (read(sessionKey)?.receipt || null)!==(session?.receipt || null)) location.reload();
+    if (session && event.key===profileKey()) {
+      const account = read(profileKey());
+      if (!historyRun && account?.active?.id !== runId) location.reload();
+      else {
+        profile=account;
+        window.dispatchEvent(new Event('bitcom-profile'));
+      }
+    }
+    if (session && !historyRun && kinds.some(kind=>event.key===metaKey(kind)) && hasPendingWork()) {
+      clearTimeout(timer);
+      timer=setTimeout(retryPending,850);
+    }
   });
 })();
